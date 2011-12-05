@@ -1,0 +1,19 @@
+.. Sketch Based Image Retrieval Using Curvelet Based Descriptors documentation master file, created by
+   sphinx-quickstart on Fri Dec  2 14:01:00 2011.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Sketch Based Image Retrieval Using Curvelet Based Descriptors
+=============================================================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`search`
+
