@@ -6,8 +6,6 @@
 Sketch Based Image Retrieval Using Curvelet Based Descriptors
 =============================================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
