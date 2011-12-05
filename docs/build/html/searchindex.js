@@ -1,0 +1,1 @@
+Search.setIndex({objects:{},terms:{index:0,search:0,retriev:0,welcom:[],imag:0,sketch:0,indic:0,page:0,content:0,descriptor:0,base:0,tabl:0,document:[],curvelet:0,modul:[]},objtypes:{},titles:["Sketch Based Image Retrieval Using Curvelet Based Descriptors"],objnames:{},filenames:["index"]})
