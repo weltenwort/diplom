@@ -1,0 +1,14 @@
+Related Work
+============
+
+CBIR Using Curvelet Transform
+-----------------------------
+
+::
+
+    @MISC{Sumana_contentbased,
+        author = {Ishrat Jahan Sumana and Md. Monirul Islam and Dengsheng Zhang and Guojun Lu},
+        title = {Content Based Image Retrieval Using Curvelet Transform},
+        year = {}
+    }
+<./cbir_using_curvelet_transform.pdf>`_
