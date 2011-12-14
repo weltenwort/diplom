@@ -60,6 +60,56 @@ Curvelet Based Feature Extraction (`GuhaWu_feature`_)
        year = {2011}
     }
 
+Curvelet based face recognition via dimension reduction (`MandalWY09`_)
+-----------------------------------------------------------------------
+
+.. _MandalWY09: ./_static/related/curvelet_based_face_recognition_via_dimensional_reduction.pdf
+
+::
+
+    @article{DBLP:journals/sigpro/MandalWY09,
+      author    = {Tanaya Mandal and
+                   Q. M. Jonathan Wu and
+                   Yuan Yuan},
+      title     = {Curvelet based face recognition via dimension reduction},
+      journal   = {Signal Processing},
+      volume    = {89},
+      number    = {12},
+      year      = {2009},
+      pages     = {2345-2353},
+      ee        = {http://dx.doi.org/10.1016/j.sigpro.2009.03.007},
+      bibsource = {DBLP, http://dblp.uni-trier.de}
+    }
+
+Face recognition using curvelet based PCA (`MandalW08`_)
+--------------------------------------------------------
+
+.. _MandalW08: ./_static/related/face_recognition_using_curvelet_based_pca.pdf
+
+::
+
+    @inproceedings{conf/icpr/MandalW08,
+      author = {Mandal, Tanaya and Wu, Q. M. Jonathan},
+      booktitle = {ICPR},
+      crossref = {conf/icpr/2008},
+      interhash = {fdc4a9c6d9a320ae2f8ddb92b032f2f3},
+      intrahash = {3428f699f9cbfe3201a72bb8337aaa9d},
+      pages = {1-4},
+      publisher = {IEEE},
+      title = {Face recognition using curvelet based PCA.},
+      url = {http://dblp.uni-trier.de/db/conf/icpr/icpr2008.html#MandalW08},
+      year = 2008,
+      timestamp = {2009-03-26T00:00:00.000+0100},
+      keywords = {dblp},
+      ee = {http://dx.doi.org/10.1109/ICPR.2008.4760972},
+      added-at = {2009-03-26T00:00:00.000+0100},
+      description = {dblp},
+      isbn = {978-1-4244-2175-6},
+      biburl = {http://www.bibsonomy.org/bibtex/23428f699f9cbfe3201a72bb8337aaa9d/dblp},
+      date = {2009-03-26}
+    }
+
+
 Other Feature Extraction
 ========================
 
