@@ -1,8 +1,10 @@
 import glob
 import imp
 import inspect
+#import logging
 import os
 
+from matplotlib import pyplot
 from matplotlib.cbook import Bunch
 
 
@@ -12,8 +14,8 @@ class BaseDescriptor(object):
     def __init__(self, **parameters):
         self.parameters = Bunch(**parameters)
 
-    def apply(self, image):
-        raise NotImplemented()
+    def apply(self, image, reporter=None):
+        raise NotImplementedError()
 
     @classmethod
     def is_descriptor(cls, other):
@@ -57,9 +59,10 @@ class BaseDescriptor(object):
 
 
 class DescriptorResult(object):
-    def __init__(self, features, coefficients, artifacts={}):
+    def __init__(self, features, coefficients, parameters={}, artifacts={}):
         self.features = features
         self.coefficients = coefficients
+        self.parameters = Bunch(**parameters) if isinstance(parameters, dict) else parameters
         self.artifacts = artifacts
 
     def get_artifacts(self, group=None):
@@ -70,3 +73,40 @@ class DescriptorResult(object):
             for group_name, group_values in self.artifacts.iteritems():
                 artifacts += group_values
             return artifacts
+
+    def create_artifact_images(self, directory,
+            filename_pattern="scale{scale}_angle{angle}",
+            reporter=None):
+        os.mkdir(directory)
+        if reporter:
+            reporter.info("Creating image artifacts in '{}'...".format(directory))
+
+        angles = [1] + [self.parameters.angles] * (self.parameters.scales - 1)
+
+        if reporter:
+            reporter.on_create_image_artifacts_start(sum([
+                angles[s] for s in range(self.parameters.scales)
+                ]))
+
+        for scale in range(self.parameters.scales):
+            for angle in range(angles[scale]):
+                label = filename_pattern.format(
+                    scale=scale,
+                    angle=angle,
+                    )
+                filename = os.path.join(directory, "{}.png".format(label))
+
+                fig = pyplot.figure()
+                axes = fig.gca()
+                cl_image = self.coefficients(scale, angle)
+
+                mappable = axes.imshow(cl_image)
+                fig.colorbar(mappable, ax=axes)
+
+                #logging.info(u"Writing image '{}'...".format(filename))
+                fig.savefig(filename, format="png")
+                self.artifacts.setdefault("images", {})[label] = filename
+                reporter.on_create_image_artifacts()
+
+        if reporter:
+            reporter.on_create_image_artifacts_stop()

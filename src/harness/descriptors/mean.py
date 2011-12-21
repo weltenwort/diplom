@@ -11,7 +11,10 @@ class MeanDescriptor(BaseDescriptor):
         self.parameters.scales = scales
         self.parameters.angles = angles
 
-    def apply(self, image):
+    def apply(self, image, reporter=None):
+        if reporter:
+            reporter.on_apply_transformation_start(max=1)
+
         transformation = fdct2(
                 image.shape,
                 self.parameters.scales,
@@ -20,8 +23,12 @@ class MeanDescriptor(BaseDescriptor):
                 norm=True,
                 )
         cl = transformation.fwd(image)
+        if reporter:
+            reporter.on_apply_transformation()
+            reporter.on_apply_transformation_stop()
 
         return DescriptorResult(
                 features=None,
-                coefficients=cl
+                coefficients=cl,
+                parameters=self.parameters,
                 )
