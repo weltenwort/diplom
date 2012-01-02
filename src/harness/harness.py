@@ -26,13 +26,13 @@ class Harness(termtool.Termtool):
     @termtool.argument("descriptor")
     @termtool.argument("image")
     def apply(self, args):
-        reporter = ConsoleReporter()
+        console_reporter = ConsoleReporter()
 
         if args.artifact_directory is None:
             args.artifact_directory = datetime.datetime.now().strftime(
                     os.path.basename(args.image) + "_%Y%m%d%H%M%S")
 
-        with reporter.with_read_image(1) as progress:
+        with console_reporter.with_read_image(1) as progress:
             image = pyplot.imread(args.image)[:, :, args.channel]
             progress()
 
@@ -42,9 +42,11 @@ class Harness(termtool.Termtool):
                 )
 
         descriptor = descriptor_class()
-        result = descriptor.apply(image, reporter=reporter)
+        result = descriptor.apply(image, reporter=console_reporter)
         result.create_artifact_images(args.artifact_directory,
-                reporter=reporter)
+                reporter=console_reporter)
+
+        console_reporter.export_summary(result)
 
 if __name__ == "__main__":
     Harness().run()

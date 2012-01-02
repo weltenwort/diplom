@@ -12,6 +12,8 @@ class BaseDescriptor(object):
     name = "DescriptorName"
 
     def __init__(self, **parameters):
+        parameters.setdefault("angles", 12)
+        parameters.setdefault("scales", 4)
         self.parameters = Bunch(**parameters)
 
     def apply(self, image, reporter=None):
@@ -106,7 +108,8 @@ class DescriptorResult(object):
                 #logging.info(u"Writing image '{}'...".format(filename))
                 fig.savefig(filename, format="png")
                 self.artifacts.setdefault("images", {})[label] = filename
-                reporter.on_create_image_artifacts()
+                if reporter:
+                    reporter.on_create_image_artifacts()
 
         if reporter:
             reporter.on_create_image_artifacts_stop()

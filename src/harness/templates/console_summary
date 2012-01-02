@@ -1,0 +1,18 @@
+{# vim: set ft=jinja: #}
+Transformation Summary
+======================
+
+Parameters
+----------
+{% for parameter_name in parameters -%}
+:{{parameter_name}}: {{parameters[parameter_name]}}
+{% endfor %}
+
+Artifacts
+---------
+{% for group in artifacts -%}
+{{group|underline("~")}}
+{% for artifact in artifacts[group] -%}
+- {{artifact}} ({{artifacts[group][artifact]}})
+{% endfor %}
+{% endfor %}

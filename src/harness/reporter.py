@@ -2,6 +2,7 @@ import contextlib
 import sys
 
 #import blinker
+import jinja2
 from progressbar import ProgressBar, Bar, Percentage
 
 
@@ -74,6 +75,10 @@ class ResultReporter(object):
         yield self.on_create_image_artifacts
         self.on_create_image_artifacts_stop()
 
+    def export_summary(self, result,
+            template_directory="./templates"):
+        pass
+
 
 class ConsoleReporter(ResultReporter):
     def __init__(self, **kwargs):
@@ -113,3 +118,33 @@ class ConsoleReporter(ResultReporter):
 
     def on_create_image_artifacts_stop(self):
         self.pbar_create_image_artifacts.finish()
+
+    def export_summary(self, result,
+            template_directory="./templates"):
+        template_env = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(template_directory)
+                )
+        template_env.filters["underline"] = self.rst_underline
+
+        summary = template_env.get_template("console_summary")
+        print(summary.render(
+            parameters=result.parameters.__dict__,
+            artifacts=result.artifacts,
+            ))
+
+    @staticmethod
+    def rst_underline(value, marker):
+        return "\n".join([value, marker * len(value)])
+
+
+class HtmlReporter(ResultReporter):
+    def __init__(self, **kwargs):
+        super(HtmlReporter, self).__init__(**kwargs)
+
+    def export_summary(self, result, output_directory,
+            template_directory="./templates"):
+        template_env = jinja2.Environment(
+                loader=jinja2.FileSystemLoader(template_directory)
+                )
+
+        summary = template_env.get_template("html_summary.html")
