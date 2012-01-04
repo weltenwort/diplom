@@ -2,6 +2,7 @@ import glob
 import imp
 import inspect
 #import logging
+import multiprocessing
 import os
 
 from matplotlib import pyplot
@@ -90,6 +91,14 @@ class DescriptorResult(object):
                 angles[s] for s in range(self.parameters.scales)
                 ]))
 
+        def process_artifact_result(args):
+            scale, angle, filename = args
+            self.artifacts.setdefault("images", {})\
+                    .setdefault(scale, {})[angle] = filename
+            if reporter:
+                reporter.on_create_image_artifacts()
+
+        pool = multiprocessing.Pool()
         for scale in range(self.parameters.scales):
             for angle in range(angles[scale]):
                 label = filename_pattern.format(
@@ -97,19 +106,26 @@ class DescriptorResult(object):
                     angle=angle,
                     )
                 filename = os.path.join(directory, "{}.png".format(label))
-
-                fig = pyplot.figure()
-                axes = fig.gca()
-                cl_image = self.coefficients(scale, angle)
-
-                mappable = axes.imshow(cl_image)
-                fig.colorbar(mappable, ax=axes)
-
-                #logging.info(u"Writing image '{}'...".format(filename))
-                fig.savefig(filename, format="png")
-                self.artifacts.setdefault("images", {})[label] = filename
-                if reporter:
-                    reporter.on_create_image_artifacts()
+                pool.apply_async(create_artifact_image,
+                        args=(self.coefficients(scale, angle), scale, angle, filename),
+                        callback=process_artifact_result,
+                        )
+        pool.close()
+        pool.join()
 
         if reporter:
             reporter.on_create_image_artifacts_stop()
+
+
+def create_artifact_image(data, scale, angle, filename):
+    fig = pyplot.figure()
+    axes = fig.gca()
+    #cl_image = cl(scale, angle)
+
+    mappable = axes.imshow(data)
+    fig.colorbar(mappable, ax=axes)
+
+    #logging.info(u"Writing image '{}'...".format(filename))
+    fig.savefig(filename, format="png")
+    return (scale, angle, filename)
+    #result_queue.put((scale, angle, filename))

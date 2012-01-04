@@ -11,21 +11,33 @@ class MeanDescriptor(BaseDescriptor):
         self.parameters.scales = scales
         self.parameters.angles = angles
 
-    def apply(self, image, reporter=None):
+    def apply(self, images, reporter=None):
         if reporter:
-            reporter.on_apply_transformation_start(max=1)
+            reporter.on_apply_transformation_start(max=len(images))
 
+        result = []
+        for image in images:
+            result.append(self._apply_single(image,
+                    self.parameters.scales,
+                    self.parameters.angles
+                    ))
+            if reporter:
+                reporter.on_apply_transformation()
+
+        if reporter:
+            reporter.on_apply_transformation_stop()
+
+        return result
+
+    def _apply_single(self, image, scales, angles):
         transformation = fdct2(
                 image.shape,
-                self.parameters.scales,
-                self.parameters.angles,
+                scales,
+                angles,
                 True,
                 norm=True,
                 )
         cl = transformation.fwd(image)
-        if reporter:
-            reporter.on_apply_transformation()
-            reporter.on_apply_transformation_stop()
 
         return DescriptorResult(
                 features=None,

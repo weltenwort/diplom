@@ -10,9 +10,9 @@ Parameters
 
 Artifacts
 ---------
-{% for group in artifacts -%}
-{{group|underline("~")}}
-{% for artifact in artifacts[group] -%}
-- {{artifact}} ({{artifacts[group][artifact]}})
-{% endfor %}
+{% for artifactName, artifact in artifacts.items() recursive -%}
+- {{artifactName}}
+{%- if artifact is mapping %}
+{{ loop(artifact.items())|indent(2, true) }}
+{%- else %} ({{artifact}}){% endif %}
 {% endfor %}

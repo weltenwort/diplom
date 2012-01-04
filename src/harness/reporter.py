@@ -1,4 +1,6 @@
 import contextlib
+import os
+import shutil
 import sys
 
 #import blinker
@@ -147,4 +149,21 @@ class HtmlReporter(ResultReporter):
                 loader=jinja2.FileSystemLoader(template_directory)
                 )
 
+        summary_filename = os.path.join(output_directory, "index.html")
         summary = template_env.get_template("html_summary.html")
+
+        if not os.path.exists(output_directory):
+            os.mkdir(output_directory)
+
+        for filename in [
+                "static/angular.min.js"
+                ]:
+            shutil.copyfile(
+                    os.path.join(template_directory, filename),
+                    os.path.join(output_directory, os.path.basename(filename))
+                    )
+
+        summary.stream(
+                parameters=result.parameters.__dict__,
+                artifacts=result.artifacts,
+                ).dump(summary_filename)

@@ -5,7 +5,7 @@ from matplotlib import pyplot
 import termtool
 
 from basedescriptor import BaseDescriptor
-from reporter import ConsoleReporter
+from reporter import ConsoleReporter, HtmlReporter
 
 
 @termtool.argument("--descriptor-directory",
@@ -27,6 +27,7 @@ class Harness(termtool.Termtool):
     @termtool.argument("image")
     def apply(self, args):
         console_reporter = ConsoleReporter()
+        html_reporter = HtmlReporter()
 
         if args.artifact_directory is None:
             args.artifact_directory = datetime.datetime.now().strftime(
@@ -42,11 +43,12 @@ class Harness(termtool.Termtool):
                 )
 
         descriptor = descriptor_class()
-        result = descriptor.apply(image, reporter=console_reporter)
+        result = descriptor.apply([image, ], reporter=console_reporter)[0]
         result.create_artifact_images(args.artifact_directory,
                 reporter=console_reporter)
 
         console_reporter.export_summary(result)
+        html_reporter.export_summary(result, args.artifact_directory)
 
 if __name__ == "__main__":
     Harness().run()

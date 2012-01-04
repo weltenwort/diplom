@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<!-- vim: set ft=htmljinja: -->
+<html>
+    <head>
+        <title>Transformation Summary</title>
+        <script src="./angular.min.js" ng:autobind></script>
+    </head>
+    <body>
+        <h1>Transformation summary</h1>
+        <h2>Parameters</h2>
+        <dl>
+            {% for parameter_name in parameters -%}
+            <dt>{{parameter_name}}</dt>
+            <dd>{{parameters[parameter_name]}}</dd>
+            {% endfor %}
+        </dl>
+        <h2>Images</h2>
+        {% for scale in artifacts.images %}
+        <h3>Scale {{scale}}
+            {% for angle in artifacts.images[scale] %}
+            <h4>Angle {{angle}}</h4>
+            <img src="{{'./scale%s_angle%s.png'|format(scale, angle)}}" />
+            {% endfor %}
+        {% endfor %}
+    </body>
+</html>
