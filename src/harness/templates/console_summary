@@ -8,6 +8,12 @@ Parameters
 :{{parameter_name}}: {{parameters[parameter_name]}}
 {% endfor %}
 
+Features
+--------
+::
+
+{{features|pprint|indent(2, true)}}
+
 Artifacts
 ---------
 {% for artifactName, artifact in artifacts.items() recursive -%}

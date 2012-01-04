@@ -132,6 +132,7 @@ class ConsoleReporter(ResultReporter):
         print(summary.render(
             parameters=result.parameters.__dict__,
             artifacts=result.artifacts,
+            features=result.features,
             ))
 
     @staticmethod
@@ -166,4 +167,5 @@ class HtmlReporter(ResultReporter):
         summary.stream(
                 parameters=result.parameters.__dict__,
                 artifacts=result.artifacts,
+                features=result.features,
                 ).dump(summary_filename)
