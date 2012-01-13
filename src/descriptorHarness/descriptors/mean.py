@@ -18,7 +18,12 @@ class MeanDescriptor(BaseDescriptor):
 
         result = []
         for image in images:
-            result.append(self._apply_single(image, self.parameters))
+            features, coefficients = self._apply_single(image, self.parameters)
+            result.append(DescriptorResult(
+                features=features,
+                coefficients=coefficients,
+                parameters=self.parameters,
+                ))
             if reporter:
                 reporter.on_apply_transformation()
 
@@ -48,13 +53,28 @@ class MeanDescriptor(BaseDescriptor):
                         numpy.array_split(row, grid_size, axis=1)]
                 means = [numpy.mean(cell) for cell in grid_cells]
                 std_devs = [numpy.std(cell) for cell in grid_cells]
-                features[(scale, angle)] = {
+                features.setdefault(scale, {})[angle] = {
                         "means": means,
                         "std_devs": std_devs,
                         }
 
-        return DescriptorResult(
-                features=features,
-                coefficients=cl,
-                parameters=parameters,
-                )
+        return (features, cl)
+
+        #return DescriptorResult(
+                #features=features,
+                #coefficients=cl,
+                #parameters=parameters,
+                #)
+
+
+def apply_descriptor(data):
+    transformation = fdct2(
+            data.image.shape,
+            data.parameters.scales,
+            data.parameters.angles,
+            True,
+            norm=True,
+            )
+    data.coefficients = transformation.fwd(data.image)
+    return data
+

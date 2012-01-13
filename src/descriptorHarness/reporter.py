@@ -1,4 +1,8 @@
+from __future__ import print_function
+
 import contextlib
+import functools
+import multiprocessing
 import os
 import shutil
 import sys
@@ -6,6 +10,34 @@ import sys
 #import blinker
 import jinja2
 from progressbar import ProgressBar, Bar, Percentage
+import stream
+
+
+class ProgressReporter(object):
+    def __init__(self, output=None):
+        self.output = output if output is not None else sys.stdout
+        self._display_lock = multiprocessing.Lock()
+
+    def display(self, *args, **kwargs):
+        with self._display_lock:
+            kwargs.setdefault("file", self.output)
+            print(*args, **kwargs)
+
+    def report_step_complete(self, step_name, message, extra=None):
+        self.display("{step_name}: {message}".format(
+            step_name=step_name,
+            message=message,
+            ))
+
+    def _report_step(self, step_name, message, data):
+        self.report_step_complete(step_name, message.format(**data))
+        return data
+
+    def iterate_step(self, step_name, message):
+        return stream.map(functools.partial(self._report_step,
+            step_name,
+            message,
+            ))
 
 
 class ReporterProgressBar(ProgressBar):

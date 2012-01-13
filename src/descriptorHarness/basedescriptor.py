@@ -1,6 +1,7 @@
 import glob
 import imp
 import inspect
+import json
 #import logging
 import multiprocessing
 import os
@@ -67,6 +68,12 @@ class DescriptorResult(object):
         self.coefficients = coefficients
         self.parameters = Bunch(**parameters) if isinstance(parameters, dict) else parameters
         self.artifacts = artifacts
+
+    def serialize(self):
+        return json.dumps({
+            "features": self.features,
+            "parameters": self.parameters.__dict__,
+            })
 
     def get_artifacts(self, group=None):
         if group is not None:

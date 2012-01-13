@@ -2,10 +2,12 @@ import datetime
 import os
 
 from matplotlib import pyplot
+import stream
 import termtool
 
 from basedescriptor import BaseDescriptor
-from reporter import ConsoleReporter, HtmlReporter
+from reporter import ConsoleReporter, HtmlReporter, ProgressReporter
+from utils import ImageLoader, ParameterWrapper, load_image
 
 
 @termtool.argument("--descriptor-directory",
@@ -21,11 +23,11 @@ class Harness(termtool.Termtool):
             print(descriptor.name)
 
     @termtool.subcommand(help="apply a descriptor to an image")
-    @termtool.argument("--channel", type=int, default=0)
+    #@termtool.argument("--channel", type=int, default=0)
     @termtool.argument("--artifact-directory", default=None)
     @termtool.argument("descriptor")
     @termtool.argument("image")
-    def apply(self, args):
+    def applyone(self, args):
         console_reporter = ConsoleReporter()
         html_reporter = HtmlReporter()
 
@@ -34,7 +36,7 @@ class Harness(termtool.Termtool):
                     os.path.basename(args.image) + "_%Y%m%d%H%M%S")
 
         with console_reporter.with_read_image(1) as progress:
-            image = pyplot.imread(args.image)[:, :, args.channel]
+            image = pyplot.imread(args.image, flatten=True)
             progress()
 
         descriptor_class = BaseDescriptor.get_descriptor(
@@ -49,6 +51,25 @@ class Harness(termtool.Termtool):
 
         console_reporter.export_summary(result)
         html_reporter.export_summary(result, args.artifact_directory)
+
+    @termtool.subcommand(help="apply a descriptor to a set of images")
+    @termtool.argument("--cache-directory", default="./cache")
+    @termtool.argument("--artifact-directory", default=None)
+    @termtool.argument("descriptor")
+    @termtool.argument("image", nargs="+")
+    def apply(self, args):
+        reporter = ProgressReporter()
+
+        if args.artifact_directory is None:
+            args.artifact_directory = datetime.datetime.now().strftime(
+                    "artifacts_%Y%m%d%H%M%S")
+
+        pipeline = load_image()\
+                >> reporter.iterate_step("Load Image", "{image_filename}")
+
+        result = args.image\
+                >> stream.ProcessPool(pipeline)\
+                >> list
 
 if __name__ == "__main__":
     Harness().run()
