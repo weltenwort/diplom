@@ -1,13 +1,15 @@
 import datetime
 import os
 
+from bunch import Bunch
 from matplotlib import pyplot
 import stream
 import termtool
 
-from basedescriptor import BaseDescriptor
+from basedescriptor import BaseDescriptor, DescriptorEnvironment
 from reporter import ConsoleReporter, HtmlReporter, ProgressReporter
 from utils import ImageLoader, ParameterWrapper, load_image
+import jobs
 
 
 @termtool.argument("--descriptor-directory",
@@ -59,17 +61,49 @@ class Harness(termtool.Termtool):
     @termtool.argument("image", nargs="+")
     def apply(self, args):
         reporter = ProgressReporter()
+        descriptorEnv = DescriptorEnvironment(
+                directory=args.descriptor_directory,
+                )
 
         if args.artifact_directory is None:
             args.artifact_directory = datetime.datetime.now().strftime(
                     "artifacts_%Y%m%d%H%M%S")
 
-        pipeline = load_image()\
-                >> reporter.iterate_step("Load Image", "{image_filename}")
+        results = args.image\
+                >> load_image()\
+                >> reporter.iterate_step("Loaded Image", "{image_filename}")\
+                >> descriptorEnv.apply_descriptor(args.descriptor)\
+                >> reporter.iterate_step("Applied Descriptor", "{descriptor_name} on {image_filename}")
 
-        result = args.image\
-                >> stream.ProcessPool(pipeline)\
-                >> list
+        for result in results:
+            print "RESULT: ", result
+
+    @termtool.subcommand(help="transform a set of image using the curvelet \
+            transform")
+    @termtool.argument("--job-directory", default=None)
+    @termtool.argument("--angles", type=int, default=12)
+    @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("image", nargs="+")
+    def transform(self, args):
+        if args.job_directory is None:
+            args.job_directory = datetime.datetime.now().strftime(
+                    "job_%Y%m%d%H%M%S%f")
+
+        parameter_job = jobs.ParameterWriterJob(
+                job_directory=args.job_directory,
+                parameters=dict(
+                    angles=args.angles,
+                    scales=args.scales,
+                    )
+                )
+        parameter_job("parameters")
+
+        for image_filename in args.image:
+            job = jobs.CurveletTransformationJob(
+                    job_directory=args.job_directory,
+                    )
+            job(image_filename)
+
 
 if __name__ == "__main__":
     Harness().run()

@@ -6,8 +6,55 @@ import json
 import multiprocessing
 import os
 
+from bunch import Bunch
 from matplotlib import pyplot
-from matplotlib.cbook import Bunch
+import stream
+
+
+class DescriptorEnvironment(object):
+    def __init__(self, directory):
+        self.directory = directory
+
+    @classmethod
+    def get_descriptor_files(cls, directory):
+        pattern = os.path.join(os.path.abspath(directory), "*.py")
+        return sorted(glob.iglob(pattern))
+
+    @classmethod
+    def load_descriptor_module(cls, filename):
+        basename = os.path.splitext(os.path.basename(filename))[0]
+        descriptor_module = imp.load_source(
+                "descriptor_{}".format(basename),
+                filename,
+                )
+        return descriptor_module
+
+    @classmethod
+    def get_descriptor_modules(cls, directory):
+        return [cls.load_descriptor_module(m)\
+                for m in cls.get_descriptor_files(directory)]
+
+    def get_descriptor(self, descriptor_name):
+        for descriptor_module in self.get_descriptor_modules(self.directory):
+            if descriptor_module.DESCRIPTOR_NAME == descriptor_name:
+                return descriptor_module
+        raise NameError("No such descriptor: {}".format(descriptor_name))
+
+    def apply_descriptor(self, descriptor_name, **parameters):
+        parameters.setdefault("angles", 12)
+        parameters.setdefault("scales", 4)
+        parameters = Bunch(**parameters)
+        descriptor = self.get_descriptor(descriptor_name).apply_descriptor
+
+        def apply_descriptor_inner(data):
+            data.parameters = parameters
+            data.descriptor_name = descriptor_name
+            features = descriptor(data.image, data.parameters)
+            data.features = features
+            #data.coefficients = coefficients
+            return data
+
+        return stream.map(apply_descriptor_inner)
 
 
 class BaseDescriptor(object):

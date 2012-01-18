@@ -6,12 +6,12 @@ import stream
 
 
 def load_image(flatten=True):
-    def load_image(image_filename):
+    def load_image_inner(image_filename):
         return Bunch(
                 image_filename=image_filename,
                 image=imread(image_filename, flatten=flatten),
                 )
-    return stream.map(load_image)
+    return stream.map(load_image_inner)
 
 
 class ImageLoader(stream.Stream):
@@ -50,7 +50,14 @@ import signal
 class ProcessPipeline(object):
     def __init__(self, steps=[], proxy_factory=dict,\
             pool_parameters=[("default", None), ]):
-        self.steps = steps[:]
+        self.steps = []
+
+        for step_info in steps:
+            if callable(step_info):
+                self.append_step(step_info)
+            else:
+                self.append_step(*step_info)
+
         self.proxy_factory = proxy_factory
         self.proxy = None
         self.pool_parameters = pool_parameters[:]
