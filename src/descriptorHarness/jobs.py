@@ -3,6 +3,7 @@ import pickle
 import os
 
 from bunch import Bunch
+import numpy
 from pyct import fdct2
 from scipy.misc import imread
 
@@ -51,10 +52,13 @@ class StaticInput(object):
         return self.static_data
 
 
-class PickleInputReader(object):
+class FileInputReader(object):
     def __init__(self,\
-            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+            filename_pattern=["{base_directory}", "{item_id}"]):
         self.filename_pattern = filename_pattern
+
+    def load(self, fp):
+        return fp.read()
 
     def __call__(self, base_directory, item_id):
         filename = format_path(self.filename_pattern,
@@ -64,14 +68,17 @@ class PickleInputReader(object):
                 )
 
         with open(filename, "r") as f:
-            return pickle.load(f)
+            return self.load(f)
 
 
-class PickleOutputWriter(object):
+class FileOutputWriter(object):
     def __init__(self, result_attr,\
-            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+            filename_pattern=["{base_directory}", "{item_id}"]):
         self.result_attr = result_attr
         self.filename_pattern = filename_pattern
+
+    def dump(self, data, f):
+        f.write(str(data))
 
     def __call__(self, base_directory, item_id, result):
         filename = format_path(self.filename_pattern,
@@ -86,7 +93,44 @@ class PickleOutputWriter(object):
 
         print(filename)
         with open(filename, "w") as f:
-            pickle.dump(getattr(result, self.result_attr), f)
+            self.dump(getattr(result, self.result_attr), f)
+
+
+class PickleInputReader(FileInputReader):
+    def __init__(self,\
+            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+        super(PickleInputReader, self).__init__(filename_pattern)
+
+    def load(self, fp):
+        return pickle.load(fp)
+
+
+class PickleOutputWriter(FileOutputWriter):
+    def __init__(self, result_attr,\
+            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+        super(PickleOutputWriter, self).__init__(result_attr, filename_pattern)
+
+    def dump(self, data, f):
+        pickle.dump(data, f)
+
+
+class NumpyOutputWriter(FileOutputWriter):
+    def __init__(self, result_attr,\
+            filename_pattern=["{base_directory}", "{item_id}.npy"]):
+        super(NumpyOutputWriter, self).__init__(result_attr, filename_pattern)
+
+    def dump(self, data, f):
+        numpy.save(f, data)
+
+
+class NumpyListOutputWriter(FileOutputWriter):
+    def __init__(self, result_attr,\
+            filename_pattern=["{base_directory}", "{item_id}.npz"]):
+        super(NumpyListOutputWriter, self).__init__(result_attr,\
+                filename_pattern)
+
+    def dump(self, data, f):
+        numpy.savez(f, **data)
 
 
 class ImageInputReader(object):
@@ -132,10 +176,10 @@ class CurveletTransformationJob(Job):
                         ])
                     ),
                 outputs=dict(
-                    coefficients=PickleOutputWriter("coefficients", [
+                    coefficients=NumpyListOutputWriter("coefficients", [
                         "{base_directory}",
                         "coefficients",
-                        "{safe_item_id}.pickle",
+                        "{safe_item_id}.npz",
                         ])
                     ),
                 )
@@ -151,6 +195,16 @@ class CurveletTransformationJob(Job):
                 norm=True,
                 )
 
+        coefficients = transformation.fwd(inputs.image)
+        coefficient_map = {}
+
+        angles = [1] + [inputs.parameters.angles]\
+                * (inputs.parameters.scales - 1)
+        for scale in range(inputs.parameters.scales):
+            for angle in range(angles[scale]):
+                coefficient_map["{},{}".format(scale, angle)] =\
+                        coefficients(scale, angle)
+
         return Bunch(
-                coefficients=transformation.fwd(inputs.image)
+                coefficients=coefficient_map
                 )
