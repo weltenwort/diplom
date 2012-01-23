@@ -1,3 +1,4 @@
+import base64
 import datetime
 import os
 
@@ -89,20 +90,29 @@ class Harness(termtool.Termtool):
             args.job_directory = datetime.datetime.now().strftime(
                     "job_%Y%m%d%H%M%S%f")
 
-        parameter_job = jobs.ParameterWriterJob(
+        parameter_job = jobs.ParameterPersistenceJob(
                 job_directory=args.job_directory,
-                parameters=dict(
-                    angles=args.angles,
-                    scales=args.scales,
-                    )
                 )
-        parameter_job("parameters")
+        parameter_job(dict(
+            parameters=dict(
+                angles=12,
+                scales=4,
+            )))
+
+        job = jobs.CompositeJob([
+            parameter_job,
+            jobs.ImageReaderJob(args.job_directory),
+            jobs.CurveletTransformationJob(),
+            jobs.CurveletPersistenceJob(args.job_directory),
+            ])
 
         for image_filename in args.image:
-            job = jobs.CurveletTransformationJob(
-                    job_directory=args.job_directory,
+            item = dict(
+                    id=base64.urlsafe_b64encode(image_filename),
+                    source_image_filename=image_filename,
                     )
-            job(image_filename)
+            result = job(item)
+            #print result
 
 
 if __name__ == "__main__":

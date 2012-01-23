@@ -1,15 +1,24 @@
 import base64
-import pickle
+import logging
 import os
+import pickle
 
 from bunch import Bunch
 import numpy
 from pyct import fdct2
-from scipy.misc import imread
+from scipy.misc import imread, imsave
+
+
+class DictBackend(object):
+    pass
+
+
+class FileBackend(object):
+    pass
 
 
 def ensure_list(data):
-    if isinstance(data, str):
+    if isinstance(data, basestring):
         return [data, ]
     else:
         return list(data)
@@ -21,50 +30,138 @@ def format_path(path, *args, **kwargs):
 
 
 class Job(object):
-    def __init__(self, job_directory, inputs=None, outputs=None):
-        self.job_directory = job_directory
-        self.inputs = inputs if inputs is not None else {}
-        self.outputs = outputs if outputs is not None else {}
+    def __init__(self):
+        pass
 
-    def read_input_item(self, input_name, item_id):
-        return self.inputs[input_name](self.job_directory, item_id)
+    def __call__(self, item):
+        logging.debug("Executing job {}...".format(self))
+        result = self.execute(item)
 
-    def write_output_item(self, output_name, item_id, result):
-        self.outputs[output_name](self.job_directory, item_id, result)
+        return result
 
-    def __call__(self, item_id):
-        inputs = {input_name: self.read_input_item(input_name, item_id)\
-                        for input_name in self.inputs}
-        result = self.execute(inputs)
-
-        for output_name in self.outputs:
-            self.write_output_item(output_name, item_id, result)
-
-    def execute(self, inputs):
+    def execute(self, item):
         raise NotImplementedError()
+
+
+class CompositeJob(Job):
+    def __init__(self, jobs=None):
+        self.jobs = jobs or []
+
+    def execute(self, item):
+        for job in self.jobs:
+            logging.debug("Executing job {} with item {}...".format(job, item))
+            item = job(item)
+
+        return item
+
+
+class FileIOJob(Job):
+    def __init__(self, job_directory, parameters=None,\
+            read=True, write=True):
+        super(FileIOJob, self).__init__()
+
+        self.parameters = parameters or {}
+        self.job_directory = job_directory
+        self.read = read
+        self.write = write
+
+    def read_parameter(self, parameter_name, item):
+        parameter = self.parameters[parameter_name]
+        filename = parameter.format_filename(
+                job_directory=self.job_directory,
+                parameter_name=parameter_name,
+                item=item,
+                )
+        parameter.ensure_directory(filename)
+        return parameter.read(filename)
+
+    def write_parameter(self, parameter_name, item, value):
+        parameter = self.parameters[parameter_name]
+        filename = parameter.format_filename(
+                job_directory=self.job_directory,
+                parameter_name=parameter_name,
+                item=item,
+                )
+        parameter.ensure_directory(filename)
+        parameter.write(filename, value)
+
+    def execute(self, item):
+        for parameter_name in self.parameters:
+            if parameter_name in item:
+                if self.write:
+                    #logging.debug("Writing parameter '{}': {}".format(parameter_name, item[parameter_name]))
+                    self.write_parameter(parameter_name, item,\
+                            item[parameter_name])
+            else:
+                if self.read:
+                    #logging.debug("Reading parameter '{}'...".format(parameter_name))
+                    item[parameter_name] = self.read_parameter(parameter_name,\
+                            item)
+
+        return item
+
+
+class JobParameter(object):
+    def __init__(self,\
+            filename_pattern=["{job_directory}", "{parameter_name}",
+                "{item.id}"]):
+        self.filename_pattern = filename_pattern
+
+    def format_filename(self, *args, **kwargs):
+        return format_path(self.filename_pattern, *args, **kwargs)
+
+    def ensure_directory(self, filename):
+        dirname = os.path.dirname(filename)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
+    def read(self, filename):
+        with open(filename, "r") as f:
+            return pickle.load(f)
+
+    def write(self, filename, value):
+        with open(filename, "w") as f:
+            return pickle.dump(value, f)
+
+
+class JobNpzParameter(JobParameter):
+    def read(self, filename):
+        with open(filename, "r") as f:
+            return numpy.load(f)
+
+    def write(self, filename, value):
+        with open(filename, "w") as f:
+            numpy.savez(f, **value)
+
+
+class JobImageParameter(JobParameter):
+    def read(self, filename):
+        return imread(filename, flatten=True)
+
+    def write(self, filename, value):
+        imsave(filename, value)
 
 
 class StaticInput(object):
     def __init__(self, static_data):
         self.static_data = static_data
 
-    def __call__(self, base_directory, item_id):
+    def __call__(self, base_directory, item):
         return self.static_data
 
 
 class FileInputReader(object):
     def __init__(self,\
-            filename_pattern=["{base_directory}", "{item_id}"]):
+            filename_pattern=["{base_directory}", "{item.input_filename}"]):
         self.filename_pattern = filename_pattern
 
     def load(self, fp):
         return fp.read()
 
-    def __call__(self, base_directory, item_id):
+    def __call__(self, base_directory, item):
         filename = format_path(self.filename_pattern,
                 base_directory=base_directory,
-                item_id=item_id,
-                safe_item_id=base64.urlsafe_b64encode(item_id),
+                item=item,
                 )
 
         with open(filename, "r") as f:
@@ -73,18 +170,17 @@ class FileInputReader(object):
 
 class FileOutputWriter(object):
     def __init__(self, result_attr,\
-            filename_pattern=["{base_directory}", "{item_id}"]):
+            filename_pattern=["{base_directory}", "{item.output_filename}"]):
         self.result_attr = result_attr
         self.filename_pattern = filename_pattern
 
     def dump(self, data, f):
         f.write(str(data))
 
-    def __call__(self, base_directory, item_id, result):
+    def __call__(self, base_directory, item, result):
         filename = format_path(self.filename_pattern,
                 base_directory=base_directory,
-                item_id=item_id,
-                safe_item_id=base64.urlsafe_b64encode(item_id),
+                item=item,
                 )
         dirname = os.path.dirname(filename)
 
@@ -98,7 +194,8 @@ class FileOutputWriter(object):
 
 class PickleInputReader(FileInputReader):
     def __init__(self,\
-            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+            filename_pattern=["{base_directory}",
+                "{item.input_filename}.pickle"]):
         super(PickleInputReader, self).__init__(filename_pattern)
 
     def load(self, fp):
@@ -107,7 +204,8 @@ class PickleInputReader(FileInputReader):
 
 class PickleOutputWriter(FileOutputWriter):
     def __init__(self, result_attr,\
-            filename_pattern=["{base_directory}", "{item_id}.pickle"]):
+            filename_pattern=["{base_directory}",
+                "{item.output_filename}.pickle"]):
         super(PickleOutputWriter, self).__init__(result_attr, filename_pattern)
 
     def dump(self, data, f):
@@ -116,7 +214,8 @@ class PickleOutputWriter(FileOutputWriter):
 
 class NumpyOutputWriter(FileOutputWriter):
     def __init__(self, result_attr,\
-            filename_pattern=["{base_directory}", "{item_id}.npy"]):
+            filename_pattern=["{base_directory}",
+                "{item.output_filename}.npy"]):
         super(NumpyOutputWriter, self).__init__(result_attr, filename_pattern)
 
     def dump(self, data, f):
@@ -125,7 +224,8 @@ class NumpyOutputWriter(FileOutputWriter):
 
 class NumpyListOutputWriter(FileOutputWriter):
     def __init__(self, result_attr,\
-            filename_pattern=["{base_directory}", "{item_id}.npz"]):
+            filename_pattern=["{base_directory}",
+                "{item.output_filename}.npz"]):
         super(NumpyListOutputWriter, self).__init__(result_attr,\
                 filename_pattern)
 
@@ -134,14 +234,14 @@ class NumpyListOutputWriter(FileOutputWriter):
 
 
 class ImageInputReader(object):
-    def __init__(self, filename_pattern="{item_id}"):
+    def __init__(self, filename_pattern="{item.input_filename}"):
         self.filename_pattern = filename_pattern
 
-    def __call__(self, base_directory, item_id):
+    def __call__(self, base_directory, item):
         filename = format_path(self.filename_pattern,
                 base_directory=base_directory,
-                item_id=item_id,
-                safe_item_id=base64.urlsafe_b64encode(item_id),
+                item=item,
+                safe_item=base64.urlsafe_b64encode(item),
                 )
 
         return imread(filename, flatten=True)
@@ -156,7 +256,7 @@ class ParameterWriterJob(Job):
                 outputs=dict(
                     parameters=PickleOutputWriter("parameters", [
                         "{base_directory}",
-                        "{item_id}.pickle",
+                        "{item.output_filename}.pickle",
                         ])
                     )
                 )
@@ -165,27 +265,50 @@ class ParameterWriterJob(Job):
         return Bunch.fromDict(inputs)
 
 
-class CurveletTransformationJob(Job):
+class ImageReaderJob(FileIOJob):
     def __init__(self, job_directory):
-        super(CurveletTransformationJob, self).__init__(job_directory,
-                inputs=dict(
-                    image=ImageInputReader(),
-                    parameters=PickleInputReader([
-                        "{base_directory}",
-                        "parameters.pickle",
-                        ])
+        super(ImageReaderJob, self).__init__(job_directory,
+                parameters=dict(
+                    image=JobImageParameter(filename_pattern=[
+                        "{item[source_image_filename]}",
+                        ]),
                     ),
-                outputs=dict(
-                    coefficients=NumpyListOutputWriter("coefficients", [
-                        "{base_directory}",
-                        "coefficients",
-                        "{safe_item_id}.npz",
-                        ])
+                read=True,
+                write=False,
+                )
+
+
+class ParameterPersistenceJob(FileIOJob):
+    def __init__(self, job_directory):
+        super(ParameterPersistenceJob, self).__init__(job_directory,
+                parameters=dict(
+                    parameters=JobParameter(filename_pattern=[
+                        "{job_directory}",
+                        "parameters.pickle",
+                        ]),
                     ),
                 )
 
-    def execute(self, inputs):
-        inputs = Bunch.fromDict(inputs)
+
+class CurveletPersistenceJob(FileIOJob):
+    def __init__(self, job_directory):
+        super(CurveletPersistenceJob, self).__init__(job_directory,
+                parameters=dict(
+                    coefficients=JobNpzParameter(filename_pattern=[
+                        "{job_directory}",
+                        "{parameter_name}",
+                        "{item[id]}.coefficients",
+                        ]),
+                    ),
+                )
+
+
+class CurveletTransformationJob(Job):
+    def __init__(self):
+        super(CurveletTransformationJob, self).__init__()
+
+    def execute(self, item):
+        inputs = Bunch.fromDict(item)
 
         transformation = fdct2(
                 inputs.image.shape,
@@ -205,6 +328,5 @@ class CurveletTransformationJob(Job):
                 coefficient_map["{},{}".format(scale, angle)] =\
                         coefficients(scale, angle)
 
-        return Bunch(
-                coefficients=coefficient_map
-                )
+        item["coefficients"] = coefficient_map
+        return item
