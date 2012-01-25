@@ -1,8 +1,14 @@
 import itertools
+import sys
 
 from bunch import Bunch
 from scipy.misc import imread
 import stream
+
+
+def import_module(module_name):
+    __import__(module_name)
+    return sys.modules[module_name]
 
 
 def load_image(flatten=True):

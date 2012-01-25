@@ -1,15 +1,15 @@
 import base64
 import datetime
+import multiprocessing
 import os
 
-from bunch import Bunch
+#from bunch import Bunch
 from matplotlib import pyplot
-import stream
 import termtool
 
 from basedescriptor import BaseDescriptor, DescriptorEnvironment
 from reporter import ConsoleReporter, HtmlReporter, ProgressReporter
-from utils import ImageLoader, ParameterWrapper, load_image
+import utils
 import jobs
 
 
@@ -114,6 +114,55 @@ class Harness(termtool.Termtool):
             result = job(item)
             #print result
 
+    @termtool.subcommand(help="extract features from a set of images")
+    @termtool.argument("--job-directory", default=None)
+    @termtool.argument("--angles", type=int, default=12)
+    @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("extractor")
+    @termtool.argument("image", nargs="+")
+    def extract(self, args):
+        if args.job_directory is None:
+            args.job_directory = datetime.datetime.now().strftime(
+                    "job_%Y%m%d%H%M%S%f")
+
+        parameters = dict(
+                angles=12,
+                scales=4,
+                feature_extractor=args.extractor,
+                )
+        jobs.ParameterPersistenceJob(args.job_directory)(dict(
+            parameters=parameters,
+            ))
+
+        job = jobs.CompositeJob([
+            jobs.ParameterPersistenceJob(args.job_directory, write=False),
+            jobs.ImageReaderJob(args.job_directory),
+            jobs.CurveletTransformationJob(),
+            jobs.FeatureExtractionJob(),
+            jobs.FeaturePersistenceJob(args.job_directory),
+            ])
+
+        items = []
+        for image_filename in args.image:
+            item = dict(
+                    id=base64.urlsafe_b64encode(image_filename),
+                    source_image_filename=image_filename,
+                    parameters=parameters,
+                    )
+            items.append(item)
+
+        pool = multiprocessing.Pool()
+        result = pool.map(job, items)
+
+    @termtool.subcommand(help="perform a similarity query on an image and the\
+            results of a previous feature extraction")
+    @termtool.argument("metric")
+    @termtool.argument("features")
+    @termtool.argument("image")
+    def query(self, args):
+        metric = utils.import_module(args.metric)
+
+        parameter_
 
 if __name__ == "__main__":
     Harness().run()
