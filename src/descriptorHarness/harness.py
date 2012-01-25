@@ -152,17 +152,43 @@ class Harness(termtool.Termtool):
             items.append(item)
 
         pool = multiprocessing.Pool()
-        result = pool.map(job, items)
+        pool.map(job, items)
 
     @termtool.subcommand(help="perform a similarity query on an image and the\
             results of a previous feature extraction")
     @termtool.argument("metric")
-    @termtool.argument("features")
+    @termtool.argument("features_directory")
     @termtool.argument("image")
     def query(self, args):
-        metric = utils.import_module(args.metric)
+        query_features = jobs.CompositeJob([
+            jobs.ParameterPersistenceJob(args.features_directory, write=False),
+            jobs.ImageReaderJob("."),
+            jobs.CurveletTransformationJob(),
+            jobs.FeatureExtractionJob(),
+            ])(dict(
+                id=base64.urlsafe_b64encode(args.image),
+                source_image_filename=args.image,
+                ))
 
-        parameter_
+        feature_ids = jobs.FeaturePersistenceJob(args.features_directory)\
+                .list_ids()
+
+        feature_retrieval_job = jobs.CompositeJob([
+            jobs.FeaturePersistenceJob(args.features_directory, write=False),
+            ])
+
+        feature_items = [feature_retrieval_job(dict(
+            id=item_id,
+            )) for item_id in feature_ids]
+
+        comparison_job = jobs.FeatureComparisonJob()
+
+        distances = [comparison_job(dict(
+            metric=args.metric,
+            query_features=query_features,
+            comparison_features=feature_item,
+            ))["distance"] for feature_item in feature_items]
+        print(distances)
 
 if __name__ == "__main__":
     Harness().run()

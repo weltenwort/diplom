@@ -1,7 +1,9 @@
-import base64
+#import base64
+import glob
 import logging
 import os
 import pickle
+import re
 
 from bunch import Bunch
 import numpy
@@ -51,7 +53,7 @@ class CompositeJob(Job):
 
     def execute(self, item):
         for job in self.jobs:
-            #logging.debug("Executing job {} with item {}...".format(job, item))
+            #logging.debug("Executing job {} with item {}...".format(job, item)) # NOQA
             item = job(item)
 
         return item
@@ -87,16 +89,50 @@ class FileIOJob(Job):
         parameter.ensure_directory(filename)
         parameter.write(filename, value)
 
+    def list_files(self, parameter_name=None):
+        if parameter_name is None:
+            parameter_name = self.parameters.keys()[0]
+
+        parameter = self.parameters[parameter_name]
+        filename = parameter.format_filename(
+                job_directory=self.job_directory,
+                parameter_name=parameter_name,
+                item=dict(
+                    id="*",
+                    )
+                )
+        return glob.glob(filename)
+
+    def list_ids(self, parameter_name=None):
+        sentinel = "LISTIDSENTINEL"
+        if parameter_name is None:
+            parameter_name = self.parameters.keys()[0]
+
+        parameter = self.parameters[parameter_name]
+        filename = parameter.format_filename(
+                job_directory=self.job_directory,
+                parameter_name=parameter_name,
+                item=dict(
+                    id=sentinel,
+                    )
+                )
+        filename_expression = re.compile(re.escape(filename)\
+                .replace(sentinel, "(.+)"))
+        item_ids = [filename_expression.match(filename).group(1) for filename\
+                in self.list_files(parameter_name)]
+
+        return item_ids
+
     def execute(self, item):
         for parameter_name in self.parameters:
             if parameter_name in item:
                 if self.write:
-                    #logging.debug("Writing parameter '{}': {}".format(parameter_name, item[parameter_name]))
+                    #logging.debug("Writing parameter '{}': {}".format(parameter_name, item[parameter_name])) # NOQA
                     self.write_parameter(parameter_name, item,\
                             item[parameter_name])
             else:
                 if self.read:
-                    #logging.debug("Reading parameter '{}'...".format(parameter_name))
+                    #logging.debug("Reading parameter '{}'...".format(parameter_name)) # NOQA
                     item[parameter_name] = self.read_parameter(parameter_name,\
                             item)
 
@@ -175,7 +211,7 @@ class ParameterPersistenceJob(FileIOJob):
 
 
 class CurveletPersistenceJob(FileIOJob):
-    def __init__(self, job_directory):
+    def __init__(self, job_directory, read=True, write=True):
         super(CurveletPersistenceJob, self).__init__(job_directory,
                 parameters=dict(
                     coefficients=JobNpzParameter(filename_pattern=[
@@ -184,6 +220,8 @@ class CurveletPersistenceJob(FileIOJob):
                         "{item[id]}.coefficients",
                         ]),
                     ),
+                read=read,
+                write=write,
                 )
 
 
@@ -217,9 +255,6 @@ class CurveletTransformationJob(Job):
 
 
 class FeatureExtractionJob(Job):
-    def __init__(self, extractor=None):
-        self.extractor = extractor
-
     def execute(self, item):
         feature_extractor = utils.import_module(\
                 item["parameters"]["feature_extractor"]).apply_descriptor
@@ -229,7 +264,7 @@ class FeatureExtractionJob(Job):
 
 
 class FeaturePersistenceJob(FileIOJob):
-    def __init__(self, job_directory):
+    def __init__(self, job_directory, read=True, write=True):
         super(FeaturePersistenceJob, self).__init__(job_directory,
                 parameters=dict(
                     features=JobParameter(filename_pattern=[
@@ -237,4 +272,33 @@ class FeaturePersistenceJob(FileIOJob):
                         "{parameter_name}",
                         "{item[id]}.features",
                         ])
-                    ))
+                    ),
+                read=read,
+                write=write,
+                )
+
+
+class FeatureComparisonJob(Job):
+    def execute(self, item):
+        """Compares two features.
+
+        :argument item: a dict containing the following keys:
+            metric
+                The name of the module containing the metric
+            query_features
+                The features of the query image
+            comparison_features
+                The features of the image to compare the query to
+        :return: `item` augmented with the following keys:
+            distance
+                The distance between the query and comparison images computed
+                using the given metric
+        """
+        inputs = Bunch.fromDict(item)
+
+        metric = utils.import_module(inputs.metric).apply_metric
+        distance = metric(inputs.query_features.features,\
+                inputs.comparison_features.features)
+
+        item["distance"] = distance
+        return item
