@@ -6,6 +6,7 @@ import pickle
 import re
 
 from bunch import Bunch
+from matplotlib import pyplot
 import numpy
 from pyct import fdct2
 from scipy.misc import imread, imsave
@@ -183,6 +184,58 @@ class JobImageParameter(JobParameter):
         imsave(filename, value)
 
 
+class JobIteratorParameter(JobParameter):
+    def __init__(self, each_parameter, filename_pattern=[]):
+        super(JobIteratorParameter, self).__init__(
+                filename_pattern=filename_pattern,
+                )
+        self.each_parameter = each_parameter
+
+    #def format_filename(self, *args, **kwargs):
+        #kwargs["iter_key"] = "{iter_key}"
+        #return super(JobIteratorParameter, self).format_filename(*args,\
+                #**kwargs)
+
+    def read(self, filename):
+        raise NotImplementedError()
+
+    def write(self, filename, value):
+        for key in value:
+            current_filename = self.each_parameter.format_filename(
+                    iter_filename=filename,
+                    iter_key=key,
+                    )
+            self.each_parameter.ensure_directory(current_filename)
+            self.each_parameter.write(current_filename, value[key])
+
+
+class JobCoefficientPlotParameter(JobParameter):
+    def read(self, filename):
+        raise NotImplementedError()
+
+    def write(self, filename, value):
+        fig = pyplot.figure()
+        axes = fig.gca()
+        mappable = axes.imshow(value)
+        fig.colorbar(mappable, ax=axes)
+        fig.savefig(filename, format="png")
+
+
+class JobFeaturePlotParameter(JobParameter):
+    def __init__(self, feature_name, filename_pattern=[]):
+        super(JobFeaturePlotParameter, self).__init__(
+                filename_pattern=filename_pattern,
+                )
+        self.feature_name = feature_name
+
+    def read(self, filename):
+        raise NotImplementedError()
+
+    def write(self, filename, value):
+        pass
+        #print self.feature_name, value[self.feature_name]
+
+
 class ImageReaderJob(FileIOJob):
     def __init__(self, job_directory):
         super(ImageReaderJob, self).__init__(job_directory,
@@ -302,3 +355,42 @@ class FeatureComparisonJob(Job):
 
         item["distance"] = distance
         return item
+
+
+class CoefficientPlotJob(FileIOJob):
+    def __init__(self, job_directory, read=False, write=True):
+        super(CoefficientPlotJob, self).__init__(job_directory,
+                parameters=dict(
+                    coefficients=JobIteratorParameter(
+                        each_parameter=JobCoefficientPlotParameter([
+                            "{iter_filename}",
+                            "{iter_key}.png",
+                            ]),
+                        filename_pattern=[
+                            "{job_directory}",
+                            "coefficient_plot",
+                            "{item[id]}",
+                            ],
+                        ),
+                    ),
+                read=read,
+                write=write,
+                )
+
+
+class FeaturePlotJob(FileIOJob):
+    def __init__(self, job_directory, feature_name, read=False, write=True):
+        super(FeaturePlotJob, self).__init__(job_directory,
+                parameters=dict(
+                    features=JobFeaturePlotParameter(
+                        feature_name=feature_name,
+                        filename_pattern=[
+                            "{job_directory}",
+                            "feature_plot_{}".format(feature_name),
+                            "{item[id]}",
+                            ],
+                        ),
+                    ),
+                read=read,
+                write=write,
+                )
