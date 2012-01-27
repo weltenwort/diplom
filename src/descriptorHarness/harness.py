@@ -107,9 +107,9 @@ class Harness(termtool.Termtool):
             jobs.ParameterPersistenceJob(args.job_directory, write=False),
             jobs.ImageReaderJob(args.job_directory),
             jobs.CurveletTransformationJob(),
-            #jobs.CoefficientPlotJob(args.job_directory),
+            jobs.CoefficientPlotJob(args.job_directory),
             jobs.FeatureExtractionJob(),
-            jobs.FeaturePlotJob(args.job_directory, "means"),
+            jobs.FeaturePlotJob(args.job_directory),
             ])
 
         items = []

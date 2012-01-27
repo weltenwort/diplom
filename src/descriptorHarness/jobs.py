@@ -198,9 +198,13 @@ class JobImageParameter(JobParameter):
 
 
 class JobIteratorParameter(JobParameter):
-    def __init__(self, each_parameter, filename_pattern=[]):
+    def __init__(self, parameter_name, each_parameter, filename_pattern=[],
+            enable_read=True, enable_write=True):
         super(JobIteratorParameter, self).__init__(
+                parameter_name=parameter_name,
                 filename_pattern=filename_pattern,
+                enable_read=enable_read,
+                enable_write=enable_write,
                 )
         self.each_parameter = each_parameter
 
@@ -225,12 +229,21 @@ class JobIteratorParameter(JobParameter):
 
 
 class JobCoefficientPlotParameter(JobParameter):
+    def __init__(self, parameter_name, filename_pattern=[],
+            enable_write=True):
+        super(JobCoefficientPlotParameter, self).__init__(
+                parameter_name=parameter_name,
+                filename_pattern=filename_pattern,
+                enable_read=False,
+                enable_write=enable_write,
+                )
+
     def read(self, item, **filename_args):
         raise NotImplementedError()
 
-    def write(self, item, **filename_args):
-        value = item[self.parameter_name]
-        filename = self.format_filename(item=item, **filename_args)
+    def write(self, value, **filename_args):
+        #value = item[self.parameter_name]
+        filename = self.format_filename(**filename_args)
         self.ensure_directory(filename)
 
         fig = pyplot.figure()
@@ -241,22 +254,38 @@ class JobCoefficientPlotParameter(JobParameter):
 
 
 class JobFeaturePlotParameter(JobParameter):
-    def __init__(self, feature_name, filename_pattern=[]):
+    def __init__(self, parameter_name, filename_pattern=[],
+            enable_write=True):
         super(JobFeaturePlotParameter, self).__init__(
+                parameter_name=parameter_name,
                 filename_pattern=filename_pattern,
+                enable_read=False,
+                enable_write=enable_write,
                 )
-        self.feature_name = feature_name
 
     def read(self, item, **filename_args):
         raise NotImplementedError()
 
     def write(self, item, **filename_args):
-        value = item[self.parameter_name]
-        filename = self.format_filename(item=item, **filename_args)
-        self.ensure_directory(filename)
+        features = item[self.parameter_name]
 
-        pass
-        #print self.feature_name, value[self.feature_name]
+        feature_extractor = utils.import_module(\
+                item["parameters"]["feature_extractor"])
+        feature_types = feature_extractor.get_feature_types(features)
+        feature_groups = feature_extractor.get_feature_groups(features)
+
+        for feature_type in feature_types:
+            for feature_group in feature_groups:
+                filename = self.format_filename(
+                    item=item,
+                    feature_type=feature_type,
+                    feature_group=feature_group,
+                    **filename_args
+                    )
+                figure = feature_extractor.plot_feature_group(features,\
+                        feature_type, feature_group)
+                self.ensure_directory(filename)
+                figure.savefig(filename, format="png")
 
 
 class ImageReaderJob(FileIOJob):
@@ -385,10 +414,12 @@ class CoefficientPlotJob(FileIOJob):
         super(CoefficientPlotJob, self).__init__(job_directory,
                 parameters=[
                     JobIteratorParameter("coefficients",
-                        each_parameter=JobCoefficientPlotParameter(None, [
-                            "{iter_filename}",
-                            "{iter_key}.png",
-                            ]),
+                        each_parameter=JobCoefficientPlotParameter(
+                            "coefficients", filename_pattern=[
+                                "{iter_filename}",
+                                "{iter_key}.png",
+                                ],
+                            ),
                         filename_pattern=[
                             "{job_directory}",
                             "coefficient_plot",
@@ -402,15 +433,15 @@ class CoefficientPlotJob(FileIOJob):
 
 
 class FeaturePlotJob(FileIOJob):
-    def __init__(self, job_directory, feature_name, read=False, write=True):
+    def __init__(self, job_directory, read=False, write=True):
         super(FeaturePlotJob, self).__init__(job_directory,
                 parameters=[
                     JobFeaturePlotParameter("features",
-                        feature_name=feature_name,
                         filename_pattern=[
                             "{job_directory}",
-                            "feature_plot_{}".format(feature_name),
+                            "feature_plot",
                             "{item[id]}",
+                            "{feature_type}_{feature_group}.png",
                             ],
                         ),
                     ],
