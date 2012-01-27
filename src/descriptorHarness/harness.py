@@ -81,6 +81,7 @@ class Harness(termtool.Termtool):
 
         pool = multiprocessing.Pool()
         pool.map(job, items)
+        #map(job, items)
 
     @termtool.subcommand(help="visualize features from a set of images")
     @termtool.argument("--job-directory", default=None)

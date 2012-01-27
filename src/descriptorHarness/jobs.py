@@ -65,54 +65,44 @@ class FileIOJob(Job):
             read=True, write=True):
         super(FileIOJob, self).__init__()
 
-        self.parameters = parameters or {}
+        self.parameters = parameters or []
         self.job_directory = job_directory
         self.read = read
         self.write = write
 
-    def read_parameter(self, parameter_name, item):
-        parameter = self.parameters[parameter_name]
+    #def read_parameter(self, parameter_index, item):
+        #parameter = self.parameters[parameter_index]
+        #filename = parameter.format_filename(
+                #job_directory=self.job_directory,
+                #item=item,
+                #)
+        #parameter.ensure_directory(filename)
+        #return parameter.read(filename)
+
+    #def write_parameter(self, parameter_index, item):
+        #parameter = self.parameters[parameter_index]
+        #filename = parameter.format_filename(
+                #job_directory=self.job_directory,
+                #item=item,
+                #)
+        #parameter.ensure_directory(filename)
+        #parameter.write(filename, item)
+
+    def list_files(self, parameter_index=0):
+        parameter = self.parameters[parameter_index]
         filename = parameter.format_filename(
                 job_directory=self.job_directory,
-                parameter_name=parameter_name,
-                item=item,
-                )
-        parameter.ensure_directory(filename)
-        return parameter.read(filename)
-
-    def write_parameter(self, parameter_name, item, value):
-        parameter = self.parameters[parameter_name]
-        filename = parameter.format_filename(
-                job_directory=self.job_directory,
-                parameter_name=parameter_name,
-                item=item,
-                )
-        parameter.ensure_directory(filename)
-        parameter.write(filename, value)
-
-    def list_files(self, parameter_name=None):
-        if parameter_name is None:
-            parameter_name = self.parameters.keys()[0]
-
-        parameter = self.parameters[parameter_name]
-        filename = parameter.format_filename(
-                job_directory=self.job_directory,
-                parameter_name=parameter_name,
                 item=dict(
                     id="*",
                     )
                 )
         return glob.glob(filename)
 
-    def list_ids(self, parameter_name=None):
+    def list_ids(self, parameter_index=0):
         sentinel = "LISTIDSENTINEL"
-        if parameter_name is None:
-            parameter_name = self.parameters.keys()[0]
-
-        parameter = self.parameters[parameter_name]
+        parameter = self.parameters[parameter_index]
         filename = parameter.format_filename(
                 job_directory=self.job_directory,
-                parameter_name=parameter_name,
                 item=dict(
                     id=sentinel,
                     )
@@ -120,33 +110,38 @@ class FileIOJob(Job):
         filename_expression = re.compile(re.escape(filename)\
                 .replace(sentinel, "(.+)"))
         item_ids = [filename_expression.match(filename).group(1) for filename\
-                in self.list_files(parameter_name)]
+                in self.list_files(parameter_index)]
 
         return item_ids
 
     def execute(self, item):
-        for parameter_name in self.parameters:
-            if parameter_name in item:
-                if self.write:
-                    #logging.debug("Writing parameter '{}': {}".format(parameter_name, item[parameter_name])) # NOQA
-                    self.write_parameter(parameter_name, item,\
-                            item[parameter_name])
-            else:
-                if self.read:
-                    #logging.debug("Reading parameter '{}'...".format(parameter_name)) # NOQA
-                    item[parameter_name] = self.read_parameter(parameter_name,\
-                            item)
+        for parameter in self.parameters:
+            if self.write and parameter.should_write(item):
+                parameter.write(item,
+                        job_directory=self.job_directory,
+                        )
+            if self.read and parameter.should_read(item):
+                parameter.read(item,
+                        job_directory=self.job_directory,
+                        )
 
         return item
 
 
 class JobParameter(object):
-    def __init__(self,\
+    def __init__(self, parameter_name,\
             filename_pattern=["{job_directory}", "{parameter_name}",
-                "{item.id}"]):
+                "{item.id}"],
+            enable_read=True,
+            enable_write=True,
+            ):
+        self.parameter_name = parameter_name
         self.filename_pattern = filename_pattern
+        self.enable_read = enable_read
+        self.enable_write = enable_write
 
     def format_filename(self, *args, **kwargs):
+        kwargs.setdefault("parameter_name", self.parameter_name)
         return format_path(self.filename_pattern, *args, **kwargs)
 
     def ensure_directory(self, filename):
@@ -157,30 +152,48 @@ class JobParameter(object):
             except OSError:
                 pass
 
-    def read(self, filename):
-        with open(filename, "r") as f:
-            return pickle.load(f)
+    def should_read(self, item):
+        return self.enable_read and self.parameter_name not in item
 
-    def write(self, filename, value):
+    def should_write(self, item):
+        return self.enable_write and self.parameter_name in item
+
+    def read(self, item, **filename_args):
+        filename = self.format_filename(item=item, **filename_args)
+        with open(filename, "r") as f:
+            item[self.parameter_name] = pickle.load(f)
+
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+        self.ensure_directory(filename)
         with open(filename, "w") as f:
             return pickle.dump(value, f)
 
 
 class JobNpzParameter(JobParameter):
-    def read(self, filename):
+    def read(self, item, **filename_args):
+        filename = self.format_filename(item=item, **filename_args)
         with open(filename, "r") as f:
-            return numpy.load(f)
+            item[self.parameter_name] = numpy.load(f)
 
-    def write(self, filename, value):
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+        self.ensure_directory(filename)
         with open(filename, "w") as f:
             numpy.savez(f, **value)
 
 
 class JobImageParameter(JobParameter):
-    def read(self, filename):
-        return imread(filename, flatten=True)
+    def read(self, item, **filename_args):
+        filename = self.format_filename(item=item, **filename_args)
+        item[self.parameter_name] = imread(filename, flatten=True)
 
-    def write(self, filename, value):
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+        self.ensure_directory(filename)
         imsave(filename, value)
 
 
@@ -191,29 +204,35 @@ class JobIteratorParameter(JobParameter):
                 )
         self.each_parameter = each_parameter
 
-    #def format_filename(self, *args, **kwargs):
-        #kwargs["iter_key"] = "{iter_key}"
-        #return super(JobIteratorParameter, self).format_filename(*args,\
-                #**kwargs)
-
-    def read(self, filename):
+    def read(self, item, **filename_args):
         raise NotImplementedError()
 
-    def write(self, filename, value):
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+
+        self.ensure_directory(filename)
         for key in value:
-            current_filename = self.each_parameter.format_filename(
+            #current_filename = self.each_parameter.format_filename(
+                    #iter_filename=filename,
+                    #iter_key=key,
+                    #)
+            #self.each_parameter.ensure_directory(current_filename)
+            self.each_parameter.write(value[key],
                     iter_filename=filename,
-                    iter_key=key,
+                    iter_key=key
                     )
-            self.each_parameter.ensure_directory(current_filename)
-            self.each_parameter.write(current_filename, value[key])
 
 
 class JobCoefficientPlotParameter(JobParameter):
-    def read(self, filename):
+    def read(self, item, **filename_args):
         raise NotImplementedError()
 
-    def write(self, filename, value):
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+        self.ensure_directory(filename)
+
         fig = pyplot.figure()
         axes = fig.gca()
         mappable = axes.imshow(value)
@@ -228,10 +247,14 @@ class JobFeaturePlotParameter(JobParameter):
                 )
         self.feature_name = feature_name
 
-    def read(self, filename):
+    def read(self, item, **filename_args):
         raise NotImplementedError()
 
-    def write(self, filename, value):
+    def write(self, item, **filename_args):
+        value = item[self.parameter_name]
+        filename = self.format_filename(item=item, **filename_args)
+        self.ensure_directory(filename)
+
         pass
         #print self.feature_name, value[self.feature_name]
 
@@ -239,11 +262,11 @@ class JobFeaturePlotParameter(JobParameter):
 class ImageReaderJob(FileIOJob):
     def __init__(self, job_directory):
         super(ImageReaderJob, self).__init__(job_directory,
-                parameters=dict(
-                    image=JobImageParameter(filename_pattern=[
+                parameters=[
+                    JobImageParameter("image", filename_pattern=[
                         "{item[source_image_filename]}",
                         ]),
-                    ),
+                    ],
                 read=True,
                 write=False,
                 )
@@ -252,12 +275,12 @@ class ImageReaderJob(FileIOJob):
 class ParameterPersistenceJob(FileIOJob):
     def __init__(self, job_directory, read=True, write=True):
         super(ParameterPersistenceJob, self).__init__(job_directory,
-                parameters=dict(
-                    parameters=JobParameter(filename_pattern=[
+                parameters=[
+                    JobParameter("parameters", filename_pattern=[
                         "{job_directory}",
                         "parameters.pickle",
                         ]),
-                    ),
+                    ],
                 read=read,
                 write=write,
                 )
@@ -266,13 +289,13 @@ class ParameterPersistenceJob(FileIOJob):
 class CurveletPersistenceJob(FileIOJob):
     def __init__(self, job_directory, read=True, write=True):
         super(CurveletPersistenceJob, self).__init__(job_directory,
-                parameters=dict(
-                    coefficients=JobNpzParameter(filename_pattern=[
+                parameters=[
+                    JobNpzParameter("coefficients", filename_pattern=[
                         "{job_directory}",
                         "{parameter_name}",
                         "{item[id]}.coefficients",
                         ]),
-                    ),
+                    ],
                 read=read,
                 write=write,
                 )
@@ -319,13 +342,13 @@ class FeatureExtractionJob(Job):
 class FeaturePersistenceJob(FileIOJob):
     def __init__(self, job_directory, read=True, write=True):
         super(FeaturePersistenceJob, self).__init__(job_directory,
-                parameters=dict(
-                    features=JobParameter(filename_pattern=[
+                parameters=[
+                    JobParameter("features", filename_pattern=[
                         "{job_directory}",
                         "{parameter_name}",
                         "{item[id]}.features",
                         ])
-                    ),
+                    ],
                 read=read,
                 write=write,
                 )
@@ -360,9 +383,9 @@ class FeatureComparisonJob(Job):
 class CoefficientPlotJob(FileIOJob):
     def __init__(self, job_directory, read=False, write=True):
         super(CoefficientPlotJob, self).__init__(job_directory,
-                parameters=dict(
-                    coefficients=JobIteratorParameter(
-                        each_parameter=JobCoefficientPlotParameter([
+                parameters=[
+                    JobIteratorParameter("coefficients",
+                        each_parameter=JobCoefficientPlotParameter(None, [
                             "{iter_filename}",
                             "{iter_key}.png",
                             ]),
@@ -372,7 +395,7 @@ class CoefficientPlotJob(FileIOJob):
                             "{item[id]}",
                             ],
                         ),
-                    ),
+                    ],
                 read=read,
                 write=write,
                 )
@@ -381,8 +404,8 @@ class CoefficientPlotJob(FileIOJob):
 class FeaturePlotJob(FileIOJob):
     def __init__(self, job_directory, feature_name, read=False, write=True):
         super(FeaturePlotJob, self).__init__(job_directory,
-                parameters=dict(
-                    features=JobFeaturePlotParameter(
+                parameters=[
+                    JobFeaturePlotParameter("features",
                         feature_name=feature_name,
                         filename_pattern=[
                             "{job_directory}",
@@ -390,7 +413,7 @@ class FeaturePlotJob(FileIOJob):
                             "{item[id]}",
                             ],
                         ),
-                    ),
+                    ],
                 read=read,
                 write=write,
                 )

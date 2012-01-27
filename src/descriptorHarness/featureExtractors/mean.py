@@ -13,7 +13,7 @@ def apply_descriptor(coefficients, parameters):
             std_devs={},
             )
 
-    for scale in range(parameters.scales):
+    for scale in range(1, parameters.scales):
         for angle in range(angles[scale]):
             current_coeffs = coefficients["{},{}".format(scale, angle)]
             grid_cells = [cell for row in\
