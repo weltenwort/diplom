@@ -5,11 +5,7 @@ Sketch Based Image Retrieval Using Curvelet Based Descriptors
    :maxdepth: 2
 
    related
-
-Todos
------
-
-.. program-output:: ../milli open
+   experiments/experiment_mean_1
 
 Indices and tables
 ==================
