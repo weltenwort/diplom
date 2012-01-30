@@ -1,2 +1,10 @@
 \chapter{Background \& Related Work}\label{ch:background}
-Background and related work goes here\dots
+Most approaches can be characterized by looking at three stages in their processing pipeline:
+
+\begin{description}
+    \item[Input format] The structure of the input data determines the amount of information available to the subsequent processing steps. Possible preprocessing steps include color space conversion and scaling.
+    \item[Extracted features] The large number of coefficients produced by the curvelet transform are reduced to a set of feature coefficients.
+    \item[Distance metric] In order to rank the images according to similarity a metric is used to calculate the distance in feature space between two sets of feature coefficients. The selection of a metric is often closely coupled with the feature extraction algorithm.
+\end{description}
+
+

@@ -72,13 +72,14 @@
 % ******************************************************************** 
 % Packages with options that might require adjustments
 % ******************************************************************** 
-\PassOptionsToPackage{latin9}{inputenc}	% latin9 (ISO-8859-9) = latin1+"Euro sign"
- \usepackage{inputenc}				
+%\PassOptionsToPackage{utf8}{inputenc}	% latin9 (ISO-8859-9) = latin1+"Euro sign"
+ %\usepackage{inputenc}				
+\usepackage[utf8]{inputenc}
 
 %\PassOptionsToPackage{ngerman,american}{babel}   % change this to your language(s)
 % Spanish languages need extra options in order to work with this template
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
- \usepackage{babel}					
+\usepackage[ngerman,american]{babel}					
 
 \PassOptionsToPackage{square,numbers}{natbib}
  \usepackage{natbib}				
@@ -89,8 +90,9 @@
 % ******************************************************************** 
 % General useful packages
 % ******************************************************************** 
-\PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
-	\usepackage{fontenc}                 
+%\PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
+	%\usepackage{fontenc}                 
+\usepackage[T1]{fontenc}
 \usepackage{xspace} % to get the spacing after macros right  
 \usepackage{mparhack} % get marginpar right
 \usepackage{fixltx2e} % fixes some LaTeX stuff 
@@ -273,6 +275,6 @@
 %\usepackage{hfoldsty} % Computer Modern with osf
 %\usepackage[light,condensed,math]{iwona}
 %\renewcommand{\sfdefault}{iwona}
-%\usepackage{lmodern} % <-- no osf support :-(
+\usepackage{lmodern} % <-- no osf support :-(
 %\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
 % ****************************************************************************************************
