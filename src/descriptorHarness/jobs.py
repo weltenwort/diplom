@@ -1,6 +1,7 @@
 #import base64
 import glob
 import logging
+import operator
 import os
 import pickle
 import re
@@ -406,6 +407,24 @@ class FeatureComparisonJob(Job):
                 inputs.comparison_features.features)
 
         item["distance"] = distance
+        return item
+
+
+class DistanceSortingJob(Job):
+    def execute(self, item):
+        """Sorts the items according to their distance.
+
+        :argument item: a dict containing the following keys:
+            items
+                A list of items to sort, each with a distance attribute
+            descending
+                The sort order, defaults to True
+        :return: `item`, where `item['items']` is sorted
+        """
+        items = item["items"]
+        reverse = not item.get("descending", True)
+        items.sort(key=operator.itemgetter("distance"), reverse=reverse)
+
         return item
 
 

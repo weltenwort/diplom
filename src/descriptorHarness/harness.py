@@ -154,12 +154,18 @@ class Harness(termtool.Termtool):
 
         comparison_job = jobs.FeatureComparisonJob()
 
-        distances = [comparison_job(dict(
+        distance_items = [comparison_job(dict(
             metric=args.metric,
             query_features=query_features,
             comparison_features=feature_item,
-            ))["distance"] for feature_item in feature_items]
-        print(distances)
+            )) for feature_item in feature_items]
+
+        distance_items = jobs.DistanceSortingJob()(dict(
+            items=distance_items,
+            descending=True,
+            ))["items"]
+
+        print([(base64.urlsafe_b64decode(item["comparison_features"]["id"]), item["distance"]) for item in distance_items])
 
 if __name__ == "__main__":
     Harness().run()
