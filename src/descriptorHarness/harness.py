@@ -1,7 +1,11 @@
 import base64
 import datetime
+import itertools
+import logging
 import multiprocessing
+import os
 
+import numpy
 import termtool
 
 import jobs
@@ -12,9 +16,12 @@ class Harness(termtool.Termtool):
         process_number = max(multiprocessing.cpu_count() - 1, 1)
         pool = multiprocessing.Pool(
                 processes=process_number,
-                maxtasksperchild=1,
+                maxtasksperchild=2,
                 )
-        return pool.map(job, items)
+        result = pool.map(job, items)
+        pool.close()
+        pool.join()
+        return result
 
     @termtool.subcommand(help="transform a set of image using the curvelet \
             transform")
@@ -162,7 +169,7 @@ class Harness(termtool.Termtool):
 
         feature_items = [feature_retrieval_job(dict(
             id=item_id,
-            filename=base64.urlsafe_b64decode(item_id),
+            source_image_filename=base64.urlsafe_b64decode(item_id),
             )) for item_id in feature_ids]
 
         comparison_job = jobs.FeatureComparisonJob()
@@ -184,12 +191,79 @@ class Harness(termtool.Termtool):
             query_item=query_features,
             descending=True,
             ))
-        #distance_items = jobs.DistanceSortingJob()(dict(
-            #items=distance_items,
-            #descending=True,
-            #))["items"]
 
-        #print([(base64.urlsafe_b64decode(item["comparison_features"]["id"]), item["distance"]) for item in distance_items])
+    @termtool.subcommand(help="Creates the files neccessary to run a \
+            benchmark with the given parameters")
+    @termtool.argument("--job-directory", default=None)
+    @termtool.argument("--angles", type=int, default=12)
+    @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("extractor")
+    @termtool.argument("metric")
+    @termtool.argument("sketches_file")
+    @termtool.argument("images_file")
+    @termtool.argument("sketches_directory")
+    @termtool.argument("images_directory")
+    def benchmark(self, args):
+        if args.job_directory is None:
+            args.job_directory = datetime.datetime.now().strftime(
+                    "job_%Y%m%d%H%M%S%f")
+
+        queries = []
+        with open(args.sketches_file, "r") as f_sketches,\
+                open(args.images_file, "r") as f_images:
+            for sketch_filename_rel, image_filename_line in itertools.izip(\
+                    f_sketches, f_images):
+                sketch_filename = os.path.join(args.sketches_directory,\
+                        sketch_filename_rel.strip())
+                image_filenames = [os.path.join(args.images_directory,\
+                        image_filename.strip()) for image_filename\
+                        in image_filename_line.split("\t")]
+                queries.append(dict(
+                    sketch_filename=sketch_filename,
+                    image_filenames=image_filenames,
+                    ))
+
+        parameters = dict(
+                angles=12,
+                scales=4,
+                feature_extractor=args.extractor,
+                )
+        jobs.ParameterPersistenceJob(args.job_directory)(dict(
+            parameters=parameters,
+            ))
+
+        result_filename = os.path.join(args.job_directory, "result.scores")
+        scores = []
+        for query in queries:
+            scores.append(self._benchmark_one(args, query["sketch_filename"],\
+                    query["image_filenames"]))
+        numpy.savetxt(result_filename, numpy.array(scores), "%1i", "\t")
+
+    def _benchmark_one(self, args, sketch_filename, image_filenames):
+        job = jobs.CompositeJob([
+            jobs.ParameterPersistenceJob(args.job_directory, write=False),
+            jobs.ImageReaderJob(args.job_directory),
+            jobs.CurveletTransformationJob(),
+            jobs.FeatureExtractionJob(),
+            ])
+
+        items = [dict(
+            id=base64.urlsafe_b64encode(image_filename),
+            source_image_filename=image_filename,
+            ) for image_filename in image_filenames + [sketch_filename, ]]
+        image_features = self.parallel_map(job, items)
+        sketch_features = image_features.pop()
+
+        comparison_job = jobs.FeatureComparisonJob()
+
+        distance_items = [comparison_job(dict(
+            metric=args.metric,
+            query_features=sketch_features,
+            comparison_features=feature_item,
+            )) for feature_item in image_features]
+
+        return [item["distance"] for item in distance_items]
+
 
 if __name__ == "__main__":
     Harness().run()
