@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<!-- vim: set ft=htmljinja: -->
+<html>
+    <head>
+        <title>Ranking</title>
+        <style type="text/css">
+            img.source {
+                height: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Parameters</h2>
+        <dl>
+            {% for parameter_name in parameters -%}
+            <dt>{{parameter_name}}</dt>
+            <dd>{{parameters[parameter_name]}}</dd>
+            {% endfor %}
+        </dl>
+        <h2>Query</h2>
+        <img class="source" src="{{query_item["source_image_filename"]}}" />
+        <h2>Ranking</h2>
+        <ol>
+        {% for item in items %}
+            <li>
+                <img class="source" src="{{item["comparison_features"]["filename"]}}" />
+                <p>{{item["distance"]}}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    </body>
+</html>

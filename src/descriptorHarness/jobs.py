@@ -7,6 +7,7 @@ import pickle
 import re
 
 from bunch import Bunch
+from jinja2 import Environment, FileSystemLoader
 from matplotlib import pyplot
 import numpy
 from pyct import fdct2
@@ -70,24 +71,6 @@ class FileIOJob(Job):
         self.job_directory = job_directory
         self.read = read
         self.write = write
-
-    #def read_parameter(self, parameter_index, item):
-        #parameter = self.parameters[parameter_index]
-        #filename = parameter.format_filename(
-                #job_directory=self.job_directory,
-                #item=item,
-                #)
-        #parameter.ensure_directory(filename)
-        #return parameter.read(filename)
-
-    #def write_parameter(self, parameter_index, item):
-        #parameter = self.parameters[parameter_index]
-        #filename = parameter.format_filename(
-                #job_directory=self.job_directory,
-                #item=item,
-                #)
-        #parameter.ensure_directory(filename)
-        #parameter.write(filename, item)
 
     def list_files(self, parameter_index=0):
         parameter = self.parameters[parameter_index]
@@ -189,11 +172,13 @@ class JobNpzParameter(JobParameter):
 class JobImageParameter(JobParameter):
     def read(self, item, **filename_args):
         filename = self.format_filename(item=item, **filename_args)
+        logging.debug(u"Reading image '{}'...".format(filename))
         item[self.parameter_name] = imread(filename, flatten=True)
 
     def write(self, item, **filename_args):
         value = item[self.parameter_name]
         filename = self.format_filename(item=item, **filename_args)
+        logging.debug(u"Writing image '{}'...".format(filename))
         self.ensure_directory(filename)
         imsave(filename, value)
 
@@ -289,6 +274,38 @@ class JobFeaturePlotParameter(JobParameter):
                 figure.savefig(filename, format="png")
 
 
+class JobRankVisualizationParameter(JobParameter):
+    def __init__(self, parameter_name, filename_pattern=[],
+            enable_write=True):
+        super(JobRankVisualizationParameter, self).__init__(
+                parameter_name=parameter_name,
+                filename_pattern=filename_pattern,
+                enable_read=False,
+                enable_write=enable_write,
+                )
+
+    def should_write(self, item):
+        return self.enable_write
+
+    def read(self, item, **filename_args):
+        raise NotImplementedError()
+
+    def write(self, item, **filename_args):
+        filename = self.format_filename(
+                item=item,
+                **filename_args
+                )
+
+        jinja_env = Environment(loader=FileSystemLoader("./templates"))
+        template = jinja_env.get_template("rank_visualization.html")
+        with open(filename, "w") as out_file:
+            template.stream(
+                    parameters=item["parameters"],
+                    items=item["items"],
+                    query_item=item["query_item"],
+                    ).dump(out_file)
+
+
 class ImageReaderJob(FileIOJob):
     def __init__(self, job_directory):
         super(ImageReaderJob, self).__init__(job_directory,
@@ -342,19 +359,25 @@ class CurveletTransformationJob(Job):
                 inputs.image.shape,
                 inputs.parameters.scales,
                 inputs.parameters.angles,
-                True,
-                norm=True,
+                False,
+                norm=False,
+                vec=False,
                 )
 
         coefficients = transformation.fwd(inputs.image)
         coefficient_map = {}
 
-        angles = [1] + [inputs.parameters.angles]\
-                * (inputs.parameters.scales - 1)
-        for scale in range(inputs.parameters.scales):
-            for angle in range(angles[scale]):
-                coefficient_map["{},{}".format(scale, angle)] =\
-                        coefficients(scale, angle)
+        #angles = [1] + [inputs.parameters.angles]\
+                #* (inputs.parameters.scales - 1)
+        #for scale in range(inputs.parameters.scales - 1):
+            #for angle in range(angles[scale]):
+                #coefficient_map["{},{}".format(scale, angle)] =\
+                        #coefficients(scale, angle)
+        for scale, scale_data in enumerate(coefficients):
+            if len(scale_data) > 1:
+                for angle, angle_data in enumerate(scale_data):
+                    angle_data = numpy.fabs(angle_data)
+                    coefficient_map["{},{}".format(scale, angle)] = angle_data
 
         item["coefficients"] = coefficient_map
         return item
@@ -426,6 +449,20 @@ class DistanceSortingJob(Job):
         items.sort(key=operator.itemgetter("distance"), reverse=reverse)
 
         return item
+
+
+class RankVisualizationJob(FileIOJob):
+    def __init__(self, job_directory, read=False, write=True):
+        super(RankVisualizationJob, self).__init__(job_directory,
+                parameters=[
+                    JobRankVisualizationParameter("ranks", filename_pattern=[
+                        "{job_directory}",
+                        "{parameter_name}.html",
+                        ])
+                    ],
+                read=read,
+                write=write,
+                )
 
 
 class CoefficientPlotJob(FileIOJob):

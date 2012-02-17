@@ -6,27 +6,28 @@ import numpy
 def apply_descriptor(coefficients, parameters):
     parameters = Bunch.fromDict(parameters)
     grid_size = 4
-    angles = [1] + [parameters.angles] * (parameters.scales - 1)
+    #angles = [1] + [parameters.angles] * (parameters.scales - 1)
     features = dict(
             means={},
             std_devs={},
             )
 
-    for scale in range(1, parameters.scales):
-        for angle in range(angles[scale]):
-            current_coeffs = coefficients["{},{}".format(scale, angle)]
-            grid_cells = [cell for row in\
-                    numpy.array_split(current_coeffs, grid_size)\
-                    for cell in\
-                    numpy.array_split(row, grid_size, axis=1)]
-            means = numpy.array([numpy.mean(cell) for cell in grid_cells])\
-                    .reshape((grid_size, grid_size))
-            std_devs = numpy.array([numpy.std(cell) for cell in grid_cells])\
-                    .reshape((grid_size, grid_size))
+    #for scale in range(1, len(parameters.size_info)):
+        #for angle in range(parameters.size_info[scale]):
+    for group_name, current_coeffs in coefficients.iteritems():
+            #current_coeffs = coefficients["{},{}".format(scale, angle)]
+        grid_cells = [cell for row in\
+                numpy.array_split(current_coeffs, grid_size)\
+                for cell in\
+                numpy.array_split(row, grid_size, axis=1)]
+        means = numpy.array([numpy.mean(cell) for cell in grid_cells])\
+                .reshape((grid_size, grid_size))
+        std_devs = numpy.array([numpy.std(cell) for cell in grid_cells])\
+                .reshape((grid_size, grid_size))
 
-            group_name = "{},{}".format(scale, angle)
-            features["means"][group_name] = means
-            features["std_devs"][group_name] = std_devs
+        #group_name = "{},{}".format(scale, angle)
+        features["means"][group_name] = means
+        features["std_devs"][group_name] = std_devs
 
     return features
 

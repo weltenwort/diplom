@@ -8,6 +8,14 @@ import jobs
 
 
 class Harness(termtool.Termtool):
+    def parallel_map(self, job, items):
+        process_number = max(multiprocessing.cpu_count() - 1, 1)
+        pool = multiprocessing.Pool(
+                processes=process_number,
+                maxtasksperchild=1,
+                )
+        return pool.map(job, items)
+
     @termtool.subcommand(help="transform a set of image using the curvelet \
             transform")
     @termtool.argument("--job-directory", default=None)
@@ -79,9 +87,12 @@ class Harness(termtool.Termtool):
                     )
             items.append(item)
 
-        pool = multiprocessing.Pool()
-        pool.map(job, items)
-        #map(job, items)
+        #pool = multiprocessing.Pool(
+                #processes=max(multiprocessing.cpu_count() - 1, 1),
+                #maxtasksperchild=1,
+                #)
+        #pool.map(job, items)
+        self.parallel_map(job, items)
 
     @termtool.subcommand(help="visualize features from a set of images")
     @termtool.argument("--job-directory", default=None)
@@ -123,7 +134,8 @@ class Harness(termtool.Termtool):
 
         #pool = multiprocessing.Pool()
         #pool.map(job, items)
-        map(job, items)
+        self.parallel_map(job, items)
+        #map(job, items)
 
     @termtool.subcommand(help="perform a similarity query on an image and the\
             results of a previous feature extraction")
@@ -150,6 +162,7 @@ class Harness(termtool.Termtool):
 
         feature_items = [feature_retrieval_job(dict(
             id=item_id,
+            filename=base64.urlsafe_b64decode(item_id),
             )) for item_id in feature_ids]
 
         comparison_job = jobs.FeatureComparisonJob()
@@ -160,12 +173,23 @@ class Harness(termtool.Termtool):
             comparison_features=feature_item,
             )) for feature_item in feature_items]
 
-        distance_items = jobs.DistanceSortingJob()(dict(
-            items=distance_items,
-            descending=True,
-            ))["items"]
+        ranking_job = jobs.CompositeJob([
+            jobs.ParameterPersistenceJob(args.features_directory, write=False),
+            jobs.DistanceSortingJob(),
+            jobs.RankVisualizationJob(args.features_directory),
+            ])
 
-        print([(base64.urlsafe_b64decode(item["comparison_features"]["id"]), item["distance"]) for item in distance_items])
+        ranking_job(dict(
+            items=distance_items,
+            query_item=query_features,
+            descending=True,
+            ))
+        #distance_items = jobs.DistanceSortingJob()(dict(
+            #items=distance_items,
+            #descending=True,
+            #))["items"]
+
+        #print([(base64.urlsafe_b64decode(item["comparison_features"]["id"]), item["distance"]) for item in distance_items])
 
 if __name__ == "__main__":
     Harness().run()
