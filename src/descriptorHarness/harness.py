@@ -5,6 +5,7 @@ import itertools
 #import logging
 import multiprocessing
 import os
+import shutil
 
 import numpy
 import scipy.stats
@@ -219,11 +220,15 @@ class Harness(termtool.Termtool):
         args.study_directory = os.path.abspath(os.path.join(\
                 os.path.dirname(__file__), args.study_directory))
         result_filename = os.path.join(args.job_directory, "result.scores")
-        correlation_filename = os.path.join(args.job_directory, "correlation")
+        correlations_filename = os.path.join(args.job_directory,\
+                "correlations")
+        mean_correlation_filename = os.path.join(args.job_directory,\
+                "correlation.mean")
 
         if os.path.isfile(result_filename):
             scores = numpy.loadtxt(result_filename)
         else:
+            shutil.copy(args.sketches_file, args.job_directory)
             queries = []
             with open(args.sketches_file, "r") as f_sketches,\
                     open(args.images_file, "r") as f_images:
@@ -256,9 +261,11 @@ class Harness(termtool.Termtool):
             scores = numpy.array(scores)
             numpy.savetxt(result_filename, scores, "%1i", "\t")
 
-        mean_correlation = self._correlate_to_study(scores,\
+        correlations = self._correlate_to_study(scores,\
                 args.study_directory)
-        numpy.savetxt(correlation_filename, [mean_correlation, ])
+        mean_correlation = numpy.mean(correlations)
+        numpy.savetxt(correlations_filename, correlations)
+        numpy.savetxt(mean_correlation_filename, [mean_correlation, ])
         print mean_correlation
 
     def _benchmark_one(self, args, sketch_filename, image_filenames):
@@ -298,8 +305,7 @@ class Harness(termtool.Termtool):
         #rho, _ = scipy.stats.spearmanr(benchmark.T, scores.T)
         rho = numpy.array([scipy.stats.kendalltau(x, y)[0] for x, y\
                 in zip(benchmark.tolist(), scores.tolist())])
-        mean_correlation = numpy.mean(rho)
-        return mean_correlation
+        return rho
 
 
 if __name__ == "__main__":
