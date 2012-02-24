@@ -1,11 +1,13 @@
 import base64
 import datetime
+import glob
 import itertools
-import logging
+#import logging
 import multiprocessing
 import os
 
 import numpy
+import scipy.stats
 import termtool
 
 import jobs
@@ -23,44 +25,46 @@ class Harness(termtool.Termtool):
         pool.join()
         return result
 
-    @termtool.subcommand(help="transform a set of image using the curvelet \
-            transform")
-    @termtool.argument("--job-directory", default=None)
-    @termtool.argument("--angles", type=int, default=12)
-    @termtool.argument("--scales", type=int, default=4)
-    @termtool.argument("image", nargs="+")
-    def transform(self, args):
-        if args.job_directory is None:
-            args.job_directory = datetime.datetime.now().strftime(
-                    "job_%Y%m%d%H%M%S%f")
+    #@termtool.subcommand(help="transform a set of image using the curvelet \
+            #transform")
+    #@termtool.argument("--job-directory", default=None)
+    #@termtool.argument("--angles", type=int, default=12)
+    #@termtool.argument("--scales", type=int, default=4)
+    #@termtool.argument("--grid-size", type=int, default=4)
+    #@termtool.argument("image", nargs="+")
+    #def transform(self, args):
+        #if args.job_directory is None:
+            #args.job_directory = datetime.datetime.now().strftime(
+                    #"job_%Y%m%d%H%M%S%f")
 
-        parameter_job = jobs.ParameterPersistenceJob(
-                job_directory=args.job_directory,
-                )
-        parameter_job(dict(
-            parameters=dict(
-                angles=12,
-                scales=4,
-            )))
+        #parameter_job = jobs.ParameterPersistenceJob(
+                #job_directory=args.job_directory,
+                #)
+        #parameter_job(dict(
+            #parameters=dict(
+                #angles=12,
+                #scales=4,
+            #)))
 
-        job = jobs.CompositeJob([
-            parameter_job,
-            jobs.ImageReaderJob(args.job_directory),
-            jobs.CurveletTransformationJob(),
-            jobs.CurveletPersistenceJob(args.job_directory),
-            ])
+        #job = jobs.CompositeJob([
+            #parameter_job,
+            #jobs.ImageReaderJob(args.job_directory),
+            #jobs.CurveletTransformationJob(),
+            #jobs.CurveletPersistenceJob(args.job_directory),
+            #])
 
-        for image_filename in args.image:
-            item = dict(
-                    id=base64.urlsafe_b64encode(image_filename),
-                    source_image_filename=image_filename,
-                    )
-            job(item)
+        #for image_filename in args.image:
+            #item = dict(
+                    #id=base64.urlsafe_b64encode(image_filename),
+                    #source_image_filename=image_filename,
+                    #)
+            #job(item)
 
     @termtool.subcommand(help="extract features from a set of images")
     @termtool.argument("--job-directory", default=None)
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("--grid-size", type=int, default=4)
     @termtool.argument("extractor")
     @termtool.argument("image", nargs="+")
     def extract(self, args):
@@ -69,9 +73,10 @@ class Harness(termtool.Termtool):
                     "job_%Y%m%d%H%M%S%f")
 
         parameters = dict(
-                angles=12,
-                scales=4,
+                angles=args.angles,
+                scales=args.scales,
                 feature_extractor=args.extractor,
+                grid_size=args.grid_size,
                 )
         jobs.ParameterPersistenceJob(args.job_directory)(dict(
             parameters=parameters,
@@ -105,6 +110,7 @@ class Harness(termtool.Termtool):
     @termtool.argument("--job-directory", default=None)
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("--grid-size", type=int, default=4)
     @termtool.argument("extractor")
     @termtool.argument("image", nargs="+")
     def visualize(self, args):
@@ -113,9 +119,10 @@ class Harness(termtool.Termtool):
                     "job_%Y%m%d%H%M%S%f")
 
         parameters = dict(
-                angles=12,
-                scales=4,
+                angles=args.angles,
+                scales=args.scales,
                 feature_extractor=args.extractor,
+                grid_size=args.grid_size,
                 )
         jobs.ParameterPersistenceJob(args.job_directory)(dict(
             parameters=parameters,
@@ -195,8 +202,10 @@ class Harness(termtool.Termtool):
     @termtool.subcommand(help="Creates the files neccessary to run a \
             benchmark with the given parameters")
     @termtool.argument("--job-directory", default=None)
+    @termtool.argument("--study-directory", default="./study")
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
+    @termtool.argument("--grid-size", type=int, default=4)
     @termtool.argument("extractor")
     @termtool.argument("metric")
     @termtool.argument("sketches_file")
@@ -207,37 +216,50 @@ class Harness(termtool.Termtool):
         if args.job_directory is None:
             args.job_directory = datetime.datetime.now().strftime(
                     "job_%Y%m%d%H%M%S%f")
-
-        queries = []
-        with open(args.sketches_file, "r") as f_sketches,\
-                open(args.images_file, "r") as f_images:
-            for sketch_filename_rel, image_filename_line in itertools.izip(\
-                    f_sketches, f_images):
-                sketch_filename = os.path.join(args.sketches_directory,\
-                        sketch_filename_rel.strip())
-                image_filenames = [os.path.join(args.images_directory,\
-                        image_filename.strip()) for image_filename\
-                        in image_filename_line.split("\t")]
-                queries.append(dict(
-                    sketch_filename=sketch_filename,
-                    image_filenames=image_filenames,
-                    ))
-
-        parameters = dict(
-                angles=12,
-                scales=4,
-                feature_extractor=args.extractor,
-                )
-        jobs.ParameterPersistenceJob(args.job_directory)(dict(
-            parameters=parameters,
-            ))
-
+        args.study_directory = os.path.abspath(os.path.join(\
+                os.path.dirname(__file__), args.study_directory))
         result_filename = os.path.join(args.job_directory, "result.scores")
-        scores = []
-        for query in queries:
-            scores.append(self._benchmark_one(args, query["sketch_filename"],\
-                    query["image_filenames"]))
-        numpy.savetxt(result_filename, numpy.array(scores), "%1i", "\t")
+        correlation_filename = os.path.join(args.job_directory, "correlation")
+
+        if os.path.isfile(result_filename):
+            scores = numpy.loadtxt(result_filename)
+        else:
+            queries = []
+            with open(args.sketches_file, "r") as f_sketches,\
+                    open(args.images_file, "r") as f_images:
+                for sketch_filename_rel, image_filename_line in itertools.izip(
+                        f_sketches, f_images):
+                    sketch_filename = os.path.join(args.sketches_directory,\
+                            sketch_filename_rel.strip())
+                    image_filenames = [os.path.join(args.images_directory,\
+                            image_filename.strip()) for image_filename\
+                            in image_filename_line.split("\t")]
+                    queries.append(dict(
+                        sketch_filename=sketch_filename,
+                        image_filenames=image_filenames,
+                        ))
+
+            parameters = dict(
+                    angles=args.angles,
+                    scales=args.scales,
+                    feature_extractor=args.extractor,
+                    grid_size=args.grid_size,
+                    )
+            jobs.ParameterPersistenceJob(args.job_directory)(dict(
+                parameters=parameters,
+                ))
+
+            scores = []
+            for query in queries:
+                scores.append(self._benchmark_one(args,\
+                        query["sketch_filename"], query["image_filenames"]))
+            scores = numpy.array(scores)
+            numpy.savetxt(result_filename, scores, "%1i", "\t")
+
+        mean_correlation = self._correlate_to_study(scores,\
+                args.study_directory)
+        numpy.savetxt(correlation_filename, [mean_correlation, ])
+        print mean_correlation
 
     def _benchmark_one(self, args, sketch_filename, image_filenames):
         job = jobs.CompositeJob([
@@ -263,6 +285,21 @@ class Harness(termtool.Termtool):
             )) for feature_item in image_features]
 
         return [item["distance"] for item in distance_items]
+
+    def _correlate_to_study(self, scores, study_directory):
+        study_pattern = os.path.join(study_directory, "*.study")
+        studies = []
+        for study_filename in glob.glob(study_pattern):
+            study = numpy.loadtxt(study_filename)
+            studies.append(study[:study.shape[0] / 2])
+        studies = numpy.dstack(studies)
+
+        benchmark = numpy.mean(studies, axis=2)
+        #rho, _ = scipy.stats.spearmanr(benchmark.T, scores.T)
+        rho = numpy.array([scipy.stats.kendalltau(x, y)[0] for x, y\
+                in zip(benchmark.tolist(), scores.tolist())])
+        mean_correlation = numpy.mean(rho)
+        return mean_correlation
 
 
 if __name__ == "__main__":
