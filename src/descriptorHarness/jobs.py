@@ -1,9 +1,9 @@
-#import base64
 import glob
+import json
 import logging
 import operator
 import os
-import pickle
+#import pickle
 import re
 
 from bunch import Bunch
@@ -145,14 +145,14 @@ class JobParameter(object):
     def read(self, item, **filename_args):
         filename = self.format_filename(item=item, **filename_args)
         with open(filename, "r") as f:
-            item[self.parameter_name] = pickle.load(f)
+            item[self.parameter_name] = json.load(f)
 
     def write(self, item, **filename_args):
         value = item[self.parameter_name]
         filename = self.format_filename(item=item, **filename_args)
         self.ensure_directory(filename)
         with open(filename, "w") as f:
-            return pickle.dump(value, f)
+            return json.dump(value, f)
 
 
 class JobNpzParameter(JobParameter):
@@ -325,7 +325,7 @@ class ParameterPersistenceJob(FileIOJob):
                 parameters=[
                     JobParameter("parameters", filename_pattern=[
                         "{job_directory}",
-                        "parameters.pickle",
+                        "parameters.json",
                         ]),
                     ],
                 read=read,

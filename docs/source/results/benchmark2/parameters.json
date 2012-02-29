@@ -1,0 +1,1 @@
+{"feature_parameters": {"grid_size": 4}, "feature_extractor": "featureExtractors.mean", "angles": 12, "scales": 4, "metric": "metrics.l2_std_devs"}

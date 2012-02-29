@@ -2,6 +2,7 @@ import base64
 import datetime
 import glob
 import itertools
+import json
 #import logging
 import multiprocessing
 import os
@@ -16,7 +17,7 @@ import jobs
 
 class Harness(termtool.Termtool):
     def parallel_map(self, job, items):
-        process_number = max(multiprocessing.cpu_count() - 1, 1)
+        process_number = max(multiprocessing.cpu_count() - 2, 1)
         pool = multiprocessing.Pool(
                 processes=process_number,
                 maxtasksperchild=2,
@@ -206,7 +207,7 @@ class Harness(termtool.Termtool):
     @termtool.argument("--study-directory", default="./study")
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
-    @termtool.argument("--grid-size", type=int, default=4)
+    @termtool.argument("--feature-parameters", default="{}")
     @termtool.argument("extractor")
     @termtool.argument("metric")
     @termtool.argument("sketches_file")
@@ -228,6 +229,17 @@ class Harness(termtool.Termtool):
         if os.path.isfile(result_filename):
             scores = numpy.loadtxt(result_filename)
         else:
+            parameters = dict(
+                    angles=args.angles,
+                    scales=args.scales,
+                    feature_extractor=args.extractor,
+                    feature_parameters=json.loads(args.feature_parameters),
+                    metric=args.metric,
+                    )
+            jobs.ParameterPersistenceJob(args.job_directory)(dict(
+                parameters=parameters,
+                ))
+
             shutil.copy(args.sketches_file, args.job_directory)
             queries = []
             with open(args.sketches_file, "r") as f_sketches,\
@@ -243,16 +255,6 @@ class Harness(termtool.Termtool):
                         sketch_filename=sketch_filename,
                         image_filenames=image_filenames,
                         ))
-
-            parameters = dict(
-                    angles=args.angles,
-                    scales=args.scales,
-                    feature_extractor=args.extractor,
-                    grid_size=args.grid_size,
-                    )
-            jobs.ParameterPersistenceJob(args.job_directory)(dict(
-                parameters=parameters,
-                ))
 
             scores = []
             for query in queries:

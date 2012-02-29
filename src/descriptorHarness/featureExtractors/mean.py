@@ -5,7 +5,7 @@ import numpy
 
 def apply_descriptor(coefficients, parameters):
     parameters = Bunch.fromDict(parameters)
-    grid_size = parameters.grid_size
+    grid_size = parameters.feature_parameters.grid_size
     #angles = [1] + [parameters.angles] * (parameters.scales - 1)
     features = dict(
             means={},
