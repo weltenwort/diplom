@@ -33,6 +33,7 @@ for result_index, result in enumerate(results):
         ))
 
 pyplot.ylabel("Correlations to User Study")
+pyplot.xlabel("Query Sketches")
 pyplot.xticks(indices + 0.4, sketches, rotation=80)
 
 pyplot.legend(loc="lower right", prop={"size": "small"})\
