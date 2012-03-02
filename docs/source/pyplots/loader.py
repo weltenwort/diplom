@@ -29,7 +29,8 @@ def load_result(result_directory):
 
 
 def load_results(results_directory):
-    results = [load_result(d) for d in results_directory]
+    results = sorted([load_result(d) for d in results_directory],\
+            key=lambda r: r["label"])
 
     color_map = [pyplot.cm.hsv(x) for x in\
             numpy.linspace(0, 1, len(results) + 1)]
