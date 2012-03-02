@@ -19,11 +19,30 @@ class ComparisonTable(Directive):
                     self.lineno - self.state_machine.input_offset - 1))
             results_path = Path(source).resolve().parent().join(results_path)
         results = load_results(results_path)
+        for result in results:
+            self.state.document.settings.record_dependencies.add(str(
+                result["path"]))
 
-        #return [self.create_table([["a", "b"], ]), ]
-        return []
+        headers = ["Label", "Angles", "Scales", "Features", "Metric",\
+                "Feature Parameters", "Mean Correlation"]
+        data = [self.create_row(r) for r in results]
 
-    def create_table(self, data):
+        return [self.create_table([headers, ] + data), ]
+        #return []
+
+    def create_row(self, result):
+        parameters = result.get("parameters", {})
+        return [
+                result["label"],
+                parameters.get("angles", 0),
+                parameters.get("scales", 0),
+                parameters.get("feature_extractor", ""),
+                parameters.get("metric", ""),
+                parameters.get("feature_parameters", ""),
+                result["mean_correlation"],
+                ]
+
+    def create_table(self, data, num_headers=1):
         table_node = nodes.table()
 
         if len(data) > 0:
@@ -31,19 +50,30 @@ class ComparisonTable(Directive):
             table_node += tgroup_node
 
             col_width = 100 // len(data[0])
-            for col_index in range(len(data)):
+            for col_index in range(len(data[0])):
                 colspec_node = nodes.colspec(colwidth=col_width)
                 tgroup_node += colspec_node
 
+            thead = nodes.thead()
+            tgroup_node += thead
             tbody = nodes.tbody()
             tgroup_node += tbody
-            for row in data:
+            for row_index, row in enumerate(data):
                 row_node = nodes.row()
                 for cell in row:
                     cell_node = nodes.entry()
-                    cell_node += nodes.Text(unicode(cell))
+                    if isinstance(cell, nodes.Node):
+                        cell_node += cell
+                    else:
+                        text_node = nodes.Text(unicode(cell))
+                        paragraph_node = nodes.paragraph(unicode(cell), '',\
+                                text_node)
+                        cell_node += paragraph_node
                     row_node += cell_node
-                tbody += row_node
+                if row_index < num_headers:
+                    thead += row_node
+                else:
+                    tbody += row_node
 
         return table_node
 

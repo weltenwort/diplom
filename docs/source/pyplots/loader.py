@@ -2,6 +2,7 @@ import json
 import pickle
 import re
 
+from matplotlib import pyplot
 import numpy
 
 
@@ -18,6 +19,8 @@ def load_result(result_directory):
             parameters = json.load(f)
 
     return dict(
+            path=result_directory,
+            label=result_directory.parts[-1],
             mean_correlation=mean_correlation,
             correlations=correlations,
             parameters=parameters,
@@ -26,13 +29,21 @@ def load_result(result_directory):
 
 
 def load_results(results_directory):
-    return [load_result(d) for d in results_directory]
+    results = [load_result(d) for d in results_directory]
+
+    color_map = [pyplot.cm.hsv(x) for x in\
+            numpy.linspace(0, 1, len(results) + 1)]
+    for result, color in zip(results, color_map):
+        result["plot_color"] = color
+
+    return results
 
 
 def format_label(result):
-    return "{parameters[feature_extractor]}, {parameters[metric]}".format(
-            parameters=result["parameters"],
-            )
+    return result["label"]
+    #return "{parameters[feature_extractor]}, {parameters[metric]}".format(
+            #parameters=result["parameters"],
+            #)
 
 
 def naturally_sorted(l):

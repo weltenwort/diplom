@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.abspath('./pyplots'))
 extensions = [
     'matplotlib.sphinxext.mathmpl',
     'matplotlib.sphinxext.only_directives',
-    'matplotlib.sphinxext.plot_directive',
+    'plot_directive',
     'sphinx.ext.pngmath',
     'sphinx.ext.ifconfig',
     'sphinxcontrib.programoutput',

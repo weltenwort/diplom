@@ -9,7 +9,6 @@ from loader import format_label, load_results, naturally_sorted
 
 results = load_results(Path("../results").resolve())
 
-color_map = [pyplot.cm.hsv(x) for x in numpy.linspace(0, 1, len(results) + 1)]
 bar_width = 0.8 / len(results)
 indices = numpy.arange(len(results[0]["correlations"]))
 
@@ -28,7 +27,7 @@ for result_index, result in enumerate(results):
         indices + bar_width * result_index,
         correlations,
         width=bar_width,
-        color=color_map[result_index],
+        color=result["plot_color"],
         label=format_label(result),
         ))
 
