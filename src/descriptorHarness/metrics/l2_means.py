@@ -9,5 +9,5 @@ def apply_metric(features1, features2):
         f2 = features2[feature_name][feature_group]
         diff = numpy.asarray(f1) - numpy.asarray(f2)
         squares = numpy.power(diff, 2)
-        distance += numpy.sum(squares)
+        distance += numpy.sqrt(numpy.sum(squares))
     return distance

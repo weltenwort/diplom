@@ -3,7 +3,7 @@ import json
 import logging
 import operator
 import os
-#import pickle
+import pickle
 import re
 
 from bunch import Bunch
@@ -62,6 +62,18 @@ class CompositeJob(Job):
         return item
 
 
+class TrySequenciallyJob(CompositeJob):
+    def execute(self, item):
+        for job in self.jobs:
+            try:
+                item = job(item)
+                break
+            except Exception:
+                logging.debug("Attempted execution of {} failed.".format(job))
+
+        return item
+
+
 class FileIOJob(Job):
     def __init__(self, job_directory, parameters=None,\
             read=True, write=True):
@@ -113,6 +125,8 @@ class FileIOJob(Job):
 
 
 class JobParameter(object):
+    serializer = pickle
+
     def __init__(self, parameter_name,\
             filename_pattern=["{job_directory}", "{parameter_name}",
                 "{item.id}"],
@@ -145,14 +159,18 @@ class JobParameter(object):
     def read(self, item, **filename_args):
         filename = self.format_filename(item=item, **filename_args)
         with open(filename, "r") as f:
-            item[self.parameter_name] = json.load(f)
+            item[self.parameter_name] = self.serializer.load(f)
 
     def write(self, item, **filename_args):
         value = item[self.parameter_name]
         filename = self.format_filename(item=item, **filename_args)
         self.ensure_directory(filename)
         with open(filename, "w") as f:
-            return json.dump(value, f)
+            return self.serializer.dump(value, f)
+
+
+class JobJsonParameter(JobParameter):
+    serializer = json
 
 
 class JobNpzParameter(JobParameter):
@@ -323,7 +341,7 @@ class ParameterPersistenceJob(FileIOJob):
     def __init__(self, job_directory, read=True, write=True):
         super(ParameterPersistenceJob, self).__init__(job_directory,
                 parameters=[
-                    JobParameter("parameters", filename_pattern=[
+                    JobJsonParameter("parameters", filename_pattern=[
                         "{job_directory}",
                         "parameters.json",
                         ]),

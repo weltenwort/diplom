@@ -204,6 +204,7 @@ class Harness(termtool.Termtool):
     @termtool.subcommand(help="Creates the files neccessary to run a \
             benchmark with the given parameters")
     @termtool.argument("--job-directory", default=None)
+    @termtool.argument("--cache-directory", default=None)
     @termtool.argument("--study-directory", default="./study")
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
@@ -220,6 +221,8 @@ class Harness(termtool.Termtool):
                     "job_%Y%m%d%H%M%S%f")
         args.study_directory = os.path.abspath(os.path.join(\
                 os.path.dirname(__file__), args.study_directory))
+        if args.cache_directory:
+            args.cache_directory = os.path.abspath(args.cache_directory)
         result_filename = os.path.join(args.job_directory, "result.scores")
         correlations_filename = os.path.join(args.job_directory,\
                 "correlations")
@@ -271,18 +274,38 @@ class Harness(termtool.Termtool):
         print mean_correlation
 
     def _benchmark_one(self, args, sketch_filename, image_filenames):
+        if args.cache_directory is None:
+            feature_job = jobs.FeatureExtractionJob()
+        else:
+            feature_job = jobs.TrySequenciallyJob([
+                jobs.FeaturePersistenceJob(
+                        args.cache_directory,
+                        read=True,
+                        write=False
+                        ),
+                jobs.CompositeJob([
+                    jobs.ImageReaderJob(args.job_directory),
+                    jobs.CurveletTransformationJob(),
+                    jobs.FeatureExtractionJob(),
+                    jobs.FeaturePersistenceJob(
+                        args.cache_directory,
+                        read=False,
+                        write=True,
+                        ),
+                    ]),
+                ])
+
         job = jobs.CompositeJob([
             jobs.ParameterPersistenceJob(args.job_directory, write=False),
-            jobs.ImageReaderJob(args.job_directory),
-            jobs.CurveletTransformationJob(),
-            jobs.FeatureExtractionJob(),
+            feature_job,
             ])
 
         items = [dict(
             id=base64.urlsafe_b64encode(image_filename),
             source_image_filename=image_filename,
             ) for image_filename in image_filenames + [sketch_filename, ]]
-        image_features = self.parallel_map(job, items)
+        #image_features = self.parallel_map(job, items)
+        image_features = map(job, items)
         sketch_features = image_features.pop()
 
         comparison_job = jobs.FeatureComparisonJob()
