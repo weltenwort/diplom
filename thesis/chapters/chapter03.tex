@@ -1,2 +1,21 @@
 \chapter{Proposed Solution}\label{ch:solution}
 Proposed solution goes here\dots
+
+\section{Input Format}
+\begin{itemize}
+    \item Luma component (Y') of Y'UV representation
+    \item Gradient magnitude of Sobel operator of luma component
+    \item Canny edge map of luma component
+    \item gPb
+\end{itemize}
+
+\section{Feature Extraction}
+\begin{itemize}
+    \item Global features: mean and standard deviation
+    \item Local features: visual words via k-means clustering
+\end{itemize}
+
+\section{Distance Metric}
+\begin{itemize}
+    \item Euclidean Distance
+\end{itemize}
