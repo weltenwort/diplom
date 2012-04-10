@@ -220,3 +220,50 @@ Data-driven visual similarity for cross-domain image matching (`Shrivastava11cro
      keywords = {image matching, image retrieval, paintings, re-photography, saliency, sketches, visual memex, visual similarity},
     } 
 
+Video Google: A Text Retrieval Approach to Object Matching in Videos (`Sivic2003`_)
+-------------------------------------------------------------------------------------------
+
+.. _Sivic2003: ./_static/related/video_google.pdf
+
+::
+
+    @inproceedings{Sivic2003,
+     author = {Sivic, Josef and Zisserman, Andrew},
+     title = {Video Google: A Text Retrieval Approach to Object Matching in Videos},
+     booktitle = {Proceedings of the Ninth IEEE International Conference on Computer Vision - Volume 2},
+     series = {ICCV '03},
+     year = {2003},
+     isbn = {0-7695-1950-4},
+     pages = {1470--},
+     url = {http://dl.acm.org/citation.cfm?id=946247.946751},
+     acmid = {946751},
+     publisher = {IEEE Computer Society},
+     address = {Washington, DC, USA},
+    }
+
+Contour Detection and Hierarchical Image Segmentation (`Arbelaez2011`_)
+-------------------------------------------------------------------------------------------
+
+.. _Arbelaez2011: ./_static/related/contour_detection_and_hierarchical_image_segmentation.pdf
+
+::
+
+    @article{Arbelaez2011,
+     author = {Arbelaez, Pablo and Maire, Michael and Fowlkes, Charless and Malik, Jitendra},
+     title = {Contour Detection and Hierarchical Image Segmentation},
+     journal = {IEEE Trans. Pattern Anal. Mach. Intell.},
+     issue_date = {May 2011},
+     volume = {33},
+     number = {5},
+     month = may,
+     year = {2011},
+     issn = {0162-8828},
+     pages = {898--916},
+     numpages = {19},
+     url = {http://dx.doi.org/10.1109/TPAMI.2010.161},
+     doi = {10.1109/TPAMI.2010.161},
+     acmid = {1963088},
+     publisher = {IEEE Computer Society},
+     address = {Washington, DC, USA},
+     keywords = {Contour detection, image segmentation, computer vision.},
+    }
