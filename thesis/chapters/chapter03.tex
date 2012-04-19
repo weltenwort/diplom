@@ -19,3 +19,25 @@ Proposed solution goes here\dots
 \begin{itemize}
     \item Euclidean Distance
 \end{itemize}
+
+\begin{tikzpicture}[
+        font=\scriptsize,
+        point/.style={},
+        block/.style={text width=10em}
+    ]
+    \matrix (thebigpicture) {
+        % header
+        \node[point] (colheader0) {}; &
+        \node[point] (colheader1) {}; &
+        \node[point] (colheader2) {}; &
+        \node[point] (colheader3) {}; &
+        \node[point] (colheader4) {}; &
+        \node[point] (colheader5) {}; \\
+        % first row
+        \node[block] {Read Image}; & &
+        \node[block] {Apply Curvelet \\ Transform}; &
+        \node[block] {Calculate Means / Standard Deviations}; &
+        \node[block] {Rank by Euclidean Distance}; \\
+        \\
+    };
+\end{tikzpicture}
