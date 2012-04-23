@@ -81,8 +81,8 @@
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
 \usepackage[ngerman,american]{babel}					
 
-\PassOptionsToPackage{square,numbers}{natbib}
- \usepackage{natbib}				
+%\PassOptionsToPackage{square,numbers}{natbib}
+ %\usepackage{natbib}				
 
 \PassOptionsToPackage{fleqn}{amsmath}		% math environments and more by the AMS 
  \usepackage{amsmath}
@@ -280,3 +280,7 @@
 % ****************************************************************************************************
 
 \usepackage{tikz}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{Bibliography.bib}
+%\bibliography{Bibliography}
