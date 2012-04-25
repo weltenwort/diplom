@@ -1,0 +1,1 @@
+{"metric": "metrics.l2_means_selective", "feature_parameters": {"grid_size": 8}, "feature_extractor": "featureExtractors.mean", "angles": 12, "scales": 4, "image_reader": "imageReaders.luma"}

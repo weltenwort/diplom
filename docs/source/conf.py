@@ -33,7 +33,10 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinxcontrib.programoutput',
     'comparison_table',
+    'sphinxcontrib.blockdiag',
     ]
+
+blockdiag_fontpath = '/usr/share/fonts/TTF/DejaVuSans.ttf'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

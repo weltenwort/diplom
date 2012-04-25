@@ -116,6 +116,12 @@ Other Feature Extraction
 A Feature-based Approach for Image Retrieval by Sketch (`Chan97afeature-based`_)
 --------------------------------------------------------------------------------
 
+* color input
+* edge detection
+* hough transform
+* statistical shape segment extraction
+* implicit polynomials as feature representation
+
 .. _Chan97afeature-based: ./_static/related/a_feature_based_approach_for_image_retrieval_by_sketch.pdf
 
 ::

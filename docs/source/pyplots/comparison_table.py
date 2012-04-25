@@ -33,7 +33,7 @@ class ComparisonTable(Directive):
             self.state.document.settings.record_dependencies.add(str(
                 result["path"]))
 
-        headers = ["Label", "Angles", "Scales", "Features", "Metric",\
+        headers = ["Label", "Angles", "Scales", "Input", "Features", "Metric",\
                 "Feature Parameters", "Mean Correlation"]
         data = [self.extract_result(r) for r in results]
 
@@ -46,6 +46,7 @@ class ComparisonTable(Directive):
                 result["label"],
                 parameters.get("angles", 0),
                 parameters.get("scales", 0),
+                parameters.get("image_reader"),
                 parameters.get("feature_extractor", ""),
                 parameters.get("metric", ""),
                 parameters.get("feature_parameters", ""),
@@ -61,10 +62,10 @@ class ComparisonTable(Directive):
         cell_node = nodes.entry()
         block = None
         if not is_header and cell_item:
-            if col_index == 3:
+            if col_index == 4:
                 block = StringList(feature_template.format(target=cell_item)\
                         .splitlines())
-            elif col_index == 4:
+            elif col_index == 5:
                 block = StringList(metric_template.format(target=cell_item)\
                         .splitlines())
             #elif col_index == 5:
