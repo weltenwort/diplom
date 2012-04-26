@@ -23,7 +23,7 @@
         <ol>
         {% for item in items %}
             <li>
-                <img class="source" src="{{item["comparison_features"]["filename"]}}" />
+                <img class="source" src="{{item["comparison_features"]["source_image_filename"]}}" />
                 <p>{{item["distance"]}}</p>
             </li>
         {% endfor %}

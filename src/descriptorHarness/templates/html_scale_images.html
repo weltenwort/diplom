@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<!-- vim: set ft=htmljinja: -->
+<html>
+    <head>
+        <title>Transformation Summary</title>
+    </head>
+    <body>
+        <h1>Transformation summary</h1>
+        <h2>Parameters</h2>
+        <dl>
+            {% for parameter_name in parameters -%}
+            <dt>{{parameter_name}}</dt>
+            <dd>{{parameters[parameter_name]}}</dd>
+            {% endfor %}
+        </dl>
+        <h2>Images</h2>
+        <ul>
+            {% for scale in artifacts.images %}
+            <li><a href="./images_scale{{scale}}.html">Scale {{scale}}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

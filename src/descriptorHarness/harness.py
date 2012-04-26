@@ -27,46 +27,24 @@ class Harness(termtool.Termtool):
         pool.join()
         return result
 
-    #@termtool.subcommand(help="transform a set of image using the curvelet \
-            #transform")
-    #@termtool.argument("--job-directory", default=None)
-    #@termtool.argument("--angles", type=int, default=12)
-    #@termtool.argument("--scales", type=int, default=4)
-    #@termtool.argument("--grid-size", type=int, default=4)
-    #@termtool.argument("image", nargs="+")
-    #def transform(self, args):
-        #if args.job_directory is None:
-            #args.job_directory = datetime.datetime.now().strftime(
-                    #"job_%Y%m%d%H%M%S%f")
-
-        #parameter_job = jobs.ParameterPersistenceJob(
-                #job_directory=args.job_directory,
-                #)
-        #parameter_job(dict(
-            #parameters=dict(
-                #angles=12,
-                #scales=4,
-            #)))
-
-        #job = jobs.CompositeJob([
-            #parameter_job,
-            #jobs.ImageReaderJob(args.job_directory),
-            #jobs.CurveletTransformationJob(),
-            #jobs.CurveletPersistenceJob(args.job_directory),
-            #])
-
-        #for image_filename in args.image:
-            #item = dict(
-                    #id=base64.urlsafe_b64encode(image_filename),
-                    #source_image_filename=image_filename,
-                    #)
-            #job(item)
+    def create_parameters(self, args):
+        parameters = dict(
+                angles=args.angles,
+                scales=args.scales,
+                image_reader=args.image_reader,
+                feature_extractor=args.extractor,
+                feature_parameters=json.loads(args.feature_parameters),
+                )
+        if hasattr(args, "metric"):
+            parameters["metric"] = args.metric
+        return parameters
 
     @termtool.subcommand(help="extract features from a set of images")
     @termtool.argument("--job-directory", default=None)
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
-    @termtool.argument("--grid-size", type=int, default=4)
+    @termtool.argument("--feature-parameters", default="{}")
+    @termtool.argument("image_reader")
     @termtool.argument("extractor")
     @termtool.argument("image", nargs="+")
     def extract(self, args):
@@ -74,19 +52,14 @@ class Harness(termtool.Termtool):
             args.job_directory = datetime.datetime.now().strftime(
                     "job_%Y%m%d%H%M%S%f")
 
-        parameters = dict(
-                angles=args.angles,
-                scales=args.scales,
-                feature_extractor=args.extractor,
-                grid_size=args.grid_size,
-                )
+        parameters = self.create_parameters(args)
         jobs.ParameterPersistenceJob(args.job_directory)(dict(
             parameters=parameters,
             ))
 
         job = jobs.CompositeJob([
             jobs.ParameterPersistenceJob(args.job_directory, write=False),
-            jobs.ImageReaderJob(args.job_directory),
+            jobs.ImageReaderJob(),
             jobs.CurveletTransformationJob(),
             jobs.FeatureExtractionJob(),
             jobs.FeaturePersistenceJob(args.job_directory),
@@ -112,7 +85,8 @@ class Harness(termtool.Termtool):
     @termtool.argument("--job-directory", default=None)
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
-    @termtool.argument("--grid-size", type=int, default=4)
+    @termtool.argument("--feature-parameters", default="{}")
+    @termtool.argument("image_reader")
     @termtool.argument("extractor")
     @termtool.argument("image", nargs="+")
     def visualize(self, args):
@@ -120,19 +94,14 @@ class Harness(termtool.Termtool):
             args.job_directory = datetime.datetime.now().strftime(
                     "job_%Y%m%d%H%M%S%f")
 
-        parameters = dict(
-                angles=args.angles,
-                scales=args.scales,
-                feature_extractor=args.extractor,
-                grid_size=args.grid_size,
-                )
+        parameters = self.create_parameters(args)
         jobs.ParameterPersistenceJob(args.job_directory)(dict(
             parameters=parameters,
             ))
 
         job = jobs.CompositeJob([
             jobs.ParameterPersistenceJob(args.job_directory, write=False),
-            jobs.ImageReaderJob(args.job_directory),
+            jobs.ImageReaderJob(),
             jobs.CurveletTransformationJob(),
             jobs.CoefficientPlotJob(args.job_directory),
             jobs.FeatureExtractionJob(),
@@ -161,7 +130,10 @@ class Harness(termtool.Termtool):
     def query(self, args):
         query_features = jobs.CompositeJob([
             jobs.ParameterPersistenceJob(args.features_directory, write=False),
-            jobs.ImageReaderJob("."),
+            jobs.ParameterOverrideJob(dict(
+                image_reader="imageReaders.luma",
+                )),
+            jobs.ImageReaderJob(),
             jobs.CurveletTransformationJob(),
             jobs.FeatureExtractionJob(),
             ])(dict(
@@ -209,6 +181,7 @@ class Harness(termtool.Termtool):
     @termtool.argument("--angles", type=int, default=12)
     @termtool.argument("--scales", type=int, default=4)
     @termtool.argument("--feature-parameters", default="{}")
+    @termtool.argument("image_reader")
     @termtool.argument("extractor")
     @termtool.argument("metric")
     @termtool.argument("sketches_file")
@@ -232,13 +205,7 @@ class Harness(termtool.Termtool):
         if os.path.isfile(result_filename):
             scores = numpy.loadtxt(result_filename)
         else:
-            parameters = dict(
-                    angles=args.angles,
-                    scales=args.scales,
-                    feature_extractor=args.extractor,
-                    feature_parameters=json.loads(args.feature_parameters),
-                    metric=args.metric,
-                    )
+            parameters = self.create_parameters(args)
             jobs.ParameterPersistenceJob(args.job_directory)(dict(
                 parameters=parameters,
                 ))
@@ -275,7 +242,11 @@ class Harness(termtool.Termtool):
 
     def _benchmark_one(self, args, sketch_filename, image_filenames):
         if args.cache_directory is None:
-            feature_job = jobs.FeatureExtractionJob()
+            feature_job = jobs.CompositeJob([
+                jobs.ImageReaderJob(),
+                jobs.CurveletTransformationJob(),
+                jobs.FeatureExtractionJob(),
+                ])
         else:
             feature_job = jobs.TrySequenciallyJob([
                 jobs.FeaturePersistenceJob(
@@ -284,7 +255,7 @@ class Harness(termtool.Termtool):
                         write=False
                         ),
                 jobs.CompositeJob([
-                    jobs.ImageReaderJob(args.job_directory),
+                    jobs.ImageReaderJob(),
                     jobs.CurveletTransformationJob(),
                     jobs.FeatureExtractionJob(),
                     jobs.FeaturePersistenceJob(
@@ -297,15 +268,19 @@ class Harness(termtool.Termtool):
 
         job = jobs.CompositeJob([
             jobs.ParameterPersistenceJob(args.job_directory, write=False),
+            jobs.ParameterOverrideJob(dict(
+                image_reader="imageReaders.luma",
+                ), predicate_key="is_sketch"),
             feature_job,
             ])
 
         items = [dict(
             id=base64.urlsafe_b64encode(image_filename),
             source_image_filename=image_filename,
+            is_sketch=(image_filename == sketch_filename),
             ) for image_filename in image_filenames + [sketch_filename, ]]
-        #image_features = self.parallel_map(job, items)
-        image_features = map(job, items)
+        image_features = self.parallel_map(job, items)
+        #image_features = map(job, items)
         sketch_features = image_features.pop()
 
         comparison_job = jobs.FeatureComparisonJob()

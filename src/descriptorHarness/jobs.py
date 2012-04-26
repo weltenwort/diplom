@@ -1,3 +1,4 @@
+import copy
 import glob
 import json
 import logging
@@ -68,8 +69,9 @@ class TrySequenciallyJob(CompositeJob):
             try:
                 item = job(item)
                 break
-            except Exception:
-                logging.debug("Attempted execution of {} failed.".format(job))
+            except Exception as exc:
+                logging.debug("Attempted execution of {} failed: {}".format(
+                    job, exc))
 
         return item
 
@@ -324,17 +326,25 @@ class JobRankVisualizationParameter(JobParameter):
                     ).dump(out_file)
 
 
-class ImageReaderJob(FileIOJob):
-    def __init__(self, job_directory):
-        super(ImageReaderJob, self).__init__(job_directory,
-                parameters=[
-                    JobImageParameter("image", filename_pattern=[
-                        "{item[source_image_filename]}",
-                        ]),
-                    ],
-                read=True,
-                write=False,
-                )
+class ImageReaderJob(Job):
+    #def __init__(self, job_directory):
+        #super(ImageReaderJob, self).__init__(job_directory,
+                #parameters=[
+                    #JobImageParameter("image", filename_pattern=[
+                        #"{item[source_image_filename]}",
+                        #]),
+                    #],
+                #read=True,
+                #write=False,
+                #)
+
+    def execute(self, item):
+        logging.debug(item)
+        image_reader = utils.import_module(\
+                item["parameters"]["image_reader"]).read_image
+        item["image"] = image_reader(item["source_image_filename"],\
+                item["parameters"])
+        return item
 
 
 class ParameterPersistenceJob(FileIOJob):
@@ -349,6 +359,20 @@ class ParameterPersistenceJob(FileIOJob):
                 read=read,
                 write=write,
                 )
+
+
+class ParameterOverrideJob(Job):
+    def __init__(self, overrides=None, predicate_key=None):
+        self.overrides = overrides
+        self.predicate_key = predicate_key
+
+    def execute(self, item):
+        if self.overrides is not None and self.predicate_key is not None:
+            if item.get(self.predicate_key, False):
+                logging.debug("Overriding parameters...")
+                item["parameters"] = copy.deepcopy(item["parameters"])
+                item["parameters"].update(self.overrides)
+        return item
 
 
 class CurveletPersistenceJob(FileIOJob):
@@ -385,15 +409,10 @@ class CurveletTransformationJob(Job):
         coefficients = transformation.fwd(inputs.image)
         coefficient_map = {}
 
-        #angles = [1] + [inputs.parameters.angles]\
-                #* (inputs.parameters.scales - 1)
-        #for scale in range(inputs.parameters.scales - 1):
-            #for angle in range(angles[scale]):
-                #coefficient_map["{},{}".format(scale, angle)] =\
-                        #coefficients(scale, angle)
         for scale, scale_data in enumerate(coefficients):
             if len(scale_data) > 1:
-                for angle, angle_data in enumerate(scale_data):
+                for angle, angle_data in enumerate(\
+                        scale_data[:len(scale_data) / 2]):
                     angle_data = numpy.fabs(angle_data)
                     coefficient_map["{},{}".format(scale, angle)] = angle_data
 
