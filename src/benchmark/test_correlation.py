@@ -25,8 +25,9 @@ class TestBenchmark(common.BenchmarkBase):
         benchmark = numpy.loadtxt(args.benchmark)
         distances = self.get_distances_from_matrix(config, benchmark)
         correlations, mean_correlation = self.correlate_to_study(distances, data={})
-        pprint.pprint(correlations)
-        print mean_correlation
+        #pprint.pprint(correlations)
+        #print mean_correlation
+        return correlations, mean_correlation
 
 if __name__ == "__main__":
     TestBenchmark()()

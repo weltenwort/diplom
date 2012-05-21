@@ -32,7 +32,7 @@ extensions = [
     'sphinx.ext.pngmath',
     'sphinx.ext.ifconfig',
     'sphinxcontrib.programoutput',
-    'comparison_table',
+    'benchmark_table',
     'sphinxcontrib.blockdiag',
     ]
 

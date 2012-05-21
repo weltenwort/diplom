@@ -8,6 +8,7 @@ import datetime
 import glob
 import importlib
 import json
+import os
 import pickle
 import shutil
 import sys
@@ -216,13 +217,18 @@ class BenchmarkBase(object):
         self.study = self.load_study(args)
 
         self.logger.reset()
-        start_time = datetime.datetime.now()
-        correlations, mean_correlation = self.execute(config, args)
-        stop_time = datetime.datetime.now()
+        old_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+        try:
+            start_time = datetime.datetime.now()
+            correlations, mean_correlation = self.execute(config, args)
+            stop_time = datetime.datetime.now()
+        finally:
+            sys.stdout = old_stdout
         print(json.dumps(dict(
             correlations=correlations,
             mean_correlation=mean_correlation,
-            datetime=start_time,
+            datetime=str(start_time),
             duration=(stop_time - start_time).total_seconds(),
             config=config,
             ), indent=4))

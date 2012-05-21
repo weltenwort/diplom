@@ -56,99 +56,75 @@
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Label</th>
+<th class="head">Datetime</th>
 <th class="head">Angles</th>
 <th class="head">Scales</th>
-<th class="head">Input</th>
-<th class="head">Features</th>
-<th class="head">Metric</th>
-<th class="head">Feature Parameters</th>
 <th class="head">Mean Correlation</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>benchmark_l2_mean_g4</td>
+<tr class="row-even"><td>global_canny_mean_g8_l2</td>
+<td>2012-05-21 13:25:37.506252</td>
 <td>12</td>
 <td>4</td>
-<td>imageReaders.luma</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><a class="reference internal" href="metrics/metrics.l2_means_perf.html"><em>Euclidean Metric (Mean)</em></a></td>
-<td>{u&#8217;grid_size&#8217;: 4}</td>
-<td>0.128904513669</td>
+<td>0.121176948474</td>
 </tr>
-<tr class="row-odd"><td>benchmark_l2_mean_g8</td>
+<tr class="row-odd"><td>global_luma_mean_g16_l2</td>
+<td>2012-05-21 12:27:26.224126</td>
 <td>12</td>
 <td>4</td>
-<td>imageReaders.luma</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><a class="reference internal" href="metrics/metrics.l2_means_perf.html"><em>Euclidean Metric (Mean)</em></a></td>
-<td>{u&#8217;grid_size&#8217;: 8}</td>
-<td>0.136738725581</td>
+<td>0.138754707161</td>
 </tr>
-<tr class="row-even"><td>benchmark_l2_mean_sel_g8</td>
+<tr class="row-even"><td>global_luma_mean_g8_l2</td>
+<td>2012-05-21 11:50:19.498672</td>
 <td>12</td>
 <td>4</td>
-<td>imageReaders.luma</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><tt class="xref doc docutils literal"><span class="pre">metrics/metrics.l2_means_selective</span></tt></td>
-<td>{u&#8217;grid_size&#8217;: 8}</td>
-<td>0.158894388567</td>
+<td>0.139733804686</td>
 </tr>
-<tr class="row-odd"><td>benchmark_l2_mean_sel_g8_canny</td>
+<tr class="row-odd"><td>global_luma_sobel_mean_sel_g8_l2</td>
+<td>2012-05-21 19:17:46.159651</td>
 <td>12</td>
 <td>4</td>
-<td>imageReaders.canny</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><tt class="xref doc docutils literal"><span class="pre">metrics/metrics.l2_means_selective</span></tt></td>
-<td>{u&#8217;grid_size&#8217;: 8}</td>
-<td>0.159539696887</td>
-</tr>
-<tr class="row-even"><td>benchmark_l2_mean_sel_g8_sobel</td>
-<td>12</td>
-<td>4</td>
-<td>imageReaders.sobel</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><tt class="xref doc docutils literal"><span class="pre">metrics/metrics.l2_means_selective</span></tt></td>
-<td>{u&#8217;grid_size&#8217;: 8}</td>
 <td>0.160055908824</td>
 </tr>
-<tr class="row-odd"><td>benchmark_l2_std_devs_g4</td>
+<tr class="row-even"><td>global_sobel_mean_g8_l2</td>
+<td>2012-05-21 14:13:35.125519</td>
 <td>12</td>
 <td>4</td>
-<td>imageReaders.luma</td>
-<td><a class="reference internal" href="feature_extractors/featureExtractors.mean.html"><em>Mean Feature Extractor</em></a></td>
-<td><a class="reference internal" href="metrics/metrics.l2_std_devs.html"><em>Euclidean Metric (StdDev)</em></a></td>
-<td>{u&#8217;grid_size&#8217;: 4}</td>
-<td>0.124658172063</td>
+<td>0.159412131249</td>
+</tr>
+<tr class="row-odd"><td>global_sobel_mean_sel_g8_l2</td>
+<td>2012-05-21 14:56:51.640200</td>
+<td>12</td>
+<td>4</td>
+<td>0.172868693251</td>
 </tr>
 <tr class="row-even"><td>reference</td>
-<td>0</td>
-<td>0</td>
-<td>None</td>
-<td></td>
-<td></td>
-<td></td>
+<td>2012-05-21 11:19:58.793120</td>
+<td>12</td>
+<td>4</td>
 <td>0.27670439239</td>
 </tr>
 </tbody>
 </table>
-<p>(<a class="reference external" href="../pyplots/results.py">Source code</a>, <a class="reference external" href="../pyplots/results.png">png</a>, <a class="reference external" href="../pyplots/results.hires.png">hires.png</a>, <a class="reference external" href="../pyplots/results.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../pyplots/benchmark_plot_overview.py">Source code</a>, <a class="reference external" href="../pyplots/benchmark_plot_overview.png">png</a>, <a class="reference external" href="../pyplots/benchmark_plot_overview.hires.png">hires.png</a>, <a class="reference external" href="../pyplots/benchmark_plot_overview.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/results.png" src="../_images/results.png" />
+<img alt="../_images/benchmark_plot_overview.png" src="../_images/benchmark_plot_overview.png" />
 </div>
-<p>(<a class="reference external" href="../pyplots/comparison_detail.py">Source code</a>, <a class="reference external" href="../pyplots/comparison_detail.png">png</a>, <a class="reference external" href="../pyplots/comparison_detail.hires.png">hires.png</a>, <a class="reference external" href="../pyplots/comparison_detail.pdf">pdf</a>)</p>
+</div>
+<div class="section" id="details">
+<h2>Details<a class="headerlink" href="#details" title="Permalink to this headline">¶</a></h2>
+<p>(<a class="reference external" href="../pyplots/benchmark_plot_details.py">Source code</a>, <a class="reference external" href="../pyplots/benchmark_plot_details.png">png</a>, <a class="reference external" href="../pyplots/benchmark_plot_details.hires.png">hires.png</a>, <a class="reference external" href="../pyplots/benchmark_plot_details.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/comparison_detail.png" src="../_images/comparison_detail.png" />
+<img alt="../_images/benchmark_plot_details.png" src="../_images/benchmark_plot_details.png" />
 </div>
 </div>
 </div>
@@ -163,6 +139,7 @@
   <ul>
 <li><a class="reference internal" href="#">Experiments</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#details">Details</a></li>
 </ul>
 </li>
 </ul>
