@@ -4,9 +4,8 @@ import glob
 import common
 
 
-class GlobalFeaturesBenchmark(common.BenchmarkBase):
-    @common.BenchmarkBase.subcommand()
-    def execute(self, args, config, study):
+class CodebookFeaturesBenchmark(common.BenchmarkBase):
+    def execute(self, config, args):
         feature_cache = common.DiskCache("cache_{}".format(common.dict_to_filename(config, ["images", ])))
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(
@@ -35,7 +34,7 @@ class GlobalFeaturesBenchmark(common.BenchmarkBase):
                 else:
                     features = feature_cache.get(source_image_filename)
                 data["distances"][image_set["query_image"]][source_image_filename] = common.load(data["config"]["metric"]["metric"]).execute(query_features, features, data=data)
-        correlations, mean_correlation = self.correlate_to_study(data["distances"], study)
+        correlations, mean_correlation = self.correlate_to_study(data["distances"], data=data)
         self.logger.log("Mean correlation: {}".format(mean_correlation))
         return (correlations, mean_correlation)
 
