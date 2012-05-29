@@ -1,0 +1,36 @@
+{
+    "images": [
+        {
+            "query_image": "/home/laeroth/Downloads/benchmark/sketches/0.png", 
+            "source_images": [
+                "/home/laeroth/Downloads/benchmark/images/0/*.jpg"
+            ], 
+            "key": "set0"
+        },
+        {
+            "query_image": "/home/laeroth/Downloads/benchmark/sketches/1.png", 
+            "source_images": [
+                "/home/laeroth/Downloads/benchmark/images/1/*.jpg"
+            ], 
+            "key": "set1"
+        }
+    ], 
+    "curvelets": {
+        "transform": "transforms.curvelet_strictangles",
+        "angles": 12, 
+        "scales": 4
+    },
+    "readers": {
+        "query": "readers.luma",
+        "image": "readers.luma"
+    },
+    "features": {
+        "extractor": "features.patch_means",
+        "grid_size": 8,
+        "patch_size": 2,
+        "codebook_size": 100
+    },
+    "metric": {
+        "metric": "metrics.l2_means"
+    }
+}

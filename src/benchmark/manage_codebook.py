@@ -1,4 +1,5 @@
 import common
+import common.codebook
 
 
 @common.ApplicationBase.argument("-b", "--codebook", action="store",\
@@ -8,14 +9,24 @@ class CodebookManager(common.ApplicationBase):
 
     @common.ApplicationBase.subcommand(help="create a new codebook")
     def create(self, args, config):
-        codebook = common.DiskCache(args.codebook)
+        codebook = common.codebook.Codebook(args.codebook, config["features"]["codebook_size"])
 
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(
                 data["config"]["images"],
                 entry_message="Processing {count} image sets",
                 item_prefix="image set"):
-            pass
+            for source_image_filename in self.logger.loop(
+                    common.glob_list(image_set["source_images"]),
+                    entry_message="Processing {count} images...",
+                    item_prefix="image"):
+                self.logger.log("Processing image '{}'...".\
+                        format(source_image_filename))
+                image = common.load(data["config"]["readers"]["image"]).execute(source_image_filename, data=data)
+                coefficients = common.load(data["config"]["curvelets"]["transform"]).execute(image, data=data)
+                features = common.load(data["config"]["features"]["extractor"]).execute(coefficients, data=data)
+                codebook.add_observations(features)
+        codebook.cluster()
 
 
 if __name__ == "__main__":

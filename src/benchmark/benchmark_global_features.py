@@ -2,12 +2,13 @@
 import glob
 
 import common
+import common.diskcache
 
 
 class GlobalFeaturesBenchmark(common.BenchmarkBase):
     @common.BenchmarkBase.subcommand()
     def execute(self, args, config, study):
-        feature_cache = common.DiskCache("cache_{}".format(common.dict_to_filename(config, ["images", ])))
+        feature_cache = common.diskcache.DiskCache("cache_{}".format(common.dict_to_filename(config, ["images", ])))
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(
                 data["config"]["images"],
