@@ -31,6 +31,6 @@
         "codebook_size": 100
     },
     "metric": {
-        "metric": "metrics.l2_means"
+        "metric": "metrics.histogram_intersection"
     }
 }

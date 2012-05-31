@@ -219,7 +219,7 @@
         }
     ], 
     "curvelets": {
-        "transform": "transforms.curvelet",
+        "transform": "transforms.curvelet_strictangles",
         "angles": 12, 
         "scales": 4
     },
@@ -228,10 +228,12 @@
         "image": "readers.luma"
     },
     "features": {
-        "extractor": "features.global_means",
-        "grid_size": 8
+        "extractor": "features.patch_means",
+        "grid_size": 8,
+        "patch_size": 2,
+        "codebook_size": 100
     },
     "metric": {
-        "metric": "metrics.l2_means"
+        "metric": "metrics.histogram_intersection"
     }
 }

@@ -61,7 +61,7 @@ class DiskCache(object):
 
     def get(self, key, default=None):
         filepath = self._key_to_path(key)
-        if filepath.exists:
+        if filepath.exists():
             with filepath.open("rb") as fp:
                 return self.deserialize(fp)
         else:
@@ -76,7 +76,7 @@ class DiskCache(object):
 
     def remove(self, key):
         filepath = self._key_to_path(key)
-        if filepath.exists:
+        if filepath.exists():
             filepath.unlink()
 
     def clear(self):

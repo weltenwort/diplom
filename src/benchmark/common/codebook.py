@@ -11,8 +11,7 @@ class Codebook(object):
 
         self.storage = DiskCache(self._directory)
         self.observations = []
-        #self.codewords = numpy.array([])
-        self.load()
+        self.codewords = numpy.asarray([])
 
     def add_observations(self, observations):
         self.observations += observations
@@ -23,7 +22,7 @@ class Codebook(object):
         codebook, distortion = scipy.cluster.vq.kmeans(observations, self._k)
         self.codewords = codebook
 
-    def store(self):
+    def save(self):
         self.storage.set("codewords", self.codewords)
 
     def load(self):
@@ -31,5 +30,6 @@ class Codebook(object):
 
     def quantize(self, observations):
         observations = scipy.cluster.vq.whiten(numpy.asarray(observations))
-        codes = scipy.cluster.vq.vq(observations, self.codewords)
-        signature = numpy.bincount(codes, minlength=len(observations))
+        code = scipy.cluster.vq.vq(observations, self.codewords)[0]
+        signature = numpy.bincount(code, minlength=self._k)
+        return signature

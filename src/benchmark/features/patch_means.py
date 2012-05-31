@@ -68,59 +68,6 @@ def execute(coefficients, data):
     return features
 
 
-def execute_old(coefficients, data):
-    """ Extract feature patches from the coefficients.
-
-    #>>> import numpy
-    #>>> coefficients = {
-    #...     "1,1": numpy.arange(0, 100).reshape(10, 10),
-    #...     "1,2": numpy.arange(100, 200).reshape(10, 10),
-    #...     }
-    #>>> data = {"config": {"features": {"grid_size": 6, "patch_size": 3}}}
-    #>>> execute_old(coefficients, data)
-    #[]
-    """
-    grid_size = data["config"]["features"]["grid_size"]
-    patch_size = data["config"]["features"]["patch_size"]
-
-    features = []
-    for scale, angles in get_angles(coefficients).iteritems():
-        feature = []
-        for angle, group_name in angles.iteritems():
-            current_coeffs = coefficients[group_name]
-            grid_cells = [cell for row in\
-                    numpy.array_split(current_coeffs, grid_size)\
-                    for cell in\
-                    numpy.array_split(row, grid_size, axis=1)]
-            #print grid_cells
-            means = numpy.array([numpy.mean(cell) for cell in grid_cells])\
-                    .reshape((grid_size, grid_size))
-            print means
-            #feature.append(means)
-        #feature = numpy.dstack(feature)
-        #features.append(feature)
-
-    return features
-
-
-def time_execute():
-    coefficients = {
-        "1,1": numpy.arange(0, 10000).reshape(100, 100),
-        "1,2": numpy.arange(10000, 20000).reshape(100, 100),
-        }
-    data = {"config": {"features": {"grid_size": 6, "patch_size": 3}}}
-    execute(coefficients, data)
-
-
-def time_execute_old():
-    coefficients = {
-        "1,1": numpy.arange(0, 10000).reshape(100, 100),
-        "1,2": numpy.arange(10000, 20000).reshape(100, 100),
-        }
-    data = {"config": {"features": {"grid_size": 6, "patch_size": 3}}}
-    execute(coefficients, data)
-
-
 def get_angles(coefficients, sep=","):
     scale_angles = {}
     for group_name in coefficients.keys():

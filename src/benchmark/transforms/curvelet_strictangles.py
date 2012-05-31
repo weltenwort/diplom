@@ -17,8 +17,9 @@ def execute(image, data):
 
     for scale, scale_data in enumerate(coefficients):
         if len(scale_data) > 1:
-            angles = [int(x) for x in numpy.linspace(0, len(scale_data) / 2,\
-                    data["config"]["curvelets"]["angles"], False)]
+            angles = numpy.linspace(0, len(scale_data) / 2,\
+                    data["config"]["curvelets"]["angles"], False)\
+                    .astype(numpy.int)
             #for angle, angle_data in enumerate(\
                     #scale_data[:len(scale_data) / 2]):
             for angle, angle_index in enumerate(angles):
