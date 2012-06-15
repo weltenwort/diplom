@@ -22,6 +22,11 @@ def glob_list(pathnames):
     return [l for p in pathnames for l in glob.glob(p)]
 
 
+def augment_list(seq, *args):
+    l = len(seq)
+    return [seq, ] + [[arg, ] * l for arg in args]
+
+
 def ensure_list(value):
     if isinstance(value, basestring):
         return [value, ]
@@ -96,14 +101,26 @@ class Logger(object):
         self.format_stack.pop()
 
     def loop(self, iterable, entry_message="Looping over {count} items...",\
-            item_prefix="iteration"):
-        item_count = len(iterable)
+            item_prefix="iteration", item_count=None):
+        if item_count is None:
+            try:
+                item_count = len(iterable)
+            except TypeError:
+                item_count = "n"
+
         if entry_message:
             self.log(entry_message.format(count=item_count))
         for index, item in enumerate(iterable):
             with self.section(prefix="[{0}:{1:{2}}/{3}]".format(
                 item_prefix, index + 1, len(str(item_count)), item_count)):
                 yield item
+
+    def async_loop(self, f, *iterables, **kwargs):
+        from IPython.parallel import Client
+        rc = Client()
+        lview = rc.load_balanced_view()
+        return self.loop(lview.map_async(f, *iterables),\
+                item_count=len(iterables[0]), **kwargs)
 
 
 class ApplicationBaseMetaclass(type):

@@ -1,5 +1,18 @@
+import json
+
 import common
 import common.codebook
+
+
+def process_image(source_image_filename, data):
+    import common
+    image = common.load(data["config"]["readers"]["image"])\
+            .execute(source_image_filename, data=data)
+    coefficients = common.load(data["config"]["curvelets"]["transform"])\
+            .execute(image, data=data)
+    features = common.load(data["config"]["features"]["extractor"])\
+            .execute(coefficients, data=data)
+    return source_image_filename, features
 
 
 @common.ApplicationBase.argument("-b", "--codebook", action="store",\
@@ -17,20 +30,37 @@ class CodebookManager(common.ApplicationBase):
                 data["config"]["images"],
                 entry_message="Processing {count} image sets",
                 item_prefix="image set"):
-            for source_image_filename in self.logger.loop(
-                    common.glob_list(image_set["source_images"]),
+            for source_image_filename, features in self.logger.async_loop(
+                    process_image,
+                    *common.augment_list(
+                        common.glob_list(image_set["source_images"]),
+                        data,
+                        ),
                     entry_message="Processing {count} images...",
                     item_prefix="image"):
                 self.logger.log("Processing image '{}'...".\
                         format(source_image_filename))
-                image = common.load(data["config"]["readers"]["image"]).execute(source_image_filename, data=data)
-                coefficients = common.load(data["config"]["curvelets"]["transform"]).execute(image, data=data)
-                features = common.load(data["config"]["features"]["extractor"]).execute(coefficients, data=data)
+                #image = common.load(data["config"]["readers"]["image"]).execute(source_image_filename, data=data)
+                #coefficients = common.load(data["config"]["curvelets"]["transform"]).execute(image, data=data)
+                #features = common.load(data["config"]["features"]["extractor"]).execute(coefficients, data=data)
                 codebook.add_observations(features)
         self.logger.log("Clustering observations...")
         codebook.cluster()
         self.logger.log("Saving codebook...")
         codebook.save()
+
+    @common.ApplicationBase.subcommand(\
+            help="print information about a codebook")
+    def info(self, args, config):
+        codebook = common.codebook.Codebook.from_cache(args.codebook)
+
+        info = {
+                "cluster_count": codebook._k,
+                "stopword_ratio": codebook._stopword_ratio,
+                "stopword_indices": list(codebook.stopwords),
+                "frequencies": list(codebook.frequencies),
+                }
+        print(json.dumps(info, indent=4))
 
 
 if __name__ == "__main__":

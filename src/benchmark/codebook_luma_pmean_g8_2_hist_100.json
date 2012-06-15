@@ -231,7 +231,8 @@
         "extractor": "features.patch_means",
         "grid_size": 8,
         "patch_size": 2,
-        "codebook_size": 100
+        "codebook_size": 100,
+        "use_stopwords": false
     },
     "metric": {
         "metric": "metrics.histogram_intersection"

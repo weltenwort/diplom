@@ -7,6 +7,8 @@ Overview
 
 .. benchmarktable:: ../benchmark
 
+See :doc:`naming conventions <naming_conventions>`.
+
 .. plot:: pyplots/benchmark_plot_overview.py
 
 Details

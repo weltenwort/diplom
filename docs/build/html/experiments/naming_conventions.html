@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Naming Conventions &mdash; Sketch Based Image Retrieval Using Curvelet Based Descriptors 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Sketch Based Image Retrieval Using Curvelet Based Descriptors 0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Sketch Based Image Retrieval Using Curvelet Based Descriptors 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="naming-conventions">
+<h1>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="input-readers">
+<h2>Input Readers<a class="headerlink" href="#input-readers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="luma">
+<h3>luma<a class="headerlink" href="#luma" title="Permalink to this headline">¶</a></h3>
+<p>Extracts the luminance value as follows:</p>
+<div class="math">
+<p><img src="../_images/math/566392ca87c3f8f0d34bde337dc9cbdf154072ab.png" alt="L = \frac{299}{1000}R + \frac{587}{1000}G + \frac{114}{1000}B"/></p>
+</div></div>
+<div class="section" id="sobel">
+<h3>sobel<a class="headerlink" href="#sobel" title="Permalink to this headline">¶</a></h3>
+<p>Extracts the luminance value like in the luma reader and applies a sobel filter.</p>
+</div>
+<div class="section" id="canny">
+<h3>canny<a class="headerlink" href="#canny" title="Permalink to this headline">¶</a></h3>
+<p>Extracts the luminance value like in the luma reader and applies a canny filter.</p>
+</div>
+</div>
+<div class="section" id="feature-extractors">
+<h2>Feature Extractors<a class="headerlink" href="#feature-extractors" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mean">
+<h3>mean<a class="headerlink" href="#mean" title="Permalink to this headline">¶</a></h3>
+<p>Subdivides the curvelet response image <img class="math" src="../_images/math/c3355896da590fc491a10150a50416687626d7cc.png" alt="C"/> for each scale <img class="math" src="../_images/math/f37bba504894945c07a32f5496d74299a37aa51c.png" alt="s"/> and angle <img class="math" src="../_images/math/99416b997c83ae361494d3c51622d9610301f60d.png" alt="\alpha \in 1,...,a"/> into <img class="math" src="../_images/math/c3d38f82f48ef9e81c04d49354293305b0067afc.png" alt="n \times n"/> grid cells <img class="math" src="../_images/math/cc66336142126c04816a90c28dd88f74038b3fda.png" alt="G_{x,y}\text{ with }x,y \in 1,...,n"/> of approximately equal size:</p>
+<div class="math">
+<p><img src="../_images/math/ee51b50a22503a71078ed56b45072982bba16129.png" alt="C_{s,\alpha} =
+\begin{pmatrix}
+    G_{s,\alpha,1,1} &amp; G_{s,\alpha,1,2} &amp; \cdots &amp; G_{s,\alpha,1,n} \\
+    G_{s,\alpha,2,1} &amp; G_{s,\alpha,2,2} &amp; \cdots &amp; G_{s,\alpha,2,n} \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    G_{s,\alpha,n,1} &amp; G_{s,\alpha,n,2} &amp; \cdots &amp; G_{s,\alpha,n,n} \\
+\end{pmatrix}"/></p>
+</div><p>It then calculates the mean <img class="math" src="../_images/math/c40b561cacc2f0b228ef684052e937f22879f621.png" alt="\bar{C}_{s,\alpha}"/> and standard deviation <img class="math" src="../_images/math/957b248b0c2c3a3b6a012af5afe5dae0cd97ca15.png" alt="\sigma_{s,\alpha}"/> in each grid cell and stores the results as the feature vector:</p>
+<div class="math">
+<p><img src="../_images/math/2b1695dc4bd71a27dc611c62aa00557ec21aace1.png" alt="\bar{C}_{s,\alpha} =
+\begin{pmatrix}
+    mean(G_{s,\alpha,1,1}) &amp; mean(G_{s,\alpha,1,2}) &amp; \cdots &amp; mean(G_{s,\alpha,1,n}) \\
+    mean(G_{s,\alpha,2,1}) &amp; mean(G_{s,\alpha,2,2}) &amp; \cdots &amp; mean(G_{s,\alpha,2,n}) \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    mean(G_{s,\alpha,n,1}) &amp; mean(G_{s,\alpha,n,2}) &amp; \cdots &amp; mean(G_{s,\alpha,n,n}) \\
+\end{pmatrix}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/c9af255fd37b96ade81e6b5d875b782fcba0339a.png" alt="\sigma_{s,\alpha} =
+\begin{pmatrix}
+    \sigma(G_{s,\alpha,1,1}) &amp; \sigma(G_{s,\alpha,1,2}) &amp; \cdots &amp; \sigma(G_{s,\alpha,1,n}) \\
+    \sigma(G_{s,\alpha,2,1}) &amp; \sigma(G_{s,\alpha,2,2}) &amp; \cdots &amp; \sigma(G_{s,\alpha,2,n}) \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    \sigma(G_{s,\alpha,n,1}) &amp; \sigma(G_{s,\alpha,n,2}) &amp; \cdots &amp; \sigma(G_{s,\alpha,n,n}) \\
+\end{pmatrix}"/></p>
+</div></div>
+<div class="section" id="pmean">
+<h3>pmean<a class="headerlink" href="#pmean" title="Permalink to this headline">¶</a></h3>
+<p>Subdivides the curvelet response into grid cells and calculates the means <img class="math" src="../_images/math/c40b561cacc2f0b228ef684052e937f22879f621.png" alt="\bar{C}_{s,\alpha}"/> as in <a class="reference internal" href="#mean">mean</a>. It then slides a window of size <img class="math" src="../_images/math/024d7d11402bd0be11386c342f16727ee5a52cf4.png" alt="m \times m, m &lt; n"/> across it, producing <img class="math" src="../_images/math/8894532d7ba4e74632e0322edadae66682e6a353.png" alt="\bar{W}_{s,\alpha,u,v}\text{ with }u,v \in 1,...,n-m+1"/></p>
+<div class="math">
+<p><img src="../_images/math/d869a1174dbeea7a0c95ecd4b775b23941045e67.png" alt="\bar{C}_{s,\alpha} =
+\begin{pmatrix}
+    mean(G_{s,\alpha,1,1}) &amp; mean(G_{s,\alpha,1,2}) &amp; \cdots &amp; mean(G_{s,\alpha,1,n}) \\
+    mean(G_{s,\alpha,2,1}) &amp; mean(G_{s,\alpha,2,2}) &amp; \cdots &amp; mean(G_{s,\alpha,2,n}) \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    mean(G_{s,\alpha,n,1}) &amp; mean(G_{s,\alpha,n,2}) &amp; \cdots &amp; mean(G_{s,\alpha,n,n}) \\
+\end{pmatrix} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,1,1} &amp; \bar{c}_{s,\alpha,1,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,1,n} \\
+    \bar{c}_{s,\alpha,2,1} &amp; \bar{c}_{s,\alpha,2,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,2,n} \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    \bar{c}_{s,\alpha,n,1} &amp; \bar{c}_{s,\alpha,n,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,n,n} \\
+\end{pmatrix}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/847e3b5aeb3088a8ec8070d0f85e3d68eea71f34.png" alt="\bar{W}_{s,\alpha,u,v} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,u,v} &amp; \bar{c}_{s,\alpha,u,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u,v+m} \\
+    \bar{c}_{s,\alpha,u+1,v} &amp; \bar{c}_{s,\alpha,u+1,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u+1,v+m} \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    \bar{c}_{s,\alpha,u+m,v} &amp; \bar{c}_{s,\alpha,u+m,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u+m,v+m} \\
+\end{pmatrix} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,u,v,1} \\
+    \bar{c}_{s,\alpha,u,v,2} \\
+    \vdots \\
+    \bar{c}_{s,\alpha,u,v,m} \\
+\end{pmatrix}"/></p>
+</div><p>and stores the stacked mean submatrices <img class="math" src="../_images/math/8798d507d84b007eb85589a5d4f85ed061768bfe.png" alt="\bar{W}_{s,u,v}"/> as the feature vectors:</p>
+<div class="math">
+<p><img src="../_images/math/8cc83504d6b02c3849e02ad62a6a7888893152f6.png" alt="\bar{W}_{s,u,v} =
+\begin{pmatrix}
+    \bar{c}_{s,1,u,v,1} &amp; \bar{c}_{s,1,u,v,2} &amp; \cdots &amp; \bar{c}_{s,1,u,v,m} \\
+    \bar{c}_{s,2,u,v,1} &amp; \bar{c}_{s,2,u,v,2} &amp; \cdots &amp; \bar{c}_{s,2,u,v,m} \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    \bar{c}_{s,a,u,v,1} &amp; \bar{c}_{s,a,u,v,2} &amp; \cdots &amp; \bar{c}_{s,a,u,v,m} \\
+\end{pmatrix}"/></p>
+</div></div>
+<div class="section" id="pmean2">
+<h3>pmean2<a class="headerlink" href="#pmean2" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+</div>
+<div class="section" id="metrics">
+<h2>metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mean-l2">
+<h3>mean_l2<a class="headerlink" href="#mean-l2" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+<div class="section" id="mean-sel-l2">
+<h3>mean_sel_l2<a class="headerlink" href="#mean-sel-l2" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
+</div>
+<div class="section" id="hist">
+<h3>hist<a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h3>
+<p>Calculates the distance <img class="math" src="../_images/math/96ab646de7704969b91c76a214126b45f2b07b25.png" alt="d"/> between two images&#8217; signatures <img class="math" src="../_images/math/55d74b229678cd028134a2eb8eb47e10da5ec729.png" alt="a = (a_0,a_1,...,a_N)"/> and <img class="math" src="../_images/math/50b5de562824233110c6b0329ee59d05b8e64431.png" alt="b = (b_0,b_1,...,b_N)"/> using the histogram intersection:</p>
+<div class="math">
+<p><img src="../_images/math/4f6fdef9ecccf6b8dd4a92dd7ac85a7acb8a6725.png" alt="d_{a,b} = \frac{\sum_{i=0}^N min(a_i, b_i)}{\sum_{i=0}^N b_i}"/></p>
+</div></div>
+<div class="section" id="hist-stop">
+<h3>hist_stop<a class="headerlink" href="#hist-stop" title="Permalink to this headline">¶</a></h3>
+<p>Sets the signature components (bin counts) of the most frequent clusters to 0 so they do not impact the distance calculation. Then it performs the distance calculation as in <a class="reference internal" href="#hist">hist</a>.</p>
+</div>
+<div class="section" id="hist-weights">
+<h3>hist_weights<a class="headerlink" href="#hist-weights" title="Permalink to this headline">¶</a></h3>
+<p>Multiplies the signature components (bin counts) with <img class="math" src="../_images/math/959453384be4ecba91e572673ce7074146b068a7.png" alt="\frac{1}{n_i^2}"/> where <img class="math" src="../_images/math/7eb75ccf06e046206cb4c636a54d7be11d049fbf.png" alt="n_i"/> is the number of occurences of the cluster i in the training data set. Then it performs the distance calculation as in <a class="reference internal" href="#hist">hist</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Naming Conventions</a><ul>
+<li><a class="reference internal" href="#input-readers">Input Readers</a><ul>
+<li><a class="reference internal" href="#luma">luma</a></li>
+<li><a class="reference internal" href="#sobel">sobel</a></li>
+<li><a class="reference internal" href="#canny">canny</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#feature-extractors">Feature Extractors</a><ul>
+<li><a class="reference internal" href="#mean">mean</a></li>
+<li><a class="reference internal" href="#pmean">pmean</a></li>
+<li><a class="reference internal" href="#pmean2">pmean2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metrics">metrics</a><ul>
+<li><a class="reference internal" href="#mean-l2">mean_l2</a></li>
+<li><a class="reference internal" href="#mean-sel-l2">mean_sel_l2</a></li>
+<li><a class="reference internal" href="#hist">hist</a></li>
+<li><a class="reference internal" href="#hist-stop">hist_stop</a></li>
+<li><a class="reference internal" href="#hist-weights">hist_weights</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/experiments/naming_conventions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Sketch Based Image Retrieval Using Curvelet Based Descriptors 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Felix Stürmer.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
