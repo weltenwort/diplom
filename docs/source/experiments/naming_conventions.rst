@@ -112,7 +112,41 @@ and stores the stacked mean submatrices :math:`\bar{W}_{s,u,v}` as the feature v
 pmean2
 ------
 
-TBD
+Subdivides the curvelet response into grid cells and calculates the means :math:`\bar{C}_{s,\alpha}` as in `mean`_.
+
+.. math::
+    \bar{C}_{s,\alpha} =
+    \begin{pmatrix}
+        mean(G_{s,\alpha,1,1}) & mean(G_{s,\alpha,1,2}) & \cdots & mean(G_{s,\alpha,1,n}) \\
+        mean(G_{s,\alpha,2,1}) & mean(G_{s,\alpha,2,2}) & \cdots & mean(G_{s,\alpha,2,n}) \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        mean(G_{s,\alpha,n,1}) & mean(G_{s,\alpha,n,2}) & \cdots & mean(G_{s,\alpha,n,n}) \\
+    \end{pmatrix} =
+    \begin{pmatrix}
+        \bar{c}_{s,\alpha,1,1} & \bar{c}_{s,\alpha,1,2} & \cdots & \bar{c}_{s,\alpha,1,n} \\
+        \bar{c}_{s,\alpha,2,1} & \bar{c}_{s,\alpha,2,2} & \cdots & \bar{c}_{s,\alpha,2,n} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        \bar{c}_{s,\alpha,n,1} & \bar{c}_{s,\alpha,n,2} & \cdots & \bar{c}_{s,\alpha,n,n} \\
+    \end{pmatrix}
+
+It then slides a window of size :math:`m \times m, m < n` across it, producing :math:`\bar{W}_{s,\alpha,u,v}\text{ with }u,v \in 1,...,n-m+1` as in `pmean`_:
+
+.. math::
+    \bar{W}_{s,\alpha,u,v} =
+    \begin{pmatrix}
+        \bar{c}_{s,\alpha,u,v} & \bar{c}_{s,\alpha,u,v+1} & \cdots & \bar{c}_{s,\alpha,u,v+m} \\
+        \bar{c}_{s,\alpha,u+1,v} & \bar{c}_{s,\alpha,u+1,v+1} & \cdots & \bar{c}_{s,\alpha,u+1,v+m} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        \bar{c}_{s,\alpha,u+m,v} & \bar{c}_{s,\alpha,u+m,v+1} & \cdots & \bar{c}_{s,\alpha,u+m,v+m} \\
+    \end{pmatrix} =
+    \begin{pmatrix}
+        \bar{c}_{s,\alpha,u,v,1} \\
+        \bar{c}_{s,\alpha,u,v,2} \\
+        \vdots \\
+        \bar{c}_{s,\alpha,u,v,m} \\
+    \end{pmatrix}
+
+Each vector :math:`\bar{W}_{s,\alpha,u,v}` is then stored as a feature individually.
 
 
 metrics
@@ -121,12 +155,12 @@ metrics
 mean_l2
 -------
 
-TBD
+Sums up the pairwise euclidean distance between the means at corresponding scales and angles of two images.
 
 mean_sel_l2
 -----------
 
-TBD
+Sums up the pairwise euclidean distance between the means at corresponding scales and angles of two images when the mean of the feature exceeds half a standard deviation.
 
 hist
 ----
@@ -144,4 +178,4 @@ Sets the signature components (bin counts) of the most frequent clusters to 0 so
 hist_weights
 ------------
 
-Multiplies the signature components (bin counts) with :math:`\frac{1}{n_i^2}` where :math:`n_i` is the number of occurences of the cluster i in the training data set. Then it performs the distance calculation as in `hist`_.
+Multiplies the signature components (bin counts) with :math:`\frac{n_{total}}{n_i^2}` where :math:`n_{total}` is the number of observations and :math:`n_i` is the number of occurences of the cluster i in the training data set. Then it performs the distance calculation as in `hist`_.

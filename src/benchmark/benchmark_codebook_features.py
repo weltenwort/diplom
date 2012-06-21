@@ -24,6 +24,7 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
         codebook.load()
 
         data = common.RDict(config=common.RDict.from_dict(config))
+        data["codewords"] = codebook.codewords
         for image_set in self.logger.loop(
                 data["config"]["images"],
                 entry_message="Processing {count} image sets",

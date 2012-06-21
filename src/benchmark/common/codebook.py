@@ -1,14 +1,18 @@
 import numpy
-import scipy.cluster.vq
+import scipy.spatial.distance as distance
+import scipy.cluster.vq as vq
+import scipy.cluster.hierarchy as hierarchy
 
 from .diskcache import DiskCache
 
 
 class Codebook(object):
-    def __init__(self, directory, k, stopword_ratio=0.05):
+    def __init__(self, directory, k, stopword_ratio=0.05,\
+            cluster_method="kmeans"):
         self._directory = directory
         self._k = k
         self._stopword_ratio = stopword_ratio
+        self._cluster_method = cluster_method
 
         self.storage = DiskCache(self._directory)
         self.observations = []
@@ -32,12 +36,26 @@ class Codebook(object):
 
     def cluster(self):
         self.storage.clear()
-        observations = scipy.cluster.vq.whiten(numpy.array(self.observations))
-        codebook, code = scipy.cluster.vq.kmeans2(observations, self._k,\
-            minit="points")
+
+        observations = vq.whiten(numpy.array(self.observations))
+        if self._cluster_method == "kmeans":
+            codebook, code = vq.kmeans2(observations, self._k,\
+                minit="points")
+        elif self._cluster_method == "hierarchy_single":
+            distances = distance.pdist(observations, "euclidean")
+            cluster_hierarchy = hierarchy.linkage(distances,
+                    method="single",
+                    metric="euclidean",
+                    )
+            code = hierarchy.fcluster(cluster_hierarchy,
+                    t=self._k,
+                    criterion="maxclust",
+                    )
+
         self.codewords = codebook
         signature = numpy.bincount(code, minlength=self._k)
-        self.frequencies = numpy.clip(1.0 / signature, 0.0, 1.0)
+        signature_sum = float(numpy.sum(signature))
+        self.frequencies = numpy.clip(signature / signature_sum, 0.0, 1.0)
         if self._stopword_ratio > 0:
             #signature = self.quantize(self.observations, use_stopwords=False)
             self.stopwords = self.find_stopwords([signature, ])
@@ -57,13 +75,13 @@ class Codebook(object):
         self.stopwords = numpy.asarray(self.storage.get("stopwords", []))
 
     def quantize(self, observations, use_stopwords=True, use_weights=False):
-        observations = scipy.cluster.vq.whiten(numpy.asarray(observations))
-        code = scipy.cluster.vq.vq(observations, self.codewords)[0]
+        observations = vq.whiten(numpy.asarray(observations))
+        code = vq.vq(observations, self.codewords)[0]
         signature = numpy.bincount(code, minlength=self._k)
         if use_stopwords and len(self.stopwords) > 0:
             signature[self.stopwords] = 0  # set stopword bins to 0
         if use_weights:
-            signature = signature / (self.frequencies ** 2)
+            signature = signature / self.frequencies
         return signature
 
     def find_stopwords(self, signatures):

@@ -94,7 +94,7 @@
 </div></div>
 <div class="section" id="pmean">
 <h3>pmean<a class="headerlink" href="#pmean" title="Permalink to this headline">¶</a></h3>
-<p>Subdivides the curvelet response into grid cells and calculates the means <img class="math" src="../_images/math/c40b561cacc2f0b228ef684052e937f22879f621.png" alt="\bar{C}_{s,\alpha}"/> as in <a class="reference internal" href="#mean">mean</a>. It then slides a window of size <img class="math" src="../_images/math/024d7d11402bd0be11386c342f16727ee5a52cf4.png" alt="m \times m, m &lt; n"/> across it, producing <img class="math" src="../_images/math/8894532d7ba4e74632e0322edadae66682e6a353.png" alt="\bar{W}_{s,\alpha,u,v}\text{ with }u,v \in 1,...,n-m+1"/></p>
+<p>Subdivides the curvelet response into grid cells and calculates the means <img class="math" src="../_images/math/c40b561cacc2f0b228ef684052e937f22879f621.png" alt="\bar{C}_{s,\alpha}"/> as in <a class="reference internal" href="#mean">mean</a>.</p>
 <div class="math">
 <p><img src="../_images/math/d869a1174dbeea7a0c95ecd4b775b23941045e67.png" alt="\bar{C}_{s,\alpha} =
 \begin{pmatrix}
@@ -109,7 +109,8 @@
     \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
     \bar{c}_{s,\alpha,n,1} &amp; \bar{c}_{s,\alpha,n,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,n,n} \\
 \end{pmatrix}"/></p>
-</div><div class="math">
+</div><p>It then slides a window of size <img class="math" src="../_images/math/024d7d11402bd0be11386c342f16727ee5a52cf4.png" alt="m \times m, m &lt; n"/> across it, producing <img class="math" src="../_images/math/8894532d7ba4e74632e0322edadae66682e6a353.png" alt="\bar{W}_{s,\alpha,u,v}\text{ with }u,v \in 1,...,n-m+1"/>:</p>
+<div class="math">
 <p><img src="../_images/math/847e3b5aeb3088a8ec8070d0f85e3d68eea71f34.png" alt="\bar{W}_{s,\alpha,u,v} =
 \begin{pmatrix}
     \bar{c}_{s,\alpha,u,v} &amp; \bar{c}_{s,\alpha,u,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u,v+m} \\
@@ -135,18 +136,48 @@
 </div></div>
 <div class="section" id="pmean2">
 <h3>pmean2<a class="headerlink" href="#pmean2" title="Permalink to this headline">¶</a></h3>
-<p>TBD</p>
+<p>Subdivides the curvelet response into grid cells and calculates the means <img class="math" src="../_images/math/c40b561cacc2f0b228ef684052e937f22879f621.png" alt="\bar{C}_{s,\alpha}"/> as in <a class="reference internal" href="#mean">mean</a>.</p>
+<div class="math">
+<p><img src="../_images/math/d869a1174dbeea7a0c95ecd4b775b23941045e67.png" alt="\bar{C}_{s,\alpha} =
+\begin{pmatrix}
+    mean(G_{s,\alpha,1,1}) &amp; mean(G_{s,\alpha,1,2}) &amp; \cdots &amp; mean(G_{s,\alpha,1,n}) \\
+    mean(G_{s,\alpha,2,1}) &amp; mean(G_{s,\alpha,2,2}) &amp; \cdots &amp; mean(G_{s,\alpha,2,n}) \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    mean(G_{s,\alpha,n,1}) &amp; mean(G_{s,\alpha,n,2}) &amp; \cdots &amp; mean(G_{s,\alpha,n,n}) \\
+\end{pmatrix} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,1,1} &amp; \bar{c}_{s,\alpha,1,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,1,n} \\
+    \bar{c}_{s,\alpha,2,1} &amp; \bar{c}_{s,\alpha,2,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,2,n} \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    \bar{c}_{s,\alpha,n,1} &amp; \bar{c}_{s,\alpha,n,2} &amp; \cdots &amp; \bar{c}_{s,\alpha,n,n} \\
+\end{pmatrix}"/></p>
+</div><p>It then slides a window of size <img class="math" src="../_images/math/024d7d11402bd0be11386c342f16727ee5a52cf4.png" alt="m \times m, m &lt; n"/> across it, producing <img class="math" src="../_images/math/8894532d7ba4e74632e0322edadae66682e6a353.png" alt="\bar{W}_{s,\alpha,u,v}\text{ with }u,v \in 1,...,n-m+1"/> as in <a class="reference internal" href="#pmean">pmean</a>:</p>
+<div class="math">
+<p><img src="../_images/math/847e3b5aeb3088a8ec8070d0f85e3d68eea71f34.png" alt="\bar{W}_{s,\alpha,u,v} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,u,v} &amp; \bar{c}_{s,\alpha,u,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u,v+m} \\
+    \bar{c}_{s,\alpha,u+1,v} &amp; \bar{c}_{s,\alpha,u+1,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u+1,v+m} \\
+    \vdots  &amp; \vdots  &amp; \ddots &amp; \vdots  \\
+    \bar{c}_{s,\alpha,u+m,v} &amp; \bar{c}_{s,\alpha,u+m,v+1} &amp; \cdots &amp; \bar{c}_{s,\alpha,u+m,v+m} \\
+\end{pmatrix} =
+\begin{pmatrix}
+    \bar{c}_{s,\alpha,u,v,1} \\
+    \bar{c}_{s,\alpha,u,v,2} \\
+    \vdots \\
+    \bar{c}_{s,\alpha,u,v,m} \\
+\end{pmatrix}"/></p>
+</div><p>Each vector <img class="math" src="../_images/math/406ff68f6dbf538d90260ccb07f79a7686d38ee8.png" alt="\bar{W}_{s,\alpha,u,v}"/> is then stored as a feature individually.</p>
 </div>
 </div>
 <div class="section" id="metrics">
 <h2>metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="mean-l2">
 <h3>mean_l2<a class="headerlink" href="#mean-l2" title="Permalink to this headline">¶</a></h3>
-<p>TBD</p>
+<p>Sums up the pairwise euclidean distance between the means at corresponding scales and angles of two images.</p>
 </div>
 <div class="section" id="mean-sel-l2">
 <h3>mean_sel_l2<a class="headerlink" href="#mean-sel-l2" title="Permalink to this headline">¶</a></h3>
-<p>TBD</p>
+<p>Sums up the pairwise euclidean distance between the means at corresponding scales and angles of two images when the mean of the feature exceeds half a standard deviation.</p>
 </div>
 <div class="section" id="hist">
 <h3>hist<a class="headerlink" href="#hist" title="Permalink to this headline">¶</a></h3>
@@ -160,7 +191,7 @@
 </div>
 <div class="section" id="hist-weights">
 <h3>hist_weights<a class="headerlink" href="#hist-weights" title="Permalink to this headline">¶</a></h3>
-<p>Multiplies the signature components (bin counts) with <img class="math" src="../_images/math/959453384be4ecba91e572673ce7074146b068a7.png" alt="\frac{1}{n_i^2}"/> where <img class="math" src="../_images/math/7eb75ccf06e046206cb4c636a54d7be11d049fbf.png" alt="n_i"/> is the number of occurences of the cluster i in the training data set. Then it performs the distance calculation as in <a class="reference internal" href="#hist">hist</a>.</p>
+<p>Multiplies the signature components (bin counts) with <img class="math" src="../_images/math/a1540b19e436778cab74729193b057b1356f76bf.png" alt="\frac{n_{total}}{n_i^2}"/> where <img class="math" src="../_images/math/b7d0dccb1deb78a2862ae8f711af059053ad5b10.png" alt="n_{total}"/> is the number of observations and <img class="math" src="../_images/math/7eb75ccf06e046206cb4c636a54d7be11d049fbf.png" alt="n_i"/> is the number of occurences of the cluster i in the training data set. Then it performs the distance calculation as in <a class="reference internal" href="#hist">hist</a>.</p>
 </div>
 </div>
 </div>
