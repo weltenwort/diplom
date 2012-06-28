@@ -6,6 +6,7 @@ import contextlib
 import datetime
 import glob
 import importlib
+import itertools
 import json
 import os
 import sys
@@ -120,6 +121,10 @@ class Logger(object):
         rc = Client()
         lview = rc.load_balanced_view()
         return self.loop(lview.map_async(f, *iterables),\
+                item_count=len(iterables[0]), **kwargs)
+
+    def sync_loop(self, f, *iterables, **kwargs):
+        return self.loop(itertools.imap(f, *iterables),\
                 item_count=len(iterables[0]), **kwargs)
 
 

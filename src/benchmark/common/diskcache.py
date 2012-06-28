@@ -3,12 +3,18 @@ import collections
 import pickle
 import shutil
 
+import numpy
 import pathlib
+from . import dict_to_filename
 
 
 class DiskCache(object):
     def __init__(self, cache_directory):
         self._cache_directory = pathlib.Path.cwd().join(cache_directory)
+
+    @classmethod
+    def from_dict_key(cls, dictionary, prefix="cache_"):
+        return cls("".join([prefix, dict_to_filename(dictionary)]))
 
     def _key_to_path(self, key):
         path = pathlib.Path(*self._ensure_list(key))
@@ -82,3 +88,14 @@ class DiskCache(object):
     def clear(self):
         if self._cache_directory.exists() and self._cache_directory.is_file():
             shutil.rmtree(str(self._cache_directory))
+
+
+class NumpyDiskCache(DiskCache):
+    def serialize(self, value, fp):
+        if isinstance(value, dict):
+            numpy.savez_compressed(fp, **value)
+        else:
+            numpy.save(fp, value)
+
+    def deserialize(self, fp):
+        return numpy.load(fp)
