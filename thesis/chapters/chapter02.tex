@@ -1,21 +1,23 @@
 \chapter{Background \& Related Work}\label{ch:background}
-Complete vs incomplete sketches
+
+Illustration of basic structure of CBIR using local/global features.
 
 Most approaches can be characterized by looking at three stages in their processing pipeline:
 
 \begin{description}
     \item[Input format] The structure of the input data determines the amount of information available to the subsequent processing steps. Possible preprocessing steps include color space conversion, scaling and edge extraction.
-    \item[Extracted features] The large number of coefficients produced by the curvelet transform are reduced to a set of feature coefficients.
+    \item[Extracted features] Many algorithms produce a large number of coefficients that can be reduced to a set of feature coefficients using by techniques such as vector quantization or principal component analysis (PCA).
     \item[Distance metric] In order to rank the images according to similarity a metric is used to calculate the distance in feature space between two sets of feature coefficients. The selection of a metric is often closely coupled with the feature extraction algorithm.
 \end{description}
 
 \section{input format}
+Complete vs incomplete sketches, intra-/cross-domain
 
 \section{features}
 
 \begin{itemize}
     \item bag of features from k-means clustered visual words [video google]
-    \item great comparison of sampling for k-means clustered vws [nowak06]
+    \item histogram of oriented gradients [chalechale + refs]
 \end{itemize}
 
 \section{metric}

@@ -4,15 +4,15 @@
 
 Paragraph about increase in visual data, mobile cameras, medicine, etc...
 
-At the core of the research into content-based image retrieval lies the need to
-be able to access the growing repositories of visual data in a convenient and
-efficient manner.  In this context "convenient" describes the ability for the
-user to express the query without a complex reformulation of the intent to make
-it accessible to the query processor. At the same time the computational
-efficiency becomes more important as the amount of data to search grows. This
-issue becomes even more critical as the use of mobile, power-limited devices
-increases across many areas of application, such as autonomous vehicles or
-handheld augmented reality devices.
+At the core of the research into content-based image retrieval (CBIR) lies the
+need to be able to access the growing repositories of visual data in a
+convenient and efficient manner.  In this context "convenient" describes the
+ability for the user to express the query without a complex reformulation of
+the intent to make it accessible to the query processor. At the same time the
+computational efficiency becomes more important as the amount of data to search
+grows. This issue becomes even more critical as the use of mobile,
+power-limited devices increases across many areas of application, such as
+autonomous vehicles or handheld augmented reality devices.
 
 Research into text-based information retrieval has brought into existence many
 statistical methods to query a potentially large body of text using text as the
@@ -20,27 +20,30 @@ query input. This preserves the close mapping of the intent of the user to the
 expression of the query and thereby makes the process accessible to users
 without knowledge about the internal workings of the retrieval system.
 Providing the means to access a large amount of visual data using a system with
-similar properties has turned out not to be an easy problem. Using text-based
-querying for that purpose depends on the ability to reliably label visual data,
-which would require solving the general object recognition problem first
-\autocite{smeulders_content-based_2000}. The avoid that obstacle and to free
-the retrieval system from the requirement of translating between textual and
-visual information, many methods to search an image database using visual
+similar properties has turned out not to be an easy problem to solve. Using
+text-based querying for that purpose depends on the ability to reliably label
+visual data, which would require solving the general object recognition problem
+first \autocite{smeulders_content-based_2000}. To avoid that obstacle and to
+free the retrieval system from the requirement of translating between textual
+and visual information, many methods to search an image database using visual
 similarity have been developed.
 
-Sematic Gap
-
-\section{Defining Content-Based Image Retrieval}
-
-
-
-\begin{itemize}
-    \item Definition CBIR
-    \item historical intro [CBIR at the end of the early years]
-    \item Visual Similarity => Semantic Similarity? Sematic Gap! \autocite{smeulders_content-based_2000}
-\end{itemize}
-
+While the goals of those systems are very similar, they differ considerably in
+many aspects of the processing pipeline. The query input ranges from example
+images over drawings to predicate describing color and shape distribution.
+Similarly, the structure and content of the databases and the means by which
+the systems query and rank the results vary significantly. This thesis focuses
+on evaluating a system that uses hand-drawn sketches as inputs to query
+databases of either full-color images or contour images. The Fast Discrete
+Curvelet Transform \autocite{candes_fast_2006} is used to analyse image
+segments.
 
 \section{Outline}
 
-Thesis outline goes here
+\autoref{ch:background} presents the structure of the problem and prior
+solutions. The following \autoref{ch:solution} proposes several variations of a
+particular solution using the Fast Discrete Curvelet Transform \autocite{candes_fast_2006}. The
+experimental setup and its results are documented in \autoref{ch:results} and
+analysed in \autoref{ch:analysis}. In \autoref{ch:conclusion} several possible
+conclusions are drawn and pointers towards future research are given.
+
