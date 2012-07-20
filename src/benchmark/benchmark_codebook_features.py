@@ -43,7 +43,7 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
             query_signature = codebook.quantize(query_features)
             #self.logger.log(query_signature)
 
-            for source_image_filename, features in self.logger.async_loop(
+            for source_image_filename, features in self.logger.sync_loop(
                     process_image,
                     *common.augment_list(
                         common.glob_list(image_set["source_images"]),

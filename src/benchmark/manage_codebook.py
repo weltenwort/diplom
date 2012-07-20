@@ -38,7 +38,7 @@ class CodebookManager(common.ApplicationBase):
                 data["config"]["images"],
                 entry_message="Processing {count} image sets",
                 item_prefix="image set"):
-            for source_image_filename, features in self.logger.async_loop(
+            for source_image_filename, features in self.logger.sync_loop(
                     process_image,
                     *common.augment_list(
                         common.glob_list(image_set["source_images"]),

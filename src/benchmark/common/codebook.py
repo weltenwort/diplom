@@ -16,6 +16,7 @@ class Codebook(object):
 
         self.storage = DiskCache(self._directory)
         self.observations = []
+        self.document_count = 0
         self.codewords = numpy.asarray([])
         self.frequencies = numpy.asarray([])
         self.stopwords = numpy.asarray([])
@@ -31,8 +32,10 @@ class Codebook(object):
         codebook.load()
         return codebook
 
-    def add_observations(self, observations):
+    def add_observations(self, observations, new_document=True):
         self.observations += observations
+        if new_document:
+            self.document_count += 1
 
     def cluster(self):
         self.storage.clear()
@@ -54,8 +57,9 @@ class Codebook(object):
 
         self.codewords = codebook
         signature = numpy.bincount(code, minlength=self._k)
-        signature_sum = float(numpy.sum(signature))
-        self.frequencies = numpy.clip(signature / signature_sum, 0.0, 1.0)
+        #signature_sum = float(numpy.sum(signature))
+        #self.frequencies = numpy.clip(signature / signature_sum, 0.0, 1.0)
+        self.frequencies = numpy.log(float(self.document_count) / signature)
         if self._stopword_ratio > 0:
             #signature = self.quantize(self.observations, use_stopwords=False)
             self.stopwords = self.find_stopwords([signature, ])
@@ -63,6 +67,7 @@ class Codebook(object):
     def save(self):
         self.storage.set("k", self._k)
         self.storage.set("stopword_ratio", self._stopword_ratio)
+        self.storage.set("document_count", self.document_count)
         self.storage.set("codewords", self.codewords)
         self.storage.set("frequencies", self.frequencies)
         self.storage.set("stopwords", self.stopwords)
@@ -70,6 +75,7 @@ class Codebook(object):
     def load(self):
         self._k = self.storage.get("k", 0)
         self._stopword_ratio = self.storage.get("stopword_ratio", 0)
+        self.document_count = self.storage.get("document_count", 0)
         self.codewords = numpy.asarray(self.storage.get("codewords", []))
         self.frequencies = numpy.asarray(self.storage.get("frequencies", []))
         self.stopwords = numpy.asarray(self.storage.get("stopwords", []))
@@ -81,7 +87,8 @@ class Codebook(object):
         if use_stopwords and len(self.stopwords) > 0:
             signature[self.stopwords] = 0  # set stopword bins to 0
         if use_weights:
-            signature = signature / self.frequencies
+            signature_sum = float(numpy.sum(signature))
+            signature = signature / signature_sum * self.frequencies
         return signature
 
     def find_stopwords(self, signatures):
