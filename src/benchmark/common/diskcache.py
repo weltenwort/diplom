@@ -10,11 +10,11 @@ from . import dict_to_filename
 
 class DiskCache(object):
     def __init__(self, cache_directory):
-        self._cache_directory = pathlib.Path.cwd().join(cache_directory)
+        self._cache_directory = pathlib.Path(cache_directory)
 
     @classmethod
     def from_dict_key(cls, dictionary, prefix="cache_"):
-        return cls("".join([prefix, dict_to_filename(dictionary)]))
+        return cls("".join([str(prefix), dict_to_filename(dictionary)]))
 
     def _key_to_path(self, key):
         path = pathlib.Path(*self._ensure_list(key))
@@ -99,3 +99,23 @@ class NumpyDiskCache(DiskCache):
 
     def deserialize(self, fp):
         return numpy.load(fp)
+
+
+class NullCache(DiskCache):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def set(self, key, value):
+        pass
+
+    def get(self, key, default=None):
+        return default
+
+    def clear(self):
+        pass
+
+    def remove(self, key):
+        pass
+
+    def contains(self, key):
+        return False
