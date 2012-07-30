@@ -43,7 +43,7 @@ image, which a CBIR system operates on:
     \item[Resolution] The imaging resolution sets a lower limit on the size of
         features that can be correctly recognised by any algorithm. As in all
         signal processing applications, aliasing of high frequency components
-        of the image can introduct further ambiguities.
+        of the image can introduce further ambiguities.
         \autocite{shannon_communication_1998}
     \item[Occlusion] Depending on the viewpoint of the recording and the
         composition of the scene, distinguishing parts of depicted objects may
@@ -57,10 +57,38 @@ An ideal CBIR system would use feature extraction and comparison methods that
 can account and correct for such conditions.
 
 \section{Anatomy of a CBIR System}
+The inner workings of most CBIR systems can best be examined by looking at the processing pipeline each query has to go through. The coarse sequence of computational steps is almost the same in all such systems (Figure \ref{fig:cbir_coarse_structure}):
+
+\begin{enumerate}
+    \item Acquire the image.
+    \item Extract the signature using a feature extraction algorithm.
+    \item Compare the signature to a database containing the signatures of the images to search within.
+    \item Rank the images by similarity using the comparison results.
+\end{enumerate}
+
 \begin{figure}[h]
-    \includegraphics[width=0.8\textwidth]{cbir_anatomy}
+    \centering
+    \subfloat[Local features]{%
+        \includegraphics[width=0.45\textwidth]{cbir_anatomy_query_local_cropped}%
+        \label{fig:cbir_coarse_structure_local}%
+    }
+    \quad
+    \subfloat[Global features]{%
+        \includegraphics[width=0.45\textwidth]{cbir_anatomy_query_cropped}%
+        \label{fig:cbir_coarse_structure_global}%
+    }
+    \caption{Coarse structure of a CBIR system}
+    \label{fig:cbir_coarse_structure}
 \end{figure}
-Illustration of basic structure of CBIR using local/global features.
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.8\textwidth]{cbir_anatomy_signature_extraction_cropped}
+    \caption{Signature extraction in CBIR systems}
+    \label{fig:cbir_signature_extraction}
+\end{figure}
+
+OLD STUFF BELOW
 
 Most approaches can be characterized by looking at three stages in their processing pipeline:
 
