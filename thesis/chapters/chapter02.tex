@@ -1,6 +1,9 @@
 \chapter{Background \& Related Work}\label{ch:background}
 
-\section{The Semantic Gap}
+\section{General Challenges of Computer Vision}
+
+\subsection{The Semantic Gap}
+
 One of the core insights of computer vision in general and content based image
 retrieval in specific probably is that human perception is inseparably linked
 to interpretation by the brain. As a human individual there is no way to
@@ -21,7 +24,8 @@ for a user in a given situation.
 Having had that realisation can guide the decision of a researcher or designer
 of such systems.
 
-\section{The Sensory Gap}
+\subsection{The Sensory Gap}
+
 In addition to the semantic ambiguity described above, another major obstacle
 of computer vision impacts a CBIR system: \emph{the sensory gap}. This term has
 also been coined by \autocite{smeulders_content-based_2000}, where it's defined
@@ -57,6 +61,7 @@ An ideal CBIR system would use feature extraction and comparison methods that
 can account and correct for such conditions.
 
 \section{Anatomy of a CBIR System}
+
 The inner workings of most CBIR systems can best be examined by looking at the processing pipeline each query has to go through. The coarse sequence of computational steps is almost the same in all such systems (Figure \ref{fig:cbir_coarse_structure}):
 
 \begin{enumerate}
@@ -81,6 +86,14 @@ The inner workings of most CBIR systems can best be examined by looking at the p
     \label{fig:cbir_coarse_structure}
 \end{figure}
 
+\subsection{Image Aquisition}
+
+TBD
+
+\subsection{Signature Extraction}
+
+TBD
+
 \begin{figure}[h]
     \centering
         \includegraphics[width=0.8\textwidth]{cbir_anatomy_signature_extraction_cropped}
@@ -88,29 +101,45 @@ The inner workings of most CBIR systems can best be examined by looking at the p
     \label{fig:cbir_signature_extraction}
 \end{figure}
 
-OLD STUFF BELOW
+\subsection{Comparison and Ranking}
 
-Most approaches can be characterized by looking at three stages in their processing pipeline:
+TBD
 
-\begin{description}
-    \item[Input format] The structure of the input data determines the amount of information available to the subsequent processing steps. Possible preprocessing steps include color space conversion, scaling and edge extraction.
-    \item[Extracted features] Many algorithms produce a large number of coefficients that can be reduced to a set of feature coefficients using by techniques such as vector quantization or principal component analysis (PCA).
-    \item[Distance metric] In order to rank the images according to similarity a metric is used to calculate the distance in feature space between two sets of feature coefficients. The selection of a metric is often closely coupled with the feature extraction algorithm.
-\end{description}
+\section{Image Transformations for Feature Extraction}
 
-\subsection{input format}
-Complete vs incomplete sketches, intra-/cross-domain
+Discuss FFT, Gabor Filters, HOG, SIFT/GIST
 
-\subsection{features}
+\subsection{The Continuous Curvelet Transform}
 
-\begin{itemize}
-    \item bag of features from k-means clustered visual words [video google]
-    \item histogram of oriented gradients [chalechale + refs]
-\end{itemize}
+The formulation of the continuous curvlet transform (CCT) by Candes and Donoho in \autocite{candes_new_2004} was based on Candes' previous definition and expansion of the ridgelet transform \autocite{candes_ridgelets:_1998}. In that publication they looked at the state of research into efficient representations of edge discontinuities. They based their research on two realisations:
+\begin{enumerate}
+    \item A nonadaptive approach of signal approximation can compete with many of the adaptive schemes prevalent in previous research. At the same the non-adaptivity comes with a greatly reduced computational overhead and reduced requirements for a priori knowledge.
+    \item Wavelet transforms can represent point signularities in a signal of up to two dimensions in a near-ideal manner, but fail to perform equally well on edges.
+\end{enumerate}
 
-\subsection{metric}
+%OLD STUFF BELOW
 
-\begin{itemize}
-    \item after ranking using euclidean distance, rank by spatial similarity [video google]
-    \item Earth Mover's distance? [rubnerljcv00]
-\end{itemize}
+%Most approaches can be characterized by looking at three stages in their processing pipeline:
+
+%\begin{description}
+    %\item[Input format] The structure of the input data determines the amount of information available to the subsequent processing steps. Possible preprocessing steps include color space conversion, scaling and edge extraction.
+    %\item[Extracted features] Many algorithms produce a large number of coefficients that can be reduced to a set of feature coefficients using by techniques such as vector quantization or principal component analysis (PCA).
+    %\item[Distance metric] In order to rank the images according to similarity a metric is used to calculate the distance in feature space between two sets of feature coefficients. The selection of a metric is often closely coupled with the feature extraction algorithm.
+%\end{description}
+
+%\subsection{input format}
+%Complete vs incomplete sketches, intra-/cross-domain
+
+%\subsection{features}
+
+%\begin{itemize}
+    %\item bag of features from k-means clustered visual words [video google]
+    %\item histogram of oriented gradients [chalechale + refs]
+%\end{itemize}
+
+%\subsection{metric}
+
+%\begin{itemize}
+    %\item after ranking using euclidean distance, rank by spatial similarity [video google]
+    %\item Earth Mover's distance? [rubnerljcv00]
+%\end{itemize}
