@@ -23,77 +23,77 @@ Proposed solution goes here\dots
     \item EMD?
 \end{itemize}
 
-\begin{figure}
-    \scriptsize
-    \begin{tikzpicture}[
-            node distance=1em and 1em,
-            every node/.style={font=\sf},
-            point/.style={},
-            rowHeader/.style={
-                draw=black,
-                text width=5.5em,
-            },
-            colHeader/.style={
-                draw=black,
-            },
-            block/.style={
-                rectangle,
-                draw=black!80, thick,
-                fill=black!10,
-                text width=5.5em,
-                text centered,
-                minimum height=2em,
-                anchor=north,
-            },
-            flow/.style={
-                ->,
-                draw=black!40,
-                ultra thick,
-            }
-        ]
-        \def\brshift{0em and 2em};
+%\begin{figure}
+    %\scriptsize
+    %\begin{tikzpicture}[
+            %node distance=1em and 1em,
+            %every node/.style={font=\sf},
+            %point/.style={},
+            %rowHeader/.style={
+                %draw=black,
+                %text width=5.5em,
+            %},
+            %colHeader/.style={
+                %draw=black,
+            %},
+            %block/.style={
+                %rectangle,
+                %draw=black!80, thick,
+                %fill=black!10,
+                %text width=5.5em,
+                %text centered,
+                %minimum height=2em,
+                %anchor=north,
+            %},
+            %flow/.style={
+                %->,
+                %draw=black!40,
+                %ultra thick,
+            %}
+        %]
+        %\def\brshift{0em and 2em};
 
-        % column headers
-        \node[rowHeader] (hCol1) {};
-        \node[rowHeader, right=of hCol1] (hCol2) {};
-        \node[rowHeader, right=of hCol2] (hCol3) {};
-        \node[rowHeader, right=of hCol3] (hCol4) {};
-        \node[rowHeader, right=of hCol4] (hCol5) {};
-        \node[rowHeader, right=of hCol5] (hCol6) {};
+        %% column headers
+        %\node[rowHeader] (hCol1) {};
+        %\node[rowHeader, right=of hCol1] (hCol2) {};
+        %\node[rowHeader, right=of hCol2] (hCol3) {};
+        %\node[rowHeader, right=of hCol3] (hCol4) {};
+        %\node[rowHeader, right=of hCol4] (hCol5) {};
+        %\node[rowHeader, right=of hCol5] (hCol6) {};
 
-        % row headers
-        \node[colHeader, minimum height=3em, below left=1em and 0em of hCol1] (hRow1) {};
-        \node[colHeader, minimum height=3em, below=of hRow1] (hRow2) {};
-        \node[colHeader, minimum height=3em, below=of hRow2] (hRow3) {};
+        %% row headers
+        %\node[colHeader, minimum height=3em, below left=1em and 0em of hCol1] (hRow1) {};
+        %\node[colHeader, minimum height=3em, below=of hRow1] (hRow2) {};
+        %\node[colHeader, minimum height=3em, below=of hRow2] (hRow3) {};
 
-        \node[block, minimum height=23em] at (hCol1 |- hRow1.north) (readImage) {Read Image};
+        %\node[block, minimum height=23em] at (hCol1 |- hRow1.north) (readImage) {Read Image};
 
-        \node[block] at (hCol2 |- hRow1.north) (extractLuma) {Extract Luma};
-        \node[block] at (hCol2 |- hRow2.north) (applySobel) {Apply Sobel Operator};
-        \node[block] at (hCol2 |- hRow3.north) (applyCanny) {Apply Canny Operator};
+        %\node[block] at (hCol2 |- hRow1.north) (extractLuma) {Extract Luma};
+        %\node[block] at (hCol2 |- hRow2.north) (applySobel) {Apply Sobel Operator};
+        %\node[block] at (hCol2 |- hRow3.north) (applyCanny) {Apply Canny Operator};
 
-        \node[block, minimum height=11em] at (hCol3 |- hRow1.north) (applyCurvelet) {Apply Curvelet Transform};
+        %\node[block, minimum height=11em] at (hCol3 |- hRow1.north) (applyCurvelet) {Apply Curvelet Transform};
 
-        \node[block, minimum height=11em] at (hCol4 |- hRow1.north) (sample) {Determine Samples};
+        %\node[block, minimum height=11em] at (hCol4 |- hRow1.north) (sample) {Determine Samples};
 
-        \node[block, minimum height=11em] at (hCol5 |- hRow1.north) (calculateMeans) {Calculate Means};
+        %\node[block, minimum height=11em] at (hCol5 |- hRow1.north) (calculateMeans) {Calculate Means};
 
-        \node[block, minimum height=11em] at (hCol6 |- hRow1.north) (rankEuclidean) {Rank using Euclidean Metric};
+        %\node[block, minimum height=11em] at (hCol6 |- hRow1.north) (rankEuclidean) {Rank using Euclidean Metric};
 
-        \foreach \row in {1, 2, 3} {
-            \draw[flow] (hCol1.east |- hRow\row.center) -- (hCol2.west |- hRow\row.center);
-            \draw[flow] (hCol2.east |- hRow\row.center) -- (hCol3.west |- hRow\row.center);
-            \draw[flow] (hCol3.east |- hRow\row.center) -- (hCol4.west |- hRow\row.center);
-            \draw[flow] (hCol4.east |- hRow\row.center) -- (hCol5.west |- hRow\row.center);
-            \draw[flow] (hCol5.east |- hRow\row.center) -- (hCol6.west |- hRow\row.center);
-        }
-        %\def\f1{hRow1.center}
-        %\draw[flow] (\f1 -| readImage.east) -- (\f1 -| extractLuma.west);
-        %\draw[flow] (\f1 -| extractLuma.east) -- (\f1 -| applyCurvelet.west);
-        %\draw[flow] (\f1 -| applyCurvelet.east) -- (\f1 -| sample.west);
-        %\draw[flow] (\f1 -| sample.east) -- (\f1 -| calculateMeans.west);
+        %\foreach \row in {1, 2, 3} {
+            %\draw[flow] (hCol1.east |- hRow\row.center) -- (hCol2.west |- hRow\row.center);
+            %\draw[flow] (hCol2.east |- hRow\row.center) -- (hCol3.west |- hRow\row.center);
+            %\draw[flow] (hCol3.east |- hRow\row.center) -- (hCol4.west |- hRow\row.center);
+            %\draw[flow] (hCol4.east |- hRow\row.center) -- (hCol5.west |- hRow\row.center);
+            %\draw[flow] (hCol5.east |- hRow\row.center) -- (hCol6.west |- hRow\row.center);
+        %}
+        %%\def\f1{hRow1.center}
+        %%\draw[flow] (\f1 -| readImage.east) -- (\f1 -| extractLuma.west);
+        %%\draw[flow] (\f1 -| extractLuma.east) -- (\f1 -| applyCurvelet.west);
+        %%\draw[flow] (\f1 -| applyCurvelet.east) -- (\f1 -| sample.west);
+        %%\draw[flow] (\f1 -| sample.east) -- (\f1 -| calculateMeans.west);
 
-        %\def\f2{hRow2.center}
-        %\draw[flow] (\f2 -| readImage.east) -- (\f2 -| applySobel.west);
-    \end{tikzpicture}
-\end{figure}
+        %%\def\f2{hRow2.center}
+        %%\draw[flow] (\f2 -| readImage.east) -- (\f2 -| applySobel.west);
+    %\end{tikzpicture}
+%\end{figure}

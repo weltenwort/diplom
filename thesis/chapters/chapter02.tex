@@ -62,12 +62,16 @@ can account and correct for such conditions.
 
 \section{Anatomy of a CBIR System}
 
-The inner workings of most CBIR systems can best be examined by looking at the processing pipeline each query has to go through. The coarse sequence of computational steps is almost the same in all such systems (Figure \ref{fig:cbir_coarse_structure}):
+The inner workings of most CBIR systems can best be examined by looking at the
+processing pipeline each query has to go through. The coarse sequence of
+computational steps is almost the same in all such systems (Figure
+\ref{fig:cbir_coarse_structure}):
 
 \begin{enumerate}
     \item Acquire the image.
     \item Extract the signature using a feature extraction algorithm.
-    \item Compare the signature to a database containing the signatures of the images to search within.
+    \item Compare the signature to a database containing the signatures of the
+        images to search within.
     \item Rank the images by similarity using the comparison results.
 \end{enumerate}
 
@@ -111,11 +115,66 @@ Discuss FFT, Gabor Filters, HOG, SIFT/GIST
 
 \subsection{The Continuous Curvelet Transform}
 
-The formulation of the continuous curvlet transform (CCT) by Candes and Donoho in \autocite{candes_new_2004} was based on Candes' previous definition and expansion of the ridgelet transform \autocite{candes_ridgelets:_1998}. In that publication they looked at the state of research into efficient representations of edge discontinuities. They based their research on two realisations:
+The formulation of the continuous curvlet transform (CCT) by Candes and Donoho
+in \autocite{candes_curvelets:_2000} was based on Candes' previous definition and
+expansion of the ridgelet transform \autocite{candes_ridgelets:_1998}. In that
+publication they looked at the state of research into efficient representations
+of edge discontinuities. They based their research on two realisations:
 \begin{enumerate}
-    \item A nonadaptive approach of signal approximation can compete with many of the adaptive schemes prevalent in previous research. At the same the non-adaptivity comes with a greatly reduced computational overhead and reduced requirements for a priori knowledge.
-    \item Wavelet transforms can represent point signularities in a signal of up to two dimensions in a near-ideal manner, but fail to perform equally well on edges.
+    \item A nonadaptive approach of signal approximation can compete with many
+        of the adaptive schemes prevalent in previous research. At the same
+        time the non-adaptivity comes with a greatly reduced computational
+        overhead and reduced requirements for a priori knowledge. Obtaining
+        that knowledge in the presence of blurred or noisy data can sometimes
+        be unfeasable.
+    \item Wavelet transforms can represent point singularities in a signal of
+        up to two dimensions in a near-ideal manner, but fail to perform
+        equally well on edges: Given a two-dimensional object in signal $f$, that
+        is smooth except for discontinuities along a curve, a wavelet
+        approximation $\tilde{f}^W_m$ from the $m$ largest coefficients
+        exhibits an error of
+        \begin{equation*}
+            \| f - \tilde{f}^W_m \|^2 \propto m^{-1} \text{, for } m \rightarrow \infty
+        \end{equation*}
+        since up to $O(2^j)$ localized wavelets are needed to represent the
+        signal along the edge. That falls short of what an approximation
+        $\tilde{f}^T_m$ using a series of $m$ adapted triangles could achieve:
+        \begin{equation*}
+            \| f - \tilde{f}^T_m \|^2 \propto m^{-2} \text{, for } m \rightarrow \infty
+        \end{equation*}
 \end{enumerate}
+They showed that a similarly precise approximation can be achieved by combining
+Candes' ridgelet analysis \autocite{candes_ridgelets:_1998} with smart
+windowing functions and bandpass filters. The steps of the transformation were
+as follows:
+\begin{enumerate}
+    \item Decomposition of the signal into subbands of scale-dependent size
+    \item Partitioning of each subband into squares
+    \item Normalisation of each square to unit scale
+    \item Analysis of each square in an orthonormal ridgelet system
+\end{enumerate}
+
+The result was a formulation of a decomposition that matched the parabolic
+scaling law $width = length^2$ often observed in curves.
+
+The above formulation became known as the curvelet 99 transform when Candes and
+Donoho revised it soon after in \autocite{candes_new_2004}. The new version is
+not dependent on ridgelets and aims to remove some shortcomings of the curvelet
+99 transform, namely a simpler mathematical analysis, fewer parameters and
+improved efficiency regarding digital implementations, which will be described
+later.
+
+The curvelet transform in $\mathbb{R}^2$ works by localising the curvelet
+waveforms in the time domain. The "mother" curvelet waveform $\varphi_j(x)$ is
+defined using two frequency domain windows $W(r)$, the "radial window", and
+$V(t)$, the "angular window". A combined frequency window $U_j$ can then be
+defined as
+\begin{equation*}
+    U_j(r, \theta) = 2^\frac{-3j}{4} W(2^{-j}r) V(\frac{2^{\lfloor\frac{j}{2}\rfloor}\theta}{2 \pi}).
+\end{equation*}
+If we then define $\varphi_j$ as being the inverse Fourier transform of
+$\hat{\varphi}_j = U_j$, all curvelets of a scale $2^{-j}$ can be derived by
+rotating $\varphi_j$ by ... and translating $\varphi_j$ by ....
 
 %OLD STUFF BELOW
 
