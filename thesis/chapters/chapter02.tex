@@ -259,6 +259,33 @@ consistent with the continuous version (Equation
     c^D(j, l, k) := \sum_{0 \leq t_1, t_2 < n} f[t_1, t_2] \overline{\varphi_{j, l, k}^D[t_1, t_2]}.
 \end{equation}
 
+Since the windows used in the continuous form are based on rotations and dyadic
+coronae, they are not well suited for use with cartesian arrays. The discrete
+formulation substitutes them with appropriate concepts. Instead of concentric
+annuli, the window function $W^D_j$ generates concentric squares "rings" using
+the square windows $\Phi_j(\omega_1, \omega_2) = \phi(2^{-j}\omega_1)
+\phi(2^{-j}\omega_2)$, with $\phi$ being a low-pass 1D window:
+\begin{equation*}
+    W_j^D(\omega) = \sqrt{\Phi_{j+1}^2(\omega) - \Phi_j^2(\omega)}, \quad j \geq 0.
+\end{equation*}
+The rotation matrix $R_{\theta}$ is replaced by the shear matrix $S_{\theta}$
+to create the combined window function
+\begin{equation*}
+    U_{j, l}^D := W_j^D(\omega) V_j(S_{\theta_l}\omega).
+\end{equation*}
+The sequence $\theta_l$ is defined as a sequence of equispaced slopes
+$\tan(\theta_l) := l \cdot 2^{- \lfloor \frac{j}{2} \rfloor}$ with
+$l=-2^{\lfloor \frac{j}{2} \rfloor}, \dots, 2^{\lfloor \frac{j}{2} \rfloor} -
+1$. Figure \ref{fig:curvelet_frequency_windows_discrete} shows a tiling of
+all $U_{j, l}^D$.
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.5\textwidth]{curvelet_frequency_windows_discrete_cropped}
+    \caption{Discrete frequency tiling using concentric squares}
+    \label{fig:curvelet_frequency_windows_discrete}
+\end{figure}
+
 %OLD STUFF BELOW
 
 %Most approaches can be characterized by looking at three stages in their processing pipeline:
