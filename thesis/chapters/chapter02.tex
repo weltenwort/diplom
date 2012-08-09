@@ -214,7 +214,7 @@ $\hat{\varphi}_j = U_j$ and all curvelets of a scale $2^{-j}$ can be derived by
         = 0,1,\dots$ such that $0 < \theta_l < 2 \pi$ and
     \item[translating] $\varphi_j$ by a sequence of offsets $k = (k_1, k_2) \in \mathbb{Z}^2$:
 \end{description}
-\begin{equation}
+\begin{equation} \label{eq:continuous_curvelet}
     \varphi_{j,k,l}(x) = \varphi_j(R_{\theta_l}(x - x_k^{(j,l)})),
 \end{equation}
 where $x = (x_1, x_2)$, $R_{\theta}$ the rotation matrix for angle $\theta$ and
@@ -223,15 +223,41 @@ $x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
 
 Each curvelet coefficient $c(j, l, k)$ can then be calculated as the inner
 product of $f \in L^2(\mathbb{R}^2)$ and curvelet $\varphi_{j, l, k}$:
-\begin{equation}
+\begin{equation} \label{eq:continuous_curvelet_coefficient}
     c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
 \end{equation}
 
-TODO: Remaining coarse scale curvelets
+As visible in figure \ref{fig:curvelet_frequency_windows_corona} curvelets also
+have non-directional components at the coarsest scale, similar to those found
+in the wavelet transform. Those curvelets will be defined using a special
+low-pass filter window $W_0$, which is characterized as being the remainder of
+the tiling not covered by the previously described radial windows:
+\begin{equation*}
+    |W_0(r)^2| + \sum_{j \geq 0} |W_(2^{-j}r)|^2 = 1
+\end{equation*}
+Using the window defining the coarse scale curvelet $\varphi_{j_0, k}$ via its
+Fourier transform is straightforward:
+\begin{equation} \label{eq:continuous_coarse_curvelet}
+    \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi_{j_0}}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
+\end{equation}
+where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
 \subsection{The Fast Discrete Curvelet Transform}
 
-TBD
+Based on the above definition of the continuous curvelet transform, a team
+around the authors of the original curvelet publication presented two digital,
+discrete implementations of the transform \autocite{candes_fast_2006}. The
+implementations have been described in 2D and 3D, but since this paper deals
+exclusively with 2D images, the explanation below will also be restricted to
+two dimensions.
+
+The digital versions of the transforms operate on arrays $f[t_1, t_2]$ with $0
+\leq t_1, t_2 < n$ to produce coefficients $c^D(j, l, k)$ in a way
+consistent with the continuous version (Equation
+\ref{eq:continuous_curvelet_coefficient}):
+\begin{equation}
+    c^D(j, l, k) := \sum_{0 \leq t_1, t_2 < n} f[t_1, t_2] \overline{\varphi_{j, l, k}^D[t_1, t_2]}.
+\end{equation}
 
 %OLD STUFF BELOW
 
