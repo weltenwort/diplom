@@ -166,15 +166,59 @@ later.
 
 The curvelet transform in $\mathbb{R}^2$ works by localising the curvelet
 waveforms in the time domain. The "mother" curvelet waveform $\varphi_j(x)$ is
-defined using two frequency domain windows $W(r)$, the "radial window", and
-$V(t)$, the "angular window". A combined frequency window $U_j$ can then be
-defined as
+defined using two frequency domain windows $W(r)$, the "radial window" (Figure
+\ref{fig:curvelet_frequency_windows_radial}), and $V(t)$, the "angular window"
+(Figure \ref{fig:curvelet_frequency_windows_angular}). A combined frequency
+window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be defined as
 \begin{equation*}
     U_j(r, \theta) = 2^\frac{-3j}{4} W(2^{-j}r) V(\frac{2^{\lfloor\frac{j}{2}\rfloor}\theta}{2 \pi}).
 \end{equation*}
-If we then define $\varphi_j$ as being the inverse Fourier transform of
-$\hat{\varphi}_j = U_j$, all curvelets of a scale $2^{-j}$ can be derived by
-rotating $\varphi_j$ by ... and translating $\varphi_j$ by ....
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Radial window]{%
+        \includegraphics[width=0.45\textwidth]{curvelet_frequency_windows_radial_cropped}%
+        \label{fig:curvelet_frequency_windows_radial}%
+    }
+    \quad
+    \subfloat[Angular window]{%
+        \includegraphics[width=0.45\textwidth]{curvelet_frequency_windows_angular_cropped}%
+        \label{fig:curvelet_frequency_windows_angular}%
+    }
+    \quad
+    \subfloat[Combined window]{%
+        \includegraphics[width=0.45\textwidth]{curvelet_frequency_windows_combined_cropped}%
+        \label{fig:curvelet_frequency_windows_combined}%
+    }
+    \quad
+    \subfloat[Complete coronisation]{%
+        \includegraphics[width=0.45\textwidth]{curvelet_frequency_windows_corona_cropped}%
+        \label{fig:curvelet_frequency_windows_corona}%
+    }
+    \caption{Curvelet frequency windows}
+    \label{fig:curvelet_frequency_windows}
+\end{figure}
+
+$\varphi_j$ can then be expressed as being the inverse Fourier transform of
+$\hat{\varphi}_j = U_j$ and all curvelets of a scale $2^{-j}$ can be derived by
+\begin{description}
+    \item[rotating] $\varphi_j$ by a sequence of equispaced rotation angles
+        $\theta_l = 2 \pi \cdot 2^{-\lfloor\frac{j}{2}\rfloor} \cdot l$ with $l
+        = 0,1,\dots$ such that $0 < \theta_l < 2 \pi$ and
+    \item[translating] $\varphi_j$ by a sequence of offsets $k = (k_1, k_2) \in \mathbb{Z}^2$:
+\end{description}
+\begin{equation}
+    \varphi_{j,k,l}(x) = \varphi_j(R_{\theta_l}(x - x_k^{(j,l)})),
+\end{equation}
+where $x = (x_1, x_2)$, $R_{\theta}$ the rotation matrix for angle $\theta$ and
+$x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
+2^{-\frac{j}{2}})$.
+
+Each curvelet coefficient $c(j, l, k)$ can then be calculated as the inner
+product of $f \in L^2(\mathbb{R}^)$ and curvlet $\varphi_{j, l, k}$:
+\begin{equation}
+    c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
+\end{equation}
 
 %OLD STUFF BELOW
 
