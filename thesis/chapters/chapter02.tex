@@ -206,8 +206,9 @@ window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be 
     \label{fig:curvelet_frequency_windows}
 \end{figure}
 
-$\varphi_j$ can then be expressed as being the inverse Fourier transform of
-$\hat{\varphi}_j = U_j$ and all curvelets of a scale $2^{-j}$ can be derived by
+The waveform $\varphi_j$ can then be expressed as being the inverse Fourier
+transform of $\hat{\varphi}_j = U_j$ and all curvelets of a scale $2^{-j}$ can
+be derived by
 \begin{description}
     \item[rotating] $\varphi_j$ by a sequence of equispaced rotation angles
         $\theta_l = 2 \pi \cdot 2^{-\lfloor\frac{j}{2}\rfloor} \cdot l$ with $l
@@ -233,7 +234,7 @@ in the wavelet transform. Those curvelets will be defined using a special
 low-pass filter window $W_0$, which is characterized as being the remainder of
 the tiling not covered by the previously described radial windows:
 \begin{equation*}
-    |W_0(r)^2| + \sum_{j \geq 0} |W_(2^{-j}r)|^2 = 1
+    |W_0(r)^2| + \sum_{j \geq 0} |W(2^{-j}r)|^2 = 1
 \end{equation*}
 Using the window defining the coarse scale curvelet $\varphi_{j_0, k}$ via its
 Fourier transform is straightforward:
