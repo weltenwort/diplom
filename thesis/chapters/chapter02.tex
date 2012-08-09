@@ -115,7 +115,7 @@ Discuss FFT, Gabor Filters, HOG, SIFT/GIST
 
 \subsection{The Continuous Curvelet Transform}
 
-The formulation of the continuous curvlet transform (CCT) by Candes and Donoho
+The formulation of the continuous curvelet transform (CCT) by Candes and Donoho
 in \autocite{candes_curvelets:_2000} was based on Candes' previous definition and
 expansion of the ridgelet transform \autocite{candes_ridgelets:_1998}. In that
 publication they looked at the state of research into efficient representations
@@ -155,7 +155,7 @@ as follows:
 \end{enumerate}
 
 The result was a formulation of a decomposition that matched the parabolic
-scaling law $width = length^2$ often observed in curves.
+scaling law $width \propto length^2$ often observed in curves.
 
 The above formulation became known as the curvelet 99 transform when Candes and
 Donoho revised it soon after in \autocite{candes_new_2004}. The new version is
@@ -195,7 +195,14 @@ window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be 
         \includegraphics[width=0.45\textwidth]{curvelet_frequency_windows_corona_cropped}%
         \label{fig:curvelet_frequency_windows_corona}%
     }
-    \caption{Curvelet frequency windows}
+    \caption[Curvelet frequency windows]{
+        The window $W(2^{-j}r)$ at scale $2^j$
+        \subref{fig:curvelet_frequency_windows_radial} is combined with the
+        window $V(t)$ \subref{fig:curvelet_frequency_windows_angular} to form a
+        support wedge for the curvelet
+        \subref{fig:curvelet_frequency_windows_combined}. The wedge roughly
+        obeys a $width \propto length^2$ relation. \subref{fig:curvelet_frequency_windows_corona} shows the wedge within a schema of the complete tiling in frequency domain.
+    }
     \label{fig:curvelet_frequency_windows}
 \end{figure}
 
@@ -215,10 +222,16 @@ $x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
 2^{-\frac{j}{2}})$.
 
 Each curvelet coefficient $c(j, l, k)$ can then be calculated as the inner
-product of $f \in L^2(\mathbb{R}^)$ and curvlet $\varphi_{j, l, k}$:
+product of $f \in L^2(\mathbb{R}^2)$ and curvelet $\varphi_{j, l, k}$:
 \begin{equation}
     c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
 \end{equation}
+
+TODO: Remaining coarse scale curvelets
+
+\subsection{The Fast Discrete Curvelet Transform}
+
+TBD
 
 %OLD STUFF BELOW
 
