@@ -312,11 +312,47 @@ order to create a localized "wedge" with the orientation $\theta_l$:
     f_{j, l}^D[n_1, n_2] = \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2]
 \end{equation*}
 
-The discrete curvelet coefficients $c^D(j, l, k)$ can then be calculated by applying the inverse 2d Fourier transform:
+The discrete curvelet coefficients $c^D(j, l, k)$ can then be calculated by
+applying the inverse 2d Fourier transform:
 \begin{equation*}
     c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})},
 \end{equation*}
 in which $L_{1, j}$ and $L_{2, j}$ are the length and width of the rectangle supporting $U_j^D$.
+
+\subsubsection{FDCT using wrapping}
+
+As before, FDCT using wrapping first calculates $\hat{f}[n_1, n_2]$ with
+$-\frac{n}{2} \leq n_1, n_2 < \frac{n}{2}$ as the Fourier transform of the
+input $f$. The sample is then localized by multiplying it with a window $U_{j,
+l}^D$ for each angle $j$ and scale $l$:
+\begin{equation*}
+    d_{j, l}[n_1, n_2] = U_{j, l}^D \hat{f}[n_1, n_2]
+\end{equation*}
+
+To avoid the computationally costly interpolation step required in the USFFT
+approach, this method keeps the rectangular grid of the input signal. Because
+an axis-aligned bounding box of the window $U_j^D$ in Fourier domain cannot
+maintain the $width \propto length^2$ proportions of the window, applying an
+inverse Fourier transform on such a bounding box in general would lead to
+significant oversampling of the coefficients and thereby increase the memory
+requirements for fine scale curvelets beyond that of the the USFFT approach. In
+order to circumvent that, the authors utilize the periodic nature of the
+Fourier transform and propose generating a periodically wrapped version of the
+fourier samples. For $P_{j, l}$ as the bounding parallelogram of $U_{j, l}^D$,
+$L_{1, j}$ and $L_{2, j}$ are the period lengths by which to translate $P_{j,
+l}$ in the horizontal and vertical direction to produce a suitable tiling for
+each orientation $\theta_l$ (see figure). Thus, the wrapped, localized data are
+\begin{equation*}
+    f_{j, l}^D[n_1, n_2] = W d_{j, l}[n_1, n_2] = \sum_{m_1 \in \mathbb{Z}} \sum_{m_2 \in \mathbb{Z}} d_{j, l}[n_1 + m_1 L_{1, j}, n_2 + m_2 L_{2, j}]
+\end{equation*}
+with $0 \leq n_1 < L_{1, j}$ and $0 \leq n_2 < L_{2, j}$, which gives a
+rectangle of size $L_{1, j}$ times $L_{2, j}$.
+
+Again, the discrete curvelet coefficients $c^D(j, l, k)$ can then be collected
+using the inverse 2d Fourier transform:
+\begin{equation*}
+    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} f_{j, l}^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})}.
+\end{equation*}
 
 %OLD STUFF BELOW
 
