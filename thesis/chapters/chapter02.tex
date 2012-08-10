@@ -247,10 +247,10 @@ where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
 Based on the above definition of the continuous curvelet transform, a team
 around the authors of the original curvelet publication presented two digital,
-discrete implementations of the transform \autocite{candes_fast_2006}. The
-implementations have been described in 2D and 3D, but since this paper deals
-exclusively with 2D images, the explanation below will also be restricted to
-two dimensions.
+discrete implementations of the transform: the fast discrete curvelet transform
+(FDCT) \autocite{candes_fast_2006}. The implementations have been described in
+2D and 3D, but since this paper deals exclusively with 2D images, the
+explanation below will also be restricted to two dimensions.
 
 The digital versions of the transforms operate on arrays $f[t_1, t_2]$ with $0
 \leq t_1, t_2 < n$ to produce coefficients $c^D(j, l, k)$ in a way
@@ -277,7 +277,7 @@ to create the combined window function
 The sequence $\theta_l$ is defined as a sequence of equispaced slopes
 $\tan(\theta_l) := l \cdot 2^{- \lfloor \frac{j}{2} \rfloor}$ with
 $l=-2^{\lfloor \frac{j}{2} \rfloor}, \dots, 2^{\lfloor \frac{j}{2} \rfloor} -
-1$. Figure \ref{fig:curvelet_frequency_windows_discrete} shows a tiling of
+1$. The construction of the corner windows are  Figure \ref{fig:curvelet_frequency_windows_discrete} shows a tiling of
 all $U_{j, l}^D$.
 
 \begin{figure}[h]
@@ -286,6 +286,37 @@ all $U_{j, l}^D$.
     \caption{Discrete frequency tiling using concentric squares}
     \label{fig:curvelet_frequency_windows_discrete}
 \end{figure}
+
+\subsubsection{FDCT using unequispaced FFTs}
+
+The first implementation of the discrete curvelet transform transfers the input
+array $f[t_1, t_2]$, $0 \leq t_1, t_2 < n$ into the Fourier domain to obtain
+$\hat{f}[n_1, n_2]$:
+\begin{equation*}
+    \hat{f}[n_1, n_2] = \sum_{t_1, t_2 = 0}^{n - 1} f[t_1, t_2] e^{- \frac{i 2 \pi (n_1 t_1 + n_2 t_2)}{n}}, \quad -\frac{n}{2} \leq n_1, n_2 < \frac{n}{2}
+\end{equation*}
+
+The obtained Fourier samples need to be interpolated for each pair of scale $j$
+and angle $l$ to match the grid of the sheared support window $U_j^D[n_1, n_2]$
+(see figure). The authors achieve this by resampling $\hat{f}$ on the grid
+implied by the sheared window for each angle via a series of 1d fast Fourier
+transforms.  These transforms represent a polynomial interpolation of each
+"column" of the parallelogram $P_j$ containing the sheared window (see figure),
+that can be computed with a $O(n^2 \log n)$ complexity in a sufficiently exact
+approximation.
+
+This yields an object $\hat{f}[n_1, n_2 - n_1 \tan \theta_l]$ for $(n_1, n_2)
+\in P_j$, that can be multiplied with the window $U_j^D$ described above in
+order to create a localized "wedge" with the orientation $\theta_l$:
+\begin{equation*}
+    f_{j, l}^D[n_1, n_2] = \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2]
+\end{equation*}
+
+The discrete curvelet coefficients $c^D(j, l, k)$ can then be calculated by applying the inverse 2d Fourier transform:
+\begin{equation*}
+    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})},
+\end{equation*}
+in which $L_{1, j}$ and $L_{2, j}$ are the length and width of the rectangle supporting $U_j^D$.
 
 %OLD STUFF BELOW
 
