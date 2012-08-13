@@ -1,0 +1,59 @@
+\section{General Challenges of Computer Vision}
+
+\subsection{The Semantic Gap}
+
+One of the core insights of computer vision in general and content based image
+retrieval in specific probably is that human perception is inseparably linked
+to interpretation by the brain. As a human individual there is no way to
+directly access visual information without them having been filtered and
+weighted by one's personal experiences and cultural context. Therefore, when
+people talk about visual similarity of images, it usually includes a large
+degree of semantic similarity unconciously added to the perception. The
+difference between that mode of perception and the current algorithmic ways to
+analyse visual data has been eloquently coined \emph{the semantic gap} by
+\autocite{smeulders_content-based_2000}:
+
+\begin{quote}
+The semantic gap is the lack of coincidence between the information that one
+can extract from the visual data and the interpretation that the same data have
+for a user in a given situation.
+\end{quote}
+
+Having had that realisation can guide the decision of a researcher or designer
+of such systems.
+
+\subsection{The Sensory Gap}
+
+In addition to the semantic ambiguity described above, another major obstacle
+of computer vision impacts a CBIR system: \emph{the sensory gap}. This term has
+also been coined by \autocite{smeulders_content-based_2000}, where it's defined
+as follows:
+
+\begin{quote}
+The sensory gap is the gap between the object in the world and the information
+in a (computational) description derived from a recording of that scene.
+\end{quote}
+
+That terse definition includes a multitude of conditions, that can affect an
+image, which a CBIR system operates on:
+
+\begin{description}
+    \item[Illumination] The brightness or direction of the illumination can
+        hide or accent edges and texture properties in the scene. Similarly,
+        the color of the illumination influences the recorded color information
+        in the image.
+    \item[Resolution] The imaging resolution sets a lower limit on the size of
+        features that can be correctly recognised by any algorithm. As in all
+        signal processing applications, aliasing of high frequency components
+        of the image can introduce further ambiguities.
+        \autocite{shannon_communication_1998}
+    \item[Occlusion] Depending on the viewpoint of the recording and the
+        composition of the scene, distinguishing parts of depicted objects may
+        be occluded by other objects or objects may be only partially inside
+        the recorded image.
+    \item[Perspective] An object's proportions can be distorted by the imaging
+        perspective.
+\end{description}
+
+An ideal CBIR system would use feature extraction and comparison methods that
+can account and correct for such conditions.
