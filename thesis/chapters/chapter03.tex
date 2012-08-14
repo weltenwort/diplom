@@ -1,27 +1,84 @@
 \chapter{Proposed Solution}\label{ch:solution}
-Proposed solution goes here\dots
 
-\section{Input Format}
-\begin{itemize}
-    \item Luma component (Y') of Y'UV representation
-    \item Gradient magnitude of Sobel operator of luma component
-    \item Canny edge map of luma component
-    \item gPb
-\end{itemize}
+The image processing pipeline described in this thesis aims to be suitable for
+content based image retrieval using hand-drawn sketches for querying. The main
+interest was to evaluate how well the fast discrete curvelet transform (FDCT)
+\autocite{candes_fast_2006} is able to represent the lines in hand-drawn
+sketches as well as salient edges in photos or paintings. To explore the
+effects of preprocessing and signature extraction, several variations of the
+pipeline have been implemented. The used preprocessing steps include applying
+the sobel operator, extracting a canny edge map or determining segment borders
+using the $gPb$ algorithm published in \autocite{arbelaez_contour_2011}.
+Signatures are constructed using both, global curvelet features, and a
+bag-of-features approach similar to what was described in
+\autocite{sivic_video_2003} and \autocite{eitz_sketch-based_2010}.
 
-\section{Feature Extraction}
-\begin{itemize}
-    \item Global features: mean and standard deviation
-    \item Local features: visual words via k-means clustering
-    \item great comparison of sampling for k-means clustered vws [nowak06]
-\end{itemize}
+The following sections will describe the variations of the processing stages
+\emph{image acquisition}, \emph{signature extraction}, and \emph{ranking}. To
+reference the individual variations unambigiously, labels like LUMA will
+be introduced for each component.
 
-\section{Distance Metric}
-\begin{itemize}
-    \item Euclidean Distance
-    \item cosine distance?
-    \item EMD?
-\end{itemize}
+\section{Image Acquisition}
+
+% input domains
+Since one premise of the system is that hand-drawn sketches are compared with a
+large body of images from various sources, a division into two input domains
+seems obvious. The first domain, the domain of query sketches, is quite narrow,
+because we can characterize its members as binary images with large, smooth
+areas separated by discontinuities along curves. The database images, that make
+up the second domain, are not subject to such assumptions. They may be color
+photographs, paintings, computer renderings or black-and-white sketches.
+
+\paragraph{LUMA}
+
+Because the fast discrete curvelet transform used in every variant of the
+signature extraction step takes a single 2D matrix as input, images with more
+than one color channel need to be reduced to one channel. The RGB values from
+the benchmark dataset have therefore been converted to greyscale images using
+the definition of luma according to ITU standards \autocite{_parameter_2002}.
+Each pixel with red, green and blue values $(R, G, B)$ is mapped to a luminance
+value $Y$ using
+\begin{equation*}
+    Y = \frac{299}{1000}R + \frac{587}{1000}G + \frac{114}{1000}B.
+\end{equation*}
+
+\paragraph{SOBEL}
+
+TBD
+
+\paragraph{CANNY}
+
+TBD
+
+\section{Signature Extraction}
+
+TBD
+
+\section{Ranking}
+
+TBD
+
+%\section{Input Format}
+%\begin{itemize}
+    %\item Luma component (Y') of Y'UV representation
+    %\item Gradient magnitude of Sobel operator of luma component
+    %\item Canny edge map of luma component
+    %\item gPb
+%\end{itemize}
+
+%\section{Feature Extraction}
+%\begin{itemize}
+    %\item Global features: mean and standard deviation
+    %\item Local features: visual words via k-means clustering
+    %\item great comparison of sampling for k-means clustered vws [nowak06]
+%\end{itemize}
+
+%\section{Distance Metric}
+%\begin{itemize}
+    %\item Euclidean Distance
+    %\item cosine distance?
+    %\item EMD?
+%\end{itemize}
 
 %\begin{figure}
     %\scriptsize
