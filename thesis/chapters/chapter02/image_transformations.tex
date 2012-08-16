@@ -1,6 +1,61 @@
 \section{Image Transformations for Feature Extraction}
 
-Discuss FFT, Gabor Filters, HOG, SIFT/GIST
+Gabor Filters, HOG, SIFT/GIST
+
+\subsection{The Fourier Transform}
+
+TBD
+
+\subsection{The Gabor Filter}
+
+In content based image retrieval, the inability of the Fourier transform to
+localize the frequency components in time disqualifies it as a suitable
+analysis method. Instead, wavelets are often used to obtain a time-frequency
+representation of the signal. A particulaly successful application to CBIR was
+the use of gabor wavelets as proposed by Manjunath and Ma
+\autocite{manjunath_texture_1996}. The mother Gabor wavelet $g(x, y)$ with the
+sinus frequency $W$ and gaussian scaling parameters $\sigma_x$, $\sigma_y$ is
+given as
+\begin{equation*}
+    g(x, y) = \left( \frac{1}{2 \pi \sigma_x \sigma_y} \right) \exp{\left( - \frac{1}{2} \left( \frac{x^2}{\sigma_x^2} + \frac{y^2}{\sigma_y^2} \right) + i \cdot 2 \pi W x \right)}
+\end{equation*}
+and thus its Fourier transform as
+\begin{equation*}
+    \hat{g}(u, v) = \exp{\left( - \frac{1}{2} \left( \frac{(u - W)^2}{\sigma_u^2} + \frac{v^2}{\sigma_v^2} \right) \right)}\text{, }
+    \sigma_u = \frac{1}{2} \pi \sigma_x \text{ and } \sigma_v = \frac{1}{2} \pi \sigma_y
+\end{equation*}
+The individual wavelets $g_{m, n}(x, y)$ are generated from $g(x, y)$ by
+scaling and rotation by $\theta = \frac{n \pi}{K}$ for all $0 < n < K$
+orientations:
+\begin{equation*}
+    g_{m, n}(x, y) = a^{-m} g \left( a^{-m} (x \cos{\theta} + y \sin{\theta}), a^{-m} (-x \sin{\theta} + y \cos{\theta}) \right).
+\end{equation*}
+To avoid redundancy due to overlap, the scaling parameters $\sigma_u$ and
+$\sigma_v$ are chosen in a way that the frequency spectra can be tiled as in
+figure \ref{fig:gabor_tiling}. A normalization to zero mean can be added to
+remove the influence of the input's intensity value scale.
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.5\textwidth]{gabor_tiling_cropped}
+    \caption[Tiling of Gabor wavelets]{
+        Tiling of Gabor wavelets. Note that due to the elliptical shape of the
+        wavelets, there are some parts of the spectrum left uncovered.
+        }
+    \label{fig:gabor_tiling}
+\end{figure}
+
+\subsection{The Scale-Invariant Image Transform (SIFT)}
+
+TBD
+
+\subsection{Speeded-up Robust Features (SURF)}
+
+TBD
+
+\subsection{Histograms of Oriented Gradients (HOG)}
+
+TBD
 
 \subsection{The Continuous Curvelet Transform}
 
@@ -131,6 +186,9 @@ Fourier transform is straightforward:
     \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi_{j_0}}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
 \end{equation}
 where $k = (k_1, k_2) \in \mathbb{Z}^2$.
+
+Note that, in contrast to the Gabor wavelets (Figure \ref{fig:gabor_tiling}),
+there is no gap in between the curvelets, so no information is lost.
 
 \subsection{The Fast Discrete Curvelet Transform}
 
