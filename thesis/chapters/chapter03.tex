@@ -44,11 +44,51 @@ value $Y$ using
 
 \paragraph{SOBEL}
 
-TBD
+In order to make comparing the query sketch to the database images more
+effective, an edge extraction algorithm can be applied to each database image.
+The Sobel operator calculates horizontal and vertical gradients by convolving
+the image with the $3 \times 3$ kernels
+\begin{equation*}
+    K_x =
+    \begin{bmatrix}
+        -1 & 0 & 1 \\
+        -2 & 0 & 2 \\
+        -1 & 0 & 1
+    \end{bmatrix}
+    \text{ and }
+    K_y =
+    \begin{bmatrix}
+        -1 & -2 & -1 \\
+         0 &  0 &  0 \\
+         1 &  2 &  1
+    \end{bmatrix}
+\end{equation*}
+to obtain the directional gradients $G_x$ and $G_y$. The overall response is
+the gradient magnitude $G$ at each pixel location:
+\begin{equation*}
+    G = \sqrt{G_x^2 + G_y^2}
+\end{equation*}
 
 \paragraph{CANNY}
 
-TBD
+A slightly more complex way to extract edges is the Canny edge detector
+\autocite{canny_computational_1986}. Intially, the image is smoothed via a
+convolution with a small gaussian kernel to reduce the susceptibility to noise,
+even though this increases the localization error of the edge detection. On the
+smoothed image the gradient magnitude is calculated using the Sobel operator
+described above. The angle of the gradient can be calculated from the
+directional gradients $G_x$ and $G_y$ using
+\begin{equation*}
+    \Theta = \arctan{\frac{G_x}{G_y}}
+\end{equation*}
+and quantized into bins for $0 \degree$, $45 \degree$, $90 \degree$ and $135
+\degree$. Thin edges can be obtained from the gradient magnitudes by performing
+non-maximum suppression along the direction perpendicular to the gradient
+direction, e.g. a pixel is marked as being on a $90 \degree$ edge if its
+magnitude is larger than the magnitudes north and south of its location. To
+avoid lines being broken up by noisy fluctiations, the edges are traced along
+their direction and gaps are filled in if the signal within the gap is above a
+certain threshold. The result is a binary edge map of the whole image.
 
 \section{Signature Extraction}
 
