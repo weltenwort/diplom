@@ -1,3 +1,4 @@
+%! TEX root = ../thesis.tex
 \chapter{Proposed Solution}\label{ch:solution}
 
 The image processing pipeline described in this thesis aims to be suitable for
@@ -27,7 +28,8 @@ seems obvious. The first domain, the domain of query sketches, is quite narrow,
 because we can characterize its members as binary images with large, smooth
 areas separated by discontinuities along curves. The database images, that make
 up the second domain, are not subject to such assumptions. They may be color
-photographs, paintings, computer renderings or black-and-white sketches.
+photographs (Figure \ref{fig:input_example_color}), paintings, computer
+renderings or black-and-white sketches.
 
 \paragraph{LUMA}
 
@@ -35,9 +37,9 @@ Because the fast discrete curvelet transform used in every variant of the
 signature extraction step takes a single 2D matrix as input, images with more
 than one color channel need to be reduced to one channel. The RGB values from
 the benchmark dataset have therefore been converted to greyscale images using
-the definition of luma according to ITU standards \autocite{_parameter_2002}.
-Each pixel with red, green and blue values $(R, G, B)$ is mapped to a luminance
-value $Y$ using
+the definition of luma according to ITU standards \autocite{_parameter_2002}
+(Figure \ref{fig:input_example_luma}).  Each pixel with red, green and blue
+values $(R, G, B)$ is mapped to a luminance value $Y$ using
 \begin{equation*}
     Y = \frac{299}{1000}R + \frac{587}{1000}G + \frac{114}{1000}B.
 \end{equation*}
@@ -64,7 +66,8 @@ the image with the $3 \times 3$ kernels
     \end{bmatrix}
 \end{equation*}
 to obtain the directional gradients $G_x$ and $G_y$. The overall response is
-the gradient magnitude $G$ at each pixel location:
+the gradient magnitude $G$ at each pixel location (Figure
+\ref{fig:input_example_sobel}):
 \begin{equation*}
     G = \sqrt{G_x^2 + G_y^2}
 \end{equation*}
@@ -88,11 +91,47 @@ direction, e.g. a pixel is marked as being on a $90 \degree$ edge if its
 magnitude is larger than the magnitudes north and south of its location. To
 avoid lines being broken up by noisy fluctiations, the edges are traced along
 their direction and gaps are filled in if the signal within the gap is above a
-certain threshold. The result is a binary edge map of the whole image.
+certain threshold. The result is a binary edge map of the whole image (Figure
+\ref{fig:input_example_canny}).
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Original image]{%
+        \includegraphics[width=0.45\textwidth]{input_example_color}%
+        \label{fig:input_example_color}%
+    }
+    \quad
+    \subfloat[Image after luma conversion]{%
+        \includegraphics[width=0.45\textwidth]{input_example_luma}%
+        \label{fig:input_example_luma}%
+    }
+    \quad
+    \subfloat[Image after Sobel operator]{%
+        \includegraphics[width=0.45\textwidth]{input_example_sobel}%
+        \label{fig:input_example_sobel}%
+    }
+    \quad
+    \subfloat[Image after Canny operator]{%
+        \includegraphics[width=0.45\textwidth]{input_example_canny}%
+        \label{fig:input_example_canny}%
+    }
+    \caption[Image aquisition variants]{
+    }
+    \label{fig:input_examples}
+\end{figure}
 
 \section{Signature Extraction}
 
-TBD
+Each method of signature extraction described in this section has the fast
+discrete curvelet transform at its heart. The curvelet transform has two main
+parameters, that influence the result: The number of angles $N_{\theta}$ used
+at the coarest scale and the number of scales $N_j$, which corresponds to the
+number of concentric squares shown in \ref{fig:curvelet_discrete_tilings}.
+Experiments conducted to determine the optimal values of these parameters have
+shown that using more scales than 4 does not provide benefits that would
+justify the increased amount of processing time. Furthermore, since the
+coarsest scale is non-directional, as explained in section
+\ref{sec:background_cct}, it is ignored in further computations.
 
 \section{Ranking}
 
