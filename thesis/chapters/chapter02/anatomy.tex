@@ -72,12 +72,19 @@ specific types of features. Some techniques use color histograms
 \autocite{utenpattanant_color_2006}, while others
 \autocite{stricker_color_1996} \autocite{deng_efficient_2001}
 \autocite{lee_spatial_2003} include spatial relations between colors in a
-region. Many descriptors attempt to capture
-texture characteristics, such as \autocite{schaffalitzky_viewpoint_2001} and ...
-SHAPE here (sift).
+region.
+Many descriptors attempt to capture texture characteristics, such as
+\autocite{schaffalitzky_viewpoint_2001} and \autocite{manjunath_texture_1996}.
+Rubner and Thomasi \autocite{rubner_texture-based_1999} combine Gabor filters
+and the earth mover's distance and thereby bypass segmentation.
+Another class of descriptors focuses on representing shapes using detection of
+edges and salient points. Lowe \autocite{lowe_object_1999} developed the now
+widely adopted SIFT descriptor, that employs clustering of salient points. More
+recently, the SURF desciptor \autocite{bay_speeded-up_2008} uses Haar wavelets
+to deliver comparable performance.
 Several publications combine feature types to arrive at a more comprehensive
 descriptor. Oliva and Torralba \autocite{oliva_modeling_2001} capture various
-scene "roperties like "roughness" and "openness". more examples here.
+scene "roperties like "roughness" and "openness".
 
 \begin{figure}[h]
     \centering
