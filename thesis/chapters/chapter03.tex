@@ -147,15 +147,54 @@ equally sized grid cells $G_{s, \theta, x, y}$ with $x, y \in 1, 2, \dots, n$:
     \end{bmatrix}
 \end{equation*}
 For each of these grid cells, the mean $\bar{C}_{s, \theta}$ is calculated:
-\begin{equation*}
-    \bar{C}_{s,\theta} =
+\begin{align*}
+    \bar{C}_{s,\theta} &=
     \begin{bmatrix}
         mean(G_{s,\theta,1,1}) & mean(G_{s,\theta,1,2}) & \cdots & mean(G_{s,\theta,1,n}) \\
         mean(G_{s,\theta,2,1}) & mean(G_{s,\theta,2,2}) & \cdots & mean(G_{s,\theta,2,n}) \\
         \vdots  & \vdots  & \ddots & \vdots  \\
         mean(G_{s,\theta,n,1}) & mean(G_{s,\theta,n,2}) & \cdots & mean(G_{s,\theta,n,n}) \\
+    \end{bmatrix} \\
+    &=
+    \begin{bmatrix}
+        \bar{c}_{s,\theta,1,1} & \bar{c}_{s,\theta,1,2} & \cdots & \bar{c}_{s,\theta,1,n} \\
+        \bar{c}_{s,\theta,2,1} & \bar{c}_{s,\theta,2,2} & \cdots & \bar{c}_{s,\theta,2,n} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        \bar{c}_{s,\theta,n,1} & \bar{c}_{s,\theta,n,2} & \cdots & \bar{c}_{s,\theta,n,n} \\
     \end{bmatrix}
-\end{equation*}
+\end{align*}
+
+\subsection{Global Features}
+
+\paragraph{MEAN}
+
+The global approach to signature extraction simply takes the family of matrices
+$\bar{C}_{s, \theta}$ and concatenates them as the image signature.
+
+\subsection{Local Features}
+
+The local feature extraction methods used here follow the bag-of-features
+approach, that aims to represent an image using a set of local feature
+descriptions or "visual words" similar to what was described in
+\autocite{sivic_video_2003}. The exact way to extract the words will be
+detailed towards the end of this section.
+
+The set of visual words extracted from the images are diverse and hard to
+compare. In order to create meaningful image signatures from these words, the
+whole set is condensed into a dictionary using k-means clustering. As already
+discussed in \ref{sec:anatomy_signature_extraction}, the goal thereof is to
+derive a dictionary of predefined size that contains the visual words
+corresponding to the most discriminating features of the images in the image
+database.
+
+\paragraph{PMEAN}
+
+Continuing from the set of matrices $\bar{C}_{s, \theta}$, this algorithm
+densely samples 
+
+\paragraph{PMEAN2}
+
+TBD
 
 \section{Ranking}
 

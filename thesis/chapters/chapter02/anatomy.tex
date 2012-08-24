@@ -1,4 +1,4 @@
-\section{Anatomy of a CBIR System}
+\section{Anatomy of a CBIR System}\label{sec:anatomy}
 
 The inner workings of most CBIR systems can best be examined by looking at the
 processing pipeline each query has to go through. The coarse sequence of
@@ -34,7 +34,7 @@ computational steps is almost the same in all such systems (Figure
     \label{fig:cbir_coarse_structure}
 \end{figure}
 
-\subsection{Image Acquisition}
+\subsection{Image Acquisition}\label{sec:anatomy_image_acquisition}
 
 The format in which the images are available to the system determines the
 maximum amount of information available to subsequent analysis steps.
@@ -56,9 +56,28 @@ algorithm. Many algorithms like SIFT \autocite{lowe_object_1999} or SURF
 have been specifically developed to operate on multi-channel images, like cSIFT
 \autocite{abdel-hakim_csift:_2006} and \autocite{yang_robust_2008}.
 
-\subsection{Signature Extraction}
+\subsection{Signature Extraction}\label{sec:anatomy_signature_extraction}
 
-TBD
+The signature of an image is its representation in the following comparison
+step. Therefore it should describe the image using its most discriminatory
+features compared to all other images in the database. Due to the effects of
+the \emph{sensory gap} discussed above, there is, at the moment, no definitive
+way to determine the discriminatory power of features in general, even though
+knowledge about the image domain can guide the descisions.
+
+The signature composition depends on both, the kind of features extracted from
+the image and the way these features are encoded. Over the last two decades, a
+wide variety of feature descriptors have been published, which mostly focus on
+specific types of features. Some techniques use color histograms
+\autocite{utenpattanant_color_2006}, while others
+\autocite{stricker_color_1996} \autocite{deng_efficient_2001}
+\autocite{lee_spatial_2003} include spatial relations between colors in a
+region. Many descriptors attempt to capture
+texture characteristics, such as \autocite{schaffalitzky_viewpoint_2001} and ...
+SHAPE here (sift).
+Several publications combine feature types to arrive at a more comprehensive
+descriptor. Oliva and Torralba \autocite{oliva_modeling_2001} capture various
+scene "roperties like "roughness" and "openness". more examples here.
 
 \begin{figure}[h]
     \centering
@@ -67,6 +86,6 @@ TBD
     \label{fig:cbir_signature_extraction}
 \end{figure}
 
-\subsection{Comparison and Ranking}
+\subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
 TBD
