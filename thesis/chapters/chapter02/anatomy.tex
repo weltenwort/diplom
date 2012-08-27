@@ -63,13 +63,13 @@ step. Therefore it should describe the image using its most discriminatory
 features compared to all other images in the database. Due to the effects of
 the \emph{sensory gap} discussed above, there is, at the moment, no definitive
 way to determine the discriminatory power of features in general, even though
-knowledge about the image domain can guide the descisions.
+knowledge about the image domain can guide the descisions.  The signature
+composition depends on both, the kind of features extracted from the image and
+the way these features are encoded. 
 
-The signature composition depends on both, the kind of features extracted from
-the image and the way these features are encoded. Over the last two decades, a
-wide variety of feature descriptors have been published, which mostly focus on
-specific types of features. Some techniques use color histograms
-\autocite{utenpattanant_color_2006}, while others
+Over the last two decades, a wide variety of feature descriptors have been
+published, which mostly focus on specific types of features. Some techniques
+use color histograms \autocite{utenpattanant_color_2006}, while others
 \autocite{stricker_color_1996} \autocite{deng_efficient_2001}
 \autocite{lee_spatial_2003} include spatial relations between colors in a
 region.
@@ -84,7 +84,40 @@ recently, the SURF desciptor \autocite{bay_speeded-up_2008} uses Haar wavelets
 to deliver comparable performance.
 Several publications combine feature types to arrive at a more comprehensive
 descriptor. Oliva and Torralba \autocite{oliva_modeling_2001} capture various
-scene "roperties like "roughness" and "openness".
+scene properties like "roughness" and "openness".
+
+\subsubsection{Global Features}
+
+Aside from the nature of the features captured by a descriptor, there are also
+differences in the geometrical scope the features are derived from. Global
+feature descriptors attempt to capture the structure of the whole scene or
+describe the distribution of properties across the image like the binary Haar
+color descriptor published in \autocite{utenpattanant_color_2006}. Some global
+algorithms subdivide the image into regular segments and derive the localized
+distribution of features for each division. \autocite{lazebnik_beyond_2006}
+improves upon this concept by creating feature pyramids using iterative
+subdivision for multiscale analysis. While the computational complexity of
+those global approaches is usually quite low, they are especially susceptible
+to problems like partial occlusion or reflections within the scene. The spatial
+envelope descriptor \autocite{oliva_modeling_2001} combines a global
+spectrogram with locally derived spectral information to produce an overall
+image descriptor.
+
+\subsubsection{Local Features}
+
+In contrast to the global approach, many CBIR systems employ "bag-of-features"
+descriptors, that represent the image as an unsorted collection of local
+features extracted from small patches of the image. The unsorted nature of the
+feature collection leads to loss of large-scale geometric structures that can
+be counteracted by a suitable choice of the patch sizes. When the local feature
+descriptors are invariant to rotation, scale or similar deformations, the
+sensitivity to viewpoint variations or occlusions decreases. The prominent SIFT
+descriptor \autocite{lowe_object_1999} achieves this by selecting the feature
+locations such that they can be normalized with respect to scale, orientation
+and limited 3D projections. The SURF descriptor by Bay et al
+\autocite{bay_speeded-up_2008} gives similar results, but has reduces
+computational requirements. The HOG descriptor \autocite{dalal_histograms_2005}
+calculates histograms of gradient directions in a certain neighborhood.
 
 \begin{figure}[h]
     \centering
