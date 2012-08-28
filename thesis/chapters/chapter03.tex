@@ -190,7 +190,22 @@ database.
 \paragraph{PMEAN}
 
 Continuing from the set of matrices $\bar{C}_{s, \theta}$, this algorithm
-densely samples 
+densly samples each matrix by sliding a window of size $m \times m, m < n$
+across it. This results in $n - m + 1$ parts $\bar{W}_{s, \theta, u, v}$ with
+$u, v \in 1, \dots, n - m + 1$:
+\begin{equation*}
+    \bar{W}_{s,\theta,u,v} =
+    \begin{bmatrix}
+        \bar{c}_{s,\theta,u,v} & \bar{c}_{s,\theta,u,v+1} & \cdots & \bar{c}_{s,\theta,u,v+m} \\
+        \bar{c}_{s,\theta,u+1,v} & \bar{c}_{s,\theta,u+1,v+1} & \cdots & \bar{c}_{s,\theta,u+1,v+m} \\
+        \vdots  & \vdots  & \ddots & \vdots  \\
+        \bar{c}_{s,\theta,u+m,v} & \bar{c}_{s,\theta,u+m,v+1} & \cdots & \bar{c}_{s,\theta,u+m,v+m} \\
+    \end{bmatrix}
+\end{equation*}
+For each pair $u, v$ these matrices are concatenated in a consistent way and
+stored as the feature vectors of the image. That way, the algorithm derives $u
+\cdot v$ vectors of length $N_s \cdot N_{\theta_s} \cdot m^2$ from each image,
+where $N_{\theta_s}$ is the number of angles at the scale $s$.
 
 \paragraph{PMEAN2}
 
