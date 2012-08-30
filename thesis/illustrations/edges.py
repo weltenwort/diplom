@@ -31,12 +31,14 @@ color_img = imread(FILENAME)
 luma_img = read_luma(FILENAME, DATA)
 canny_img = read_canny(FILENAME, DATA)
 sobel_img = read_sobel(FILENAME, DATA)
+segment_img = imread("/home/laeroth/Documents/inf/dipl/repo/src/benchmark/image_contours/2/contour_376090783.jpg", True) / 255.0
 
 all_images = [
         {"filename": "input_example_color.pdf", "image": color_img, "colorbar": False},
         {"filename": "input_example_luma.pdf", "image": luma_img},
         {"filename": "input_example_sobel.pdf", "image": sobel_img},
         {"filename": "input_example_canny.pdf", "image": canny_img},
+        {"filename": "input_example_segment.pdf", "image": segment_img},
         ]
 
 
@@ -72,3 +74,4 @@ def save_all(images, directory):
 
 def examples():
     save_all(all_images, "/home/laeroth/Documents/inf/dipl/repo/thesis/illustrations/")
+    save_all(all_images[-1:], "/home/laeroth/Documents/inf/dipl/repo/thesis/illustrations/")

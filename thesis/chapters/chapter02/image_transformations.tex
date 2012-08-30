@@ -315,3 +315,38 @@ using the inverse 2d Fourier transform:
 \begin{equation*}
     c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} f_{j, l}^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})}.
 \end{equation*}
+
+\subsection{gPb Contour Detection}\label{sec:background_gpb}
+
+In \autocite{maire_using_2008}, Maire et al.\ describe an improvement of the
+contour detector published in \autocite{martin_learning_2004} that includes
+global information in addition to local cues. The orientation-specific local
+parameters $G_i$ extracted from a circular neighborhood around the location
+$(x, y)$ are brightness, color and texture gradients on three scales. They are
+summarized as a coefficient $mPb(x, y, \theta)$ using a weighted sum with
+weights $\alpha_i$:
+\begin{equation*}
+    mPb(x, y, \theta) = \sum_{i=1}^9 \alpha_i G_i(x, y, \theta)
+\end{equation*}
+
+The global combonent $sPb(x, y, \theta)$ is the result of applying a
+filterbank of directional gaussian derivatives to a set of $k$ generalized
+eigenvectors $v_j$, $j \in 1, \dots, k$. The linear system these eigenvectors are
+obtained from has an affinity matrix derived from the intervening contour cue
+\autocite{fowlkes_learning_2003}. The linear combination of the individual
+directional derivatives then represents the large-scale contours in the image:
+\begin{equation*}
+    sPb(x, y, \theta) = \sum_{j=1}^k \frac{1}{\sqrt{\lambda_j}} sPb_{v_j}(x, y, \theta)
+\end{equation*}
+
+A further linear combination of the local component $mPb$ and the global
+component $sPb$ with learned weights $\alpha_i$ and $\gamma$ provides a
+detailed map of contours in the image while limiting the amount of clutter
+compared to a purely local contour detector:
+\begin{equation*}
+    gPb(x, y, \theta) = \sum_{i=1}^9 \alpha_i G_i(x, y, \theta) + \gamma \cdot sPb(x, y, \theta)
+\end{equation*}
+
+From these directional contour maps, Arbeláez et al.\ derived a hierarchical
+contour detector \autocite{arbelaez_contours_2009}, that conditionally joins
+adjacent regions to obtain closed-contour maps of high quality.
