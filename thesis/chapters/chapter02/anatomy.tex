@@ -127,9 +127,28 @@ describes each image using about $1000$ local feature vectors of $160$ values
 each. Such large numbers of vectors are expensive to store and compare, so one
 of several data reduction methods is commonly used.
 
-% pca
+\paragraph{Principal Component Analysis}
 
-% lda
+The Principle Component Analysis (PCA) is a transformation, that computes the
+orthogonal basis best suited to describe the variance of the data. An
+$n$-dimensional data set is linearly mapped to a coordinate system, in which
+the direction of the first axis $a_1$ is the direction with the largest
+variance in the data. The following axes' $a_i$, $i \in 2, \dots, n$ directions
+correspond to the orthogonal directions with the next-largest variances in
+descending order. By choosing the $p$ largest component vectors and performing
+an inverse transformation of the PCA-transformed data, a projection of the
+original data in $p$ dimensions can be obtained. Due to the choice of the
+vectors for the inverse transformation, the projection discards only the parts
+of each observation that vary the least between all observations.
+
+PCA has been applied to the face recognition problem using intensity images
+(eigenfaces) \autocite{turk_face_1991}, wavelets (waveletfaces)
+\autocite{feng_human_2000} and more recently curvelets (curveletfaces)
+\autocite{mandal_face_2008}. In \autocite{ke_pca-sift:_2004} it was used to
+improve the robustness of the SIFT \autocite{lowe_object_1999} descriptor. To
+overcome the limited between-class discrimination of PCA, it has been combined
+with Linear Discriminant Analysis (LDA), yielding even better results
+\autocite{mandal_curvelet_2009}.
 
 % k-means
 
