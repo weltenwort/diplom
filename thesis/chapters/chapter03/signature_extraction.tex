@@ -63,7 +63,12 @@ whole set is condensed into a dictionary using k-means clustering. As already
 discussed in \ref{sec:anatomy_signature_extraction}, the goal thereof is to
 derive a dictionary of predefined size that contains the visual words
 corresponding to the most discriminating features of the images in the image
-database.
+database. A universally optimal size for the codebook does not seem to exist,
+as Nowak et al.\ \autocite{nowak_sampling_2006} observe an increase in accuracy
+up to 1000 words, but overfitting for some sampling algorithms beyond that. At
+the same time \autocite{yang_evaluating_2007} report optimal sizes of 20000 to
+80000 depending on the image database. In \autocite{eitz_sketch-based_2010} a
+size of 1000 visual words was found optimal for sketches.
 
 \paragraph{PMEAN}
 
@@ -88,3 +93,5 @@ where $N_{\theta_s}$ is the number of angles at the scale $s$.
 \paragraph{PMEAN2}
 
 TBD
+
+Evaluations by Nowak et al.\ \autocite{nowak_sampling_2006} have shown effects of 

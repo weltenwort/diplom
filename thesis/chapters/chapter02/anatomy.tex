@@ -86,6 +86,13 @@ Several publications combine feature types to arrive at a more comprehensive
 descriptor. Oliva and Torralba \autocite{oliva_modeling_2001} capture various
 scene properties like "roughness" and "openness".
 
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=0.8\textwidth]{cbir_anatomy_signature_extraction_cropped}
+    \caption{Signature extraction in CBIR systems}
+    \label{fig:cbir_signature_extraction}
+\end{figure}
+
 \subsubsection{Global Features}
 
 Aside from the nature of the features captured by a descriptor, there are also
@@ -115,9 +122,10 @@ sensitivity to viewpoint variations or occlusions decreases. The prominent SIFT
 descriptor \autocite{lowe_object_1999} achieves this by selecting the feature
 locations such that they can be normalized with respect to scale, orientation
 and limited 3D projections. The SURF descriptor by Bay et al
-\autocite{bay_speeded-up_2008} gives similar results, but has reduces
+\autocite{bay_speeded-up_2008} gives similar results, but has reduced
 computational requirements. The HOG descriptor \autocite{dalal_histograms_2005}
-calculates histograms of gradient directions in a neighborhood.
+calculates histograms of gradient directions on regular grid cells to describe
+the local angular distribution of edges.
 
 \subsubsection{Dimensionality Reduction}
 
@@ -150,14 +158,55 @@ overcome the limited between-class discrimination of PCA, it has been combined
 with Linear Discriminant Analysis (LDA), yielding even better results
 \autocite{mandal_curvelet_2009}.
 
+\paragraph{Visual Words and Clustering}
+
+Instead of reducing the size of the individual feature vectors, the
+bag-of-features approach collects the feature vectors into a single signature
+vector to represent the image. This is done by determining a codebook of
+representative feature vectors, the "visual words" \autocite{sivic_video_2003},
+and assigning each local feature vector to the most similar visual word. A
+histogram of the distribution of visual words can then be calculated as a
+signature for each image.
+
+To create the codebook, the large number of feature vectors extracted from
+local patches of each image in the database are grouped into clusters of
+similar vectors. The optimal number of clusters is usually determined
+experimentally and varies with other processing parameters such as the sampling
+strategy \autocite{nowak_sampling_2006} \autocite{yang_evaluating_2007}.
+
 % k-means
 
-\begin{figure}[h]
-    \centering
-        \includegraphics[width=0.8\textwidth]{cbir_anatomy_signature_extraction_cropped}
-    \caption{Signature extraction in CBIR systems}
-    \label{fig:cbir_signature_extraction}
-\end{figure}
+The most common clusting method used in numerous publications
+\autocite{zhu_theory_2002} \autocite{sivic_video_2003}
+\autocite{csurka_visual_2004} \autocite{fergus_learning_2005}
+\autocite{winn_object_2005} is k-means clustering. This algorithm uses the
+euclidean distance as a metric to assign each observation $x_p$ to the nearest
+cluster $S_i$ with mean $m_i$, $i \in 1, \dots, k$. The goal is to minimize
+the variance within each cluster:
+\begin{equation*}
+    \sum_{i=1}^k \sum_{x_p \in S_i} \| x_p - m_i \|^2
+\end{equation*}
+
+Lloyd's algorithm is the usual way to calculate a k-means partition. It
+requires a set of $k$ intial cluster centers, that are often randomly chosen
+from the dataset or randomly generated. The cluster centers $m_i$ are then
+iteratively adjusted until no reassignment takes place in two consecutive
+iterations $t$ and $t+1$. In each iteration, each oberservation $x_i$ is
+assigned to exactly one cluster $S_i$ using
+\begin{equation*}
+    S_{i, t} = \left\{ x_p : \| x_p - m_{i, t} \| \leq \| x_p - m_{j, t} \| \quad \forall j \in 1, \dots, k \right\}.
+\end{equation*}
+The centers are the recalculated as
+\begin{equation*}
+    m_{i, t+1} = |S_{i, t}|^{-1} \sum_{x_p \in S_{i, t}} x_p
+\end{equation*}
+
+The greedy nature of the algorithm and the random initialization mean that it
+is merely a heuristic and can converge on a local minimum, that not a global
+minimum.
+Other clusting methods are hierarchical agglomorative and divisive algorithms as
+used in \autocite{nister_scalable_2006} and \autocite {philbin_object_2007},
+that recursively divide or merge partitions to optimize the vocabulary.
 
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
