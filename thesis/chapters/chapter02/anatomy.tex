@@ -196,9 +196,9 @@ assigned to exactly one cluster $S_i$ using
 \begin{equation*}
     S_{i, t} = \left\{ x_p : \| x_p - m_{i, t} \| \leq \| x_p - m_{j, t} \| \quad \forall j \in 1, \dots, k \right\}.
 \end{equation*}
-The centers are the recalculated as
+The centers are then recalculated as
 \begin{equation*}
-    m_{i, t+1} = |S_{i, t}|^{-1} \sum_{x_p \in S_{i, t}} x_p
+    m_{i, t+1} = |S_{i, t}|^{-1} \sum_{x_p \in S_{i, t}} x_p.
 \end{equation*}
 
 The greedy nature of the algorithm and the random initialization mean that it
@@ -207,6 +207,18 @@ minimum.
 Other clusting methods are hierarchical agglomorative and divisive algorithms as
 used in \autocite{nister_scalable_2006} and \autocite {philbin_object_2007},
 that recursively divide or merge partitions to optimize the vocabulary.
+
+Once the clustering algorithm has converged, the cluster centers $m_i$ will be
+used as the visual words of the codebook. To create the signature vector of an
+image, its feature vectors $x_p$ will be quantized by grouping them into sets
+$S_i$, $i \in 1, \dots, k$ such that
+\begin{equation*}
+    S_i = \left\{ x_p : \| x_p - m_{i} \| \leq \| x_p - m_{j} \| \quad \forall j \in 1, \dots, k \right\}.
+\end{equation*}
+The final image signature $\tilde{I}$ then is the vector of the cardinality of these sets:
+\begin{equation*}
+    \tilde{I} = \big( |S_1|, |S_2|, \dots, |S_{k-1}|, |S_{k}| \big)
+\end{equation*}
 
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 

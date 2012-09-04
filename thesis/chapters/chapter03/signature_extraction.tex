@@ -42,6 +42,28 @@ For each of these grid cells, the mean $\bar{C}_{s, \theta}$ is calculated:
     \end{bmatrix}
 \end{align*}
 
+\begin{figure}[h]
+    \centering
+    \subfloat[Curvelet coefficients]{%
+        \includegraphics[width=0.45\textwidth]{signature_example_curvelet}%
+        \label{fig:signature_example_curvelet}%
+    }
+    \quad
+    \subfloat[Means on $8 \times 8$ grid]{%
+        \includegraphics[width=0.45\textwidth]{signature_example_curvelet_means}%
+        \label{fig:signature_example_curvelet_means}%
+    }
+    \caption[Curvelet coefficients and means]{
+        The curvelet coefficients for a specific scale and angle can be seen in
+        \subref{fig:signature_example_curvelet}. In
+        \subref{fig:signature_example_curvelet_means} the response image has
+        been subdivided into $8 \times 8$ cells and the mean value of each cell
+        are shown.
+    }
+    \label{fig:input_examples}
+\end{figure}
+
+
 \subsection{Global Features}
 
 \paragraph{MEAN}
