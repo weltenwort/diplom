@@ -222,4 +222,49 @@ The final image signature $\tilde{I}$ then is the vector of the cardinality of t
 
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
-TBD
+\subsubsection{Distance Metrics}
+
+\paragraph{Euclidean Distance}
+
+The simplest and probably most widely used distance metric is the euclidean
+distance. Its two-dimensional variant is derived from the formula of
+Pythagoras. Generalized to $n$-dimensional points $p = (p_1, p_2, \dots, p_n$
+and $q = (q_1, q_2, \dots, q_n)$, it can be written as
+\begin{equation*}
+    d_{EUCL}(p, q) = \sqrt{\sum_{i=1}^n (q_i - p_i)^2}.
+\end{equation*}
+
+\paragraph{Mahalanobis Distance}
+If the distance metric is used for clustering or classification of datasets
+with non-spherical within-class distributions, the euclidean distance will
+naturally not perform well. A common alternative is the Mahalanobis distance,
+that incorporates the correlation of the dataset into the result. The distance
+of a point $p = (p_1, p_2, \dots, p_n)$ to a cluster with mean $m = (m_1, m_2,
+\dots, m_n)$ is
+\begin{equation*}
+    d_{MAHA}(p, m) = \sqrt{(p - m)^T S^{-1} (p - m)},
+\end{equation*}
+where $S$ is the cluster's covariance matrix. In practice, it has been used in
+\autocite{mikolajczyk_scale_2004} and \autocite{sivic_video_2003} to compare
+feature vectors of the SIFT \autocite{lowe_object_1999} descriptor.
+
+\paragraph{Cosine Distance}
+A metric sometimes used in information retrieval applications is the coside
+distance or cosine similarity. The similarity is defined as the cosine of the
+angle between two vectors $p = (p_1, p_2, \dots, p_n$ and $q = (q_1, q_2,
+\dots, q_n)$ when interpreted geometrically:
+\begin{equation*}
+    cos(\theta_{p, q}) = \frac{p \cdot q}{\|p\| \|q\|}
+\end{equation*}
+This means that the metric effectively normalizes the vectors in respect to
+their euclidean length.
+
+\paragraph{Earth Mover Distance}
+
+\paragraph{Histogram Intersection}
+
+\subsubsection{Weighting}
+
+\paragraph{Support Vector Machines}
+
+\paragraph{Term Frequency and Inverse Document Frequency}
