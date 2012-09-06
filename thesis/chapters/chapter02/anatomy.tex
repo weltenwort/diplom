@@ -235,6 +235,7 @@ and $q = (q_1, q_2, \dots, q_n)$, it can be written as
 \end{equation*}
 
 \paragraph{Mahalanobis Distance}
+
 If the distance metric is used for clustering or classification of datasets
 with non-spherical within-class distributions, the euclidean distance will
 naturally not perform well. A common alternative is the Mahalanobis distance,
@@ -249,6 +250,7 @@ where $S$ is the cluster's covariance matrix. In practice, it has been used in
 feature vectors of the SIFT \autocite{lowe_object_1999} descriptor.
 
 \paragraph{Cosine Distance}
+
 A metric sometimes used in information retrieval applications is the coside
 distance or cosine similarity. The similarity is defined as the cosine of the
 angle between two vectors $p = (p_1, p_2, \dots, p_n$ and $q = (q_1, q_2,
@@ -257,9 +259,41 @@ angle between two vectors $p = (p_1, p_2, \dots, p_n$ and $q = (q_1, q_2,
     cos(\theta_{p, q}) = \frac{p \cdot q}{\|p\| \|q\|}
 \end{equation*}
 This means that the metric effectively normalizes the vectors in respect to
-their euclidean length.
+their euclidean length. That effect is often used in text retrieval to achieve
+invariance regarding the document size.
 
-\paragraph{Earth Mover Distance}
+\paragraph{Earth Mover's Distance}
+
+The Earth Mover's Distance (EMD) is an application of the discrete
+transportation problem, which was first introduced into the field of computer
+vision in \autocite{peleg_unified_1989}. The use of the algorithm as a signature
+comparison metric in image retrieval was published by Rubner et al.\
+\autocite{rubner_earth_2000}. At the abstract level, the distance is calculated
+as the amount of work necessary to transform one signature into the other.
+A main advantage of the EMD over most other distance measures is that it
+accounts for inter-bin distances (ground distances) in binned distributions.
+For signatures $P = \{ (p_1, w_{p_1}), \dots, (p_n, w_{p_n}) \}$ and $Q = \{
+(q_1, w_{q_1}), \dots, (q_m, w_{q_m}) \}$ of bin centers $p_i$ and $q_i$ with
+bin sizes $w_{p_i}$ and $w_{q_i}$ the pairwise ground distances can be
+represented in a $n \times m$ matrix $D$.
+These ground distances $d_{i, j}$ between two bins is then interpreted as the
+costs of moving a unit of goods from one bin to the other. The optimal solution
+minimizes the overall costs by finding flow values $f_{i, j}$ between each pair
+$p_i$ and $q_i$, that satisfy the constraints
+\begin{align*}
+    f_{i, j} & \geq 0 \\
+    \sum_{j=1}^m f_{i, j} & \leq w_{p_i} \\
+    \sum_{i=1}^n f_{i, j} & \leq w_{q_j} \\
+    \sum_{i=1}^n \sum_{j=1}^m f_{i, j} & = min \left( \sum_{i=1}^n w_{p_i}, \sum_{j=1}^m w_{q_j} \right)
+\end{align*}
+for all $1 \leq i \leq n$ and $1 \leq j \leq m$.
+The distance between signatures $P$ and $Q$ can then be calculated as
+\begin{equation*}
+    d_{EMD}(P, Q) = \frac{\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}.
+\end{equation*}
+In \autocite{rubner_earth_2000} the authors propose using a simplex-based
+algorithm to solve the transportation problem, that achieves good performance
+by exploiting the specific problem structure.
 
 \paragraph{Histogram Intersection}
 
