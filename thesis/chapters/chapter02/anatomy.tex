@@ -268,10 +268,12 @@ The Earth Mover's Distance (EMD) is an application of the discrete
 transportation problem, which was first introduced into the field of computer
 vision in \autocite{peleg_unified_1989}. The use of the algorithm as a signature
 comparison metric in image retrieval was published by Rubner et al.\
-\autocite{rubner_earth_2000}. At the abstract level, the distance is calculated
+\autocite{rubner_metric_1998}. At the abstract level, the distance is calculated
 as the amount of work necessary to transform one signature into the other.
 A main advantage of the EMD over most other distance measures is that it
 accounts for inter-bin distances (ground distances) in binned distributions.
+Another useful property is the ability to compare distributions of different
+sizes, e.g. for partial matching.
 For signatures $P = \{ (p_1, w_{p_1}), \dots, (p_n, w_{p_n}) \}$ and $Q = \{
 (q_1, w_{q_1}), \dots, (q_m, w_{q_m}) \}$ of bin centers $p_i$ and $q_i$ with
 bin sizes $w_{p_i}$ and $w_{q_i}$ the pairwise ground distances can be
@@ -291,11 +293,24 @@ The distance between signatures $P$ and $Q$ can then be calculated as
 \begin{equation*}
     d_{EMD}(P, Q) = \frac{\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}.
 \end{equation*}
-In \autocite{rubner_earth_2000} the authors propose using a simplex-based
+In \autocite{rubner_metric_1998} the authors propose using a simplex-based
 algorithm to solve the transportation problem, that achieves good performance
-by exploiting the specific problem structure.
+by exploiting the specific problem structure. Zhang at al.\
+\autocite{zhang_local_2006} use Rubner's implementation to train a support
+vector machine for image classification with Gaussian kernels scaled by the
+EMD.
 
 \paragraph{Histogram Intersection}
+
+A very inexpensive way to compare two distributions has been shown by Swain and
+Ballard \autocite{swain_color_1991}, namely the histogram intersection
+technique. While they used it to compare color histograms, it should work
+equally well for binned distributions generated using vector quantization. The
+normalized similarity measure between two histograms $P = (p_1, \dots, p_n)$
+and $Q = (q_1, \dots, q_n)$ is
+\begin{equation*}
+    d_{HI}(P, Q) = \frac{\sum_{i=1}^n \min (p_i, q_i)}{\sum_{i=1}^n q_i}
+\end{equation*}
 
 \subsubsection{Weighting}
 
