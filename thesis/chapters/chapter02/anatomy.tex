@@ -314,6 +314,48 @@ and $Q = (q_1, \dots, q_n)$ is
 
 \subsubsection{Weighting}
 
-\paragraph{Support Vector Machines}
+\paragraph{Linear Support Vector Machines}
+
+The concept of support vector machines (SVMs) is usually is usually employed
+when a feature needs to be classified into one or more classes. While such
+classification problem occur frequently in computer vision in the fields of
+object detection \autocite{pontil_support_1998} or scene classification, the
+class concept is too limited for general image retrieval. To achieve the
+classification, a SVM constructs a hyperplane, that optimally separates two
+sets of points $x_i \in \mathbb{R}^n$ with labels $y_i \in \{-1, 1 \}$ in a
+training dataset $S = \{ (x_i, y_i) \}$. The hyperplane can be defined using
+its normal vector $w$ and offset $b$ as
+\begin{equation*}
+    w \cdot x - b = 0.
+\end{equation*}
+To turn the problem into an optimization problem, the plane is split up into
+two parallel hyperplanes described by
+\begin{equation*}
+    w \cdot x - b = 1 \text{ and } w \cdot x - b = -1.
+\end{equation*}
+The region between these two planes is characterized by their distance
+$\frac{2}{\| w \|}$, which needs to be minimized while satisfying
+\begin{alignat*}{3}
+    w \cdot x_i - b & \geq & 1 & \quad \text{if } y_i = 1 \qquad \text{or} \\
+    w \cdot x_i - b & \leq & -1 & \quad \text{if } y_i = -1
+\end{alignat*}
+for all $i$. It is possible to transform this into an equivalent quadratic
+optimization problem solvable by standard quadratic programming algorithms.
+
+Even though image retrieval as described in this thesis is not a simple
+classification problem, linear SVMs can still be of use. Guyon et al.\
+\autocite{guyon_gene_2002} showed, that the components of $w$ can be used as
+weights describing the discriminative power of feature vectors. This was
+applied to image retrieval by Shrivastava et al.\ in
+\autocite{shrivastava_data-driven_2011}. There the authors trained a SVM for
+each query image $I_q$ with the query image's signature constituting one class
+and the database images' signatures $x_i$ making up the other class. The
+pairwise similarity could then easily be obtained from the learned weights
+$w_q$ as
+\begin{equation*}
+    S(I_q, I_i) = w_q^T x_i.
+\end{equation*}
+That way, common features in the query signature are effectively down-voted,
+while unique features are assigned larger weights.
 
 \paragraph{Term Frequency and Inverse Document Frequency}
