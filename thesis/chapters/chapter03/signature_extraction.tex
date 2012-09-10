@@ -82,15 +82,15 @@ detailed towards the end of this section.
 The set of visual words extracted from the images are diverse and hard to
 compare. In order to create meaningful image signatures from these words, the
 whole set is condensed into a dictionary using k-means clustering. As already
-discussed in \ref{sec:anatomy_signature_extraction}, the goal thereof is to
-derive a dictionary of predefined size that contains the visual words
-corresponding to the most discriminating features of the images in the image
-database. A universally optimal size for the codebook does not seem to exist,
-as Nowak et al.\ \autocite{nowak_sampling_2006} observe an increase in accuracy
-up to 1000 words, but overfitting for some sampling algorithms beyond that. At
-the same time \autocite{yang_evaluating_2007} report optimal sizes of 20000 to
-80000 depending on the image database. In \autocite{eitz_sketch-based_2010} a
-size of 1000 visual words was found optimal for sketches.
+discussed in \ref{sec:anatomy_clustering}, the goal thereof is to derive a
+dictionary of predefined size that contains the visual words corresponding to
+the most discriminating features of the images in the image database. A
+universally optimal size for the codebook does not seem to exist, as Nowak et
+al.\ \autocite{nowak_sampling_2006} observe an increase in accuracy up to 1000
+words, but overfitting for some sampling algorithms beyond that. At the same
+time \autocite{yang_evaluating_2007} report optimal sizes of 20000 to 80000
+depending on the image database. In \autocite{eitz_sketch-based_2010} a size of
+1000 visual words was found optimal for sketches.
 
 \paragraph{PMEAN}
 
@@ -107,13 +107,41 @@ $u, v \in 1, \dots, n - m + 1$:
         \bar{c}_{s,\theta,u+m,v} & \bar{c}_{s,\theta,u+m,v+1} & \cdots & \bar{c}_{s,\theta,u+m,v+m} \\
     \end{bmatrix}
 \end{equation*}
-For each pair $u, v$ these matrices are concatenated in a consistent way and
+For each pair $(u, v)$ these matrices are concatenated in a consistent way and
 stored as the feature vectors of the image. That way, the algorithm derives $u
 \cdot v$ vectors of length $N_s \cdot N_{\theta_s} \cdot m^2$ from each image,
 where $N_{\theta_s}$ is the number of angles at the scale $s$.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{signature_example_curvelet_patches}%
+    \caption[Patches on a coefficient grid]{
+        The mean coefficient grid $\bar{C}_{s, \theta}$ is densely sampled
+        using a $3 \times 3$ window to produce $m^2$ patches per scale and
+        angle.
+    }
+    \label{fig:patch_examples}
+\end{figure}
+
 \paragraph{PMEAN2}
 
-TBD
+In most parts, this variant is identical with the previously described PMEAN
+algorithm with the exception of the final signature feature vectors. Instead of
+concatenating all vectors $\bar{W}_{s, \theta, u, v}$, each scale is handled
+separately. Therefore, each combination of $(u, v, s)$ produces a vector of
+length $N_{\theta_s} \cdot m^2$.
 
-Evaluations by Nowak et al.\ \autocite{nowak_sampling_2006} have shown effects of 
+\paragraph{Sampling}
+
+Both of the feature vector extraction methods described above use dense,
+overlapping sampling of a grid of mean values. By using $m \times m$ windows,
+the small-scale spatial relationship between features can be captured. The
+overlap helps to avoid misinterpretation of features on grid boundaries that
+would occur with dense, non-overlapping sampling. Evaluations by Nowak et al.\
+\autocite{nowak_sampling_2006} have shown that random sampling, which dense
+sampling is a special case of, outperforms keypoint-based sampling for large
+enough numbers of samples. Dense sampling on grids has previously been
+successfully used by Lazebnik in \autocite{lazebnik_beyond_2006} and
+\autocite{lazebnik_spatial_2009}. The R-HOG descriptor
+\autocite{dalal_histograms_2005} also uses a dense grid for sampling with
+overlapping windows to improve matching performance.
