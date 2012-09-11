@@ -319,12 +319,13 @@ and $Q = (q_1, \dots, q_n)$ is
 The concept of support vector machines (SVMs) is usually is usually employed
 when a feature needs to be classified into one or more classes. While such
 classification problem occur frequently in computer vision in the fields of
-object detection \autocite{pontil_support_1998} or scene classification, the
-class concept is too limited for general image retrieval. To achieve the
-classification, a SVM constructs a hyperplane, that optimally separates two
-sets of points $x_i \in \mathbb{R}^n$ with labels $y_i \in \{-1, 1 \}$ in a
-training dataset $\{ (x_i, y_i) \}$. The hyperplane can be defined using its
-normal vector $w$ and offset $b$ as
+object detection \autocite{pontil_support_1998} \autocite{csurka_visual_2004},
+human detection \autocite{dalal_histograms_2005} or scene classification
+\autocite{yang_evaluating_2007}, the class concept is too limited for general
+image retrieval. To achieve the classification, a SVM constructs a hyperplane,
+that optimally separates two sets of points $x_i \in \mathbb{R}^n$ with labels
+$y_i \in \{-1, 1 \}$ in a training dataset $\{ (x_i, y_i) \}$. The hyperplane
+can be defined using its normal vector $w$ and offset $b$ as
 \begin{equation*}
     w \cdot x - b = 0.
 \end{equation*}
@@ -382,4 +383,4 @@ Therefore, the total weight $w_{i, j}$ of a term is given as
 \begin{equation*}
     w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}
 \end{equation*}
-assuming the first normalization method is used.
+assuming the document length is used for normalization.
