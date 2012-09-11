@@ -323,8 +323,8 @@ object detection \autocite{pontil_support_1998} or scene classification, the
 class concept is too limited for general image retrieval. To achieve the
 classification, a SVM constructs a hyperplane, that optimally separates two
 sets of points $x_i \in \mathbb{R}^n$ with labels $y_i \in \{-1, 1 \}$ in a
-training dataset $S = \{ (x_i, y_i) \}$. The hyperplane can be defined using
-its normal vector $w$ and offset $b$ as
+training dataset $\{ (x_i, y_i) \}$. The hyperplane can be defined using its
+normal vector $w$ and offset $b$ as
 \begin{equation*}
     w \cdot x - b = 0.
 \end{equation*}
@@ -358,4 +358,28 @@ $w_q$ as
 That way, common features in the query signature are effectively down-voted,
 while unique features are assigned larger weights.
 
-\paragraph{Term Frequency and Inverse Document Frequency}
+\paragraph{TF-IDF}
+
+Along with the visual word analogy from the field of text retrieval, the
+statistical method of TF-IDF weighting \autocite{baeza-yates_modern_1999} has
+been applied to CBIR \autocite{sivic_video_2003}. It is a technique to weight
+features (terms) in a document in relation to their occurence in the document
+and the whole database. The term frequency $tf_{i, j}$ is the number of
+normalized occurences of term $t_i$ in document $d_j$. The normalization can be
+performed in different ways. The most common ones are dividing by the total
+number of words $n_j$ in the document or the maximum term count $\max \{ tc_{i,
+j} : \forall t_i \in d_j \}$ of any term in the document $j$:
+\begin{equation*}
+    tf_{i, j} = \frac{tc_{i, j}}{n_j} \text{ or } tf_{i, j} = \frac{tc_{i, j}}{\max \{ tc_{i, j} : \forall t_i \in d_j \}}
+\end{equation*}
+The occurence of a term in the database $D$ is measured as the logarithm of the
+quotient of the overall number of documents $|D|$ and the number of documents
+$m_i$ containing the term $t_i$:
+\begin{equation*}
+    idf_{i} = \log \frac{|D|}{m_i}
+\end{equation*}
+Therefore, the total weight $w_{i, j}$ of a term is given as
+\begin{equation*}
+    w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}
+\end{equation*}
+assuming the first normalization method is used.
