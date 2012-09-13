@@ -96,8 +96,8 @@ depending on the image database. In \autocite{eitz_sketch-based_2010} a size of
 
 Continuing from the set of matrices $\bar{C}_{s, \theta}$, this algorithm
 densly samples each matrix by sliding a window of size $m \times m, m < n$
-across it. This results in $n - m + 1$ parts $\bar{W}_{s, \theta, u, v}$ with
-$u, v \in 1, \dots, n - m + 1$:
+across it (Figure \ref{fig:patch_examples}). This results in $n - m + 1$ parts
+$\bar{W}_{s, \theta, u, v}$ with $u, v \in 1, \dots, n - m + 1$:
 \begin{equation*}
     \bar{W}_{s,\theta,u,v} =
     \begin{bmatrix}
@@ -117,8 +117,8 @@ where $N_{\theta_s}$ is the number of angles at the scale $s$.
     \includegraphics[width=0.9\textwidth]{signature_example_curvelet_patches}%
     \caption[Patches on a coefficient grid]{
         The $8 \times 8$ mean coefficient grid $\bar{C}_{s, \theta}$ is densely
-        sampled using $3 \times 3$ windows to produce $36$ patches per scale
-        and angle.
+        sampled using windows of $3 \times 3$ grid cells to produce $36$
+        patches per scale and angle.
     }
     \label{fig:patch_examples}
 \end{figure}

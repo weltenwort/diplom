@@ -1,2 +1,41 @@
 \chapter{Experimental Results}\label{ch:results}
-Experimental results go here\dots
+
+This chapter will present the specific processing pipelines constructed from
+the steps explained in chapter \ref{ch:solution}. A detailed description of the
+experimental results for each pipeline variation will follow. Many pipelines
+were tested with varying parameters, some of which are common to all
+experiments and some of which are specific to the implementation.
+
+\subsection{Benchmarking Method}
+
+A usual way to evaluate the performance of retrieval systems is to calculate
+the ratio of true positive and false positive matches and visualize it in a
+receiver operating characteristic (ROC) curve. While that approach is well
+suited for benchmarking binary decision algorithms, it is not appropriate for
+retrieval problems, that don't feature a well-defined "correct" solution. An
+alternative approach is looking the recall and precision characteristics
+defined as
+\begin{align*}
+    recall & = \frac{\text{number of correct positive results}}{\text{total number of positives}} \\
+    1 - precision & = \frac{\text{number of false positive results}}{\text{total number of results}}
+\end{align*}
+Even though this metric works better for algorithms that return a set of
+results, it is still based on the notion of a "positive match", which requires
+an a-priori classification of the benchmark data. For systems that assign a
+degree of similarity to each item in the result set, this would require
+applying a threshold for classification. In addition to the distorting
+influence of an unsuitable thresholding choice, this method completely
+disregards the match quality within the positive result set, that can be
+important information to user of such a retrieval system.
+
+Since sketch-based image retrieval systems are most likely to be used in
+interactive search applications of some form, it is desirable to assess the
+performance in relation to the results a human would achieve.  Therefore the
+benchmark used to evaluate the retrieval pipelines corresponds to the method
+described in \autocite{eitz_sketch-based_2010}, in which the authors create a
+benchmark dataset and perform a user study with 28 participants to define
+"ground truth" rankings. The dataset is divided into 31 groups of one sketch
+and 40 images each. Participants ranked the 40 images within each group by
+their similarity to the corresponding sketch in a controlled study environment.
+
+To compare
