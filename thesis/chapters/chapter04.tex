@@ -36,6 +36,28 @@ described in \autocite{eitz_sketch-based_2010}, in which the authors create a
 benchmark dataset and perform a user study with 28 participants to define
 "ground truth" rankings. The dataset is divided into 31 groups of one sketch
 and 40 images each. Participants ranked the 40 images within each group by
-their similarity to the corresponding sketch in a controlled study environment.
+assigning scores indicating the similarity to the corresponding sketch in a
+controlled study environment. Each sketch/image pair's final ground truth
+ranking is calculated as the mean of the scores assigned by all participants.
 
-To compare
+To compare a ground truth ranking $x = (x_1, x_2, \dots, x_n)$ to a ranking
+$y = (y_1, y_2, \dots, y_n)$ produced by a retrieval system, the Kendall
+rank correlation coefficient $\tau_B$ is used. It measures the similarity of
+the orderings by grouping all pairs $p_{i, j} = \{(x_i, y_i), (x_j, y_j)\}$,
+$i, j \in 1, \dots, n$ into 5 sets:
+\begin{align*}
+    p_{i, j} & \in C & \quad\text{if } x_i < x_j \text{ and } y_i < y_j \\
+    p_{i, j} & \in D & \quad\text{if } x_i < x_j \text{ and } y_i > y_j \\
+    p_{i, j} & \in T_x & \quad\text{if } x_i = x_j \text{ and } y_i \neq y_j \\
+    p_{i, j} & \in T_y & \quad\text{if } x_i \neq x_j \text{ and } y_i = y_j \\
+    p_{i, j} & \in T_{xy} & \quad\text{if } x_i = x_j \text{ and } y_i = y_j
+\end{align*}
+From that, the correlation value $\tau_B$ in the interval $[-1, 1]$ can be
+calculated as
+\begin{equation*}
+    \tau_B = \frac{|C| - |D|}{\sqrt{(|C| + |D| + |T_x|)(|C| + |D| + |T_y|)}}.
+\end{equation*}
+The higher $\tau_B$ is, the more pairs in $x$ and $y$ have a similar ordering.
+Since the values are only compared within each ranking, the result is
+independent of each rankings' scaling, making it ideal for comparison of
+different distance metrics.
