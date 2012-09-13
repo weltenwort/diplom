@@ -101,14 +101,14 @@ feature descriptors attempt to capture the structure of the whole scene or
 describe the distribution of properties across the image like the binary Haar
 color descriptor published in \autocite{utenpattanant_color_2006}. Some global
 algorithms subdivide the image into regular segments and derive the localized
-distribution of features for each division. \autocite{lazebnik_beyond_2006}
-improves upon this concept by creating feature pyramids using iterative
-subdivision for multiscale analysis. While the computational complexity of
-those global approaches is usually quite low, they are especially susceptible
-to problems like partial occlusion or reflections within the scene. The spatial
-envelope descriptor \autocite{oliva_modeling_2001} combines a global
-spectrogram with locally derived spectral information to produce an overall
-image descriptor.
+distribution of features for each division. \autocite{lazebnik_beyond_2006} and
+later \autocite{lazebnik_spatial_2009} improve upon this concept by creating
+feature pyramids using iterative subdivision for multiscale analysis. While the
+computational complexity of those global approaches is usually quite low, they
+are especially susceptible to problems like partial occlusion or reflections
+within the scene. The spatial envelope descriptor
+\autocite{oliva_modeling_2001} combines a global spectrogram with locally
+derived spectral information to produce an overall image descriptor.
 
 \subsubsection{Local Features}
 
