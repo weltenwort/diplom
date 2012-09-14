@@ -1,0 +1,16 @@
+\colorlet{lightbg}{yellow!20}
+\colorlet{lightborder}{yellow!50!black}
+\colorlet{graybg}{black!10}
+\colorlet{grayborder}{black!50}
+
+\usetikzlibrary{fit,positioning,chains,scopes}
+
+\tikzset{
+	node grid/.style={row sep=1ex, column sep=1.5ex},
+	small node/.style={very thick, text height=1ex, text depth=.25ex, rounded corners},
+	document node/.style={small node, draw=lightborder, fill=lightbg},
+	operation node/.style={small node, draw=grayborder, fill=graybg},
+	connector/.style={very thick, draw=grayborder, ->, rounded corners},
+	vh connector/.style={connector, to path={-| (\tikztotarget)}},
+	hv connector/.style={connector, to path={|- (\tikztotarget)}}
+}
