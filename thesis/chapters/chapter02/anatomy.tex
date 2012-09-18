@@ -222,9 +222,9 @@ The final image signature $\tilde{I}$ then is the vector of the cardinality of t
 
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
-\subsubsection{Distance Metrics}
+\subsubsection{Distance Metrics}\label{sec:anatomy_ranking_distance}
 
-\paragraph{Euclidean Distance}
+\paragraph{Euclidean Distance}\label{sec:anatomy_ranking_distance_euclidean}
 
 The simplest and probably most widely used distance metric is the euclidean
 distance. Its two-dimensional variant is derived from the formula of
@@ -291,7 +291,7 @@ $p_i$ and $q_i$, that satisfy the constraints
 for all $1 \leq i \leq n$ and $1 \leq j \leq m$.
 The distance between signatures $P$ and $Q$ can then be calculated as
 \begin{equation*}
-    d_{EMD}(P, Q) = \frac{\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}.
+    d_{EMD}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\displaystyle\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}.
 \end{equation*}
 In \autocite{rubner_metric_1998} the authors propose using a simplex-based
 algorithm to solve the transportation problem, that achieves good performance
@@ -309,7 +309,12 @@ equally well for binned distributions generated using vector quantization. The
 normalized similarity measure between two histograms $P = (p_1, \dots, p_n)$
 and $Q = (q_1, \dots, q_n)$ is
 \begin{equation*}
-    d_{HI}(P, Q) = \frac{\sum_{i=1}^n \min (p_i, q_i)}{\sum_{i=1}^n q_i}
+    d_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle\sum_{i=1}^n q_i}
+\end{equation*}
+A variation of the above definition treats partial matches as perfect matches
+by adjusting the denominator:
+\begin{equation*}
+    d_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle \min \left( \sum_{i=1}^n p_i, \sum_{i=1}^n q_i \right)}
 \end{equation*}
 
 \subsubsection{Weighting}
