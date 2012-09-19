@@ -1,5 +1,6 @@
 import base64
 import collections
+import hashlib
 import pickle
 import shutil
 
@@ -15,6 +16,11 @@ class DiskCache(object):
     @classmethod
     def from_dict_key(cls, dictionary, prefix="cache_"):
         return cls("".join([str(prefix), dict_to_filename(dictionary)]))
+
+    @classmethod
+    def hash_from_dict_key(cls, dictionary, prefix="cache_", **kwargs):
+        directory = hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
+        return cls("".join([str(prefix), directory]), **kwargs)
 
     def _key_to_path(self, key):
         path = pathlib.Path(*self._ensure_list(key))
@@ -90,7 +96,7 @@ class DiskCache(object):
             shutil.rmtree(str(self._cache_directory))
 
 
-class NumpyDiskCache(DiskCache):
+class NumpyCacheMixin(object):
     def serialize(self, value, fp):
         if isinstance(value, dict):
             numpy.savez_compressed(fp, **value)
@@ -99,6 +105,10 @@ class NumpyDiskCache(DiskCache):
 
     def deserialize(self, fp):
         return numpy.load(fp)
+
+
+class NumpyDiskCache(DiskCache, NumpyCacheMixin):
+    pass
 
 
 class NullCache(DiskCache):
@@ -119,3 +129,31 @@ class NullCache(DiskCache):
 
     def contains(self, key):
         return False
+
+
+class ConfigDiskCache(DiskCache):
+    config_keys = []
+    prefix = "cache_"
+
+    @classmethod
+    def from_config(cls, config, prefix=None):
+        if prefix is None:
+            prefix = cls.prefix
+        dictionary = {key: value for key, value in config.iteritems() if key in cls.config_keys}
+        directory = hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
+        return cls("".join([str(prefix), directory]))
+
+
+class ReaderDiskCache(ConfigDiskCache, NumpyCacheMixin):
+    config_keys = ["readers"]
+    prefix = "rcache_"
+
+
+class FeatureDiskCache(ConfigDiskCache):
+    config_keys = ReaderDiskCache.config_keys + ["curvelets", "features"]
+    prefix = "fcache_"
+
+
+class CodebookDiskCache(ConfigDiskCache):
+    config_keys = FeatureDiskCache.config_keys + ["codebook"]
+    prefix = "ccache_"

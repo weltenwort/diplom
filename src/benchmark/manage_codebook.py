@@ -3,25 +3,31 @@ import re
 
 import common
 import common.codebook
+import common.config
 
 
 def process_image(source_image_filename, data):
     import common
     import common.diskcache
 
-    if data["config"].get("cache", {}).get("enabled", False):
-        feature_cache = common.diskcache.DiskCache.from_dict_key(dict(
-            readers=data["config"]["readers"],
-            curvelets=data["config"]["curvelets"],
-            features=dict((k, v) for k, v in data["config"]["features"].items() if k in ["extractor", "grid_size", "patch_size"]),
-            ), prefix=data["config"].get("cache", {}).get("cache_prefix", "cache_features_"))
+    if data["config"].get("cache", {}).get("reader_enabled", False):
+        reader_cache = common.diskcache.ReaderDiskCache.from_config(data["config"])
+    else:
+        reader_cache = common.diskcache.NullCache()
+
+    if data["config"].get("cache", {}).get("feature_enabled", False):
+        feature_cache = common.diskcache.FeatureDiskCache.from_config(data["config"])
     else:
         feature_cache = common.diskcache.NullCache()
 
     if feature_cache.contains(source_image_filename):
         features = feature_cache.get(source_image_filename)
     else:
-        image = common.load(data["config"]["readers"]["image"]).execute(source_image_filename, data=data)
+        if reader_cache.contains(source_image_filename):
+            image = reader_cache.get(source_image_filename)
+        else:
+            image = common.load(data["config"]["readers"]["image"]).execute(source_image_filename, data=data)
+            reader_cache.set(source_image_filename, image)
         coefficients = common.load(data["config"]["curvelets"]["transform"]).execute(image, data=data)
         features = common.load(data["config"]["features"]["extractor"]).execute(coefficients, data=data)
         feature_cache.set(source_image_filename, features)
@@ -29,13 +35,16 @@ def process_image(source_image_filename, data):
     return source_image_filename, features
 
 
-@common.ApplicationBase.argument("-b", "--codebook", action="store", dest="codebook", required=True)
+@common.ApplicationBase.argument("-b", "--codebook", action="store", dest="codebook", default=None)
 class CodebookManager(common.ApplicationBase):
     DEFAULT_COMMAND = "create"
 
     @common.ApplicationBase.subcommand(help="create a new codebook")
     def create(self, args, config):
-        codebook = common.codebook.Codebook(args.codebook, config["features"]["codebook_size"])
+        if args.codebook is not None:
+            codebook = common.codebook.Codebook.create_from_path(args.codebook, k=config["codebook"]["codebook_size"])
+        else:
+            codebook = common.codebook.Codebook.create_from_config(config)
 
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(

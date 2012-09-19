@@ -309,12 +309,12 @@ equally well for binned distributions generated using vector quantization. The
 normalized similarity measure between two histograms $P = (p_1, \dots, p_n)$
 and $Q = (q_1, \dots, q_n)$ is
 \begin{equation*}
-    d_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle\sum_{i=1}^n q_i}
+    s_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle\sum_{i=1}^n q_i}
 \end{equation*}
 A variation of the above definition treats partial matches as perfect matches
 by adjusting the denominator:
 \begin{equation*}
-    d_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle \min \left( \sum_{i=1}^n p_i, \sum_{i=1}^n q_i \right)}
+    s_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle \min \left( \sum_{i=1}^n p_i, \sum_{i=1}^n q_i \right)}
 \end{equation*}
 
 \subsubsection{Weighting}

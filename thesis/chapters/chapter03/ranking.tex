@@ -2,7 +2,7 @@
 
 As the last step of the pipeline, ranking operates on the signatures produced
 by prior extraction steps. It outputs a sequence of database images, sorted by
-the similarity to the query image in descending order. The similarity can be
+the distance to the query image in ascending order. The distance can be
 determined using various metrics and similarity measures, which have been
 detailed in \ref{sec:anatomy_ranking_distance}. This section lists the metrics
 used in the experiments and labels them for later reference.
@@ -15,11 +15,16 @@ signature.
 
 \paragraph{HI}
 
-When comparing histograms if features, the histogram intersection measure has
-been shown to be superior to the euclidean distance in most of the cases
-\autocite{wu_beyond_2009}. It has the added benefit of allowing for partial
-matches in a signature.
+When comparing histograms of features, the histogram intersection measure
+$s_{HI}$ has been shown to be superior to the euclidean distance in most of the
+cases \autocite{wu_beyond_2009}. It has the added benefit of allowing for
+partial matches in a signature. As can be seen from the definition in
+\ref{sec:anatomy_ranking_distance}, the result lies within $[0, 1]$ with $1$
+being a perfect match. Therefore, $1 - s_{HI}$ is used as a distance value to
+sort the result list.
 
 \paragraph{EMD}
 
-TBD
+The Earth Mover's Distance is solved using a simplex algorithm veriant, which
+has an exponential worst case complexity. That makes it computationally more
+expensive than the linear complexity measures described previously.
