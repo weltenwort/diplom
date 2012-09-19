@@ -42,7 +42,7 @@ class CodebookManager(common.ApplicationBase):
     @common.ApplicationBase.subcommand(help="create a new codebook")
     def create(self, args, config):
         if args.codebook is not None:
-            codebook = common.codebook.Codebook.create_from_path(args.codebook, k=config["codebook"]["codebook_size"])
+            codebook = common.codebook.Codebook.create_from_path(args.codebook, size=config["codebook"]["codebook_size"])
         else:
             codebook = common.codebook.Codebook.create_from_config(config)
 
