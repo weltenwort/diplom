@@ -3,7 +3,7 @@ import numpy
 
 def execute(signature1, signature2, data):
     distance = 1 - float(numpy.sum(numpy.minimum(signature1, signature2)))\
-            / float(numpy.sum(signature2))
+            / min(float(numpy.sum(signature1)), float(numpy.sum(signature2)))
     return distance
 
 #def execute(signature1, signature2, data):

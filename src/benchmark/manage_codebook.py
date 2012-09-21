@@ -10,13 +10,15 @@ def process_image(source_image_filename, data):
     import common
     import common.diskcache
 
-    if data["config"].get("cache", {}).get("reader_enabled", False):
-        reader_cache = common.diskcache.ReaderDiskCache.from_config(data["config"])
+    cache_config = data["config"].get("cache", {})
+
+    if cache_config.get("reader_enabled", False):
+        reader_cache = common.diskcache.ReaderDiskCache.from_config(data["config"], root_directory=cache_config.get("reader_path", "."))
     else:
         reader_cache = common.diskcache.NullCache()
 
-    if data["config"].get("cache", {}).get("feature_enabled", False):
-        feature_cache = common.diskcache.FeatureDiskCache.from_config(data["config"])
+    if cache_config.get("feature_enabled", False):
+        feature_cache = common.diskcache.FeatureDiskCache.from_config(data["config"], root_directory=cache_config.get("feature_path", "."))
     else:
         feature_cache = common.diskcache.NullCache()
 

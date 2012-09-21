@@ -232,6 +232,8 @@ class ApplicationBase(object):
 
 @ApplicationBase.argument("-s", "--study", action="store", dest="study",\
                 required=True)
+@ApplicationBase.argument("-o", "--output-filename", action="store", dest="output_filename",\
+                default=None)
 class BenchmarkBase(ApplicationBase):
     DEFAULT_COMMAND = "execute"
 
@@ -239,6 +241,7 @@ class BenchmarkBase(ApplicationBase):
         return self.load_json(args.study)
 
     def dispatch_subcommand(self, args, config, **kwargs):
+        output_filename = args.output_filename or "r_" + args.config + datetime.datetime.now().isoformat()
         study = self.load_study(args)
         old_stdout = sys.stdout
         sys.stdout = open(os.devnull, 'w')
@@ -249,13 +252,17 @@ class BenchmarkBase(ApplicationBase):
             stop_time = datetime.datetime.now()
         finally:
             sys.stdout = old_stdout
-        print(json.dumps(dict(
+        duration = (stop_time - start_time).total_seconds()
+        result_summary = json.dumps(dict(
             correlations=correlations,
             mean_correlation=mean_correlation,
             datetime=str(start_time),
-            duration=(stop_time - start_time).total_seconds(),
+            duration=duration,
             config=config,
-            ), indent=4))
+            ), indent=4)
+        with open(output_filename, "w") as fp:
+            fp.write(result_summary)
+        self.logger.log("Duration: {}\nMean Correlation: {}".format(duration, mean_correlation))
 
     def get_benchmark_for_distances(self, distances, study):
         benchmark = {}

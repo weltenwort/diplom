@@ -1,5 +1,6 @@
 #import hashlib
 import numpy
+import pathlib
 import scipy.spatial.distance as distance
 import scipy.cluster.vq as vq
 import scipy.cluster.hierarchy as hierarchy
@@ -22,9 +23,12 @@ class Codebook(object):
         self.frequencies = numpy.asarray([])
         self.stopwords = numpy.asarray([])
 
+    def __cmp__(self, other):
+        return self.storage.__cmp__(other.storage)
+
     def __repr__(self):
-        return "Codebook(directory='{}', size={}, stopword_ratio={})".format(
-                self._directory, self._size, self._stopword_ratio,
+        return "Codebook(storage='{}', size={}, stopword_ratio={})".format(
+                self.storage, self._size, self._stopword_ratio,
                 )
 
     @classmethod
@@ -34,14 +38,18 @@ class Codebook(object):
         return codebook
 
     @classmethod
-    def load_from_path(cls, path, *args, **kwargs):
-        codebook = cls.create_from_path(path, *args, **kwargs)
+    def load_from_path(cls, path):
+        codebook = cls.create_from_path(path, size=0)
         codebook.load()
         return codebook
 
     @classmethod
     def create_from_config(cls, config):
-        codebook = cls(CodebookDiskCache.from_config(config), config["codebook"]["codebook_size"], config["codebook"].get("stopword_ratio", 0.05))
+        codebook = cls(
+                storage=CodebookDiskCache.from_config(config),
+                size=config["codebook"]["codebook_size"],
+                stopword_ratio=config["codebook"].get("stopword_ratio", 0.05),
+                )
         return codebook
 
     @classmethod
@@ -53,6 +61,14 @@ class Codebook(object):
     #def hash_from_dict_key(cls, dictionary, prefix="cache_", **kwargs):
         #directory = hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
         #return cls("".join([str(prefix), directory]), **kwargs)
+
+    @property
+    def name(self):
+        return self.storage.id
+
+    @property
+    def modification_date(self):
+        return self.storage.modification_date
 
     def add_observations(self, observations, new_document=True):
         self.observations += observations
@@ -95,12 +111,22 @@ class Codebook(object):
         self.storage.set("stopwords", self.stopwords)
 
     def load(self):
-        self._size = self.storage.get("size", 0)
+        if not self.exists():
+            raise IOError("Codebook does not exist in strage {}".format(self.storage))
+        self._size = self.storage.get("size")
         self._stopword_ratio = self.storage.get("stopword_ratio", 0)
         self.document_count = self.storage.get("document_count", 0)
         self.codewords = numpy.asarray(self.storage.get("codewords", []))
         self.frequencies = numpy.asarray(self.storage.get("frequencies", []))
         self.stopwords = numpy.asarray(self.storage.get("stopwords", []))
+
+    def exists(self):
+        try:
+            self.storage.get("size")
+        except KeyError:
+            return False
+        else:
+            return True
 
     def quantize(self, observations, use_stopwords=True, use_weights=False):
         observations = vq.whiten(numpy.asarray(observations))
@@ -118,3 +144,22 @@ class Codebook(object):
         signatures_sum = numpy.sum(signatures, axis=0)
         sorted_signatures_sum_indices = numpy.argsort(signatures_sum)
         return sorted_signatures_sum_indices[-number:]
+
+
+class CodebookManager(object):
+    def __init__(self, directory):
+        self.directory = directory
+
+    def get_codebooks(self):
+        codebooks = set()
+
+        path = pathlib.Path(self.directory)
+        for child in path:
+            if child.is_dir():
+                try:
+                    codebook = Codebook.load_from_path(str(child))
+                    codebooks.add(codebook)
+                except IOError:
+                    pass
+
+        return codebooks

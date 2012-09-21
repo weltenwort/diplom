@@ -36,7 +36,7 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
         else:
             codebook = common.codebook.Codebook.load_from_config(config)
 
-        data = common.RDict(config=common.RDict.from_dict(config))
+        data = common.RDict(config=config)
         data["codewords"] = codebook.codewords
         for image_set in self.logger.loop(
                 data["config"]["images"],
@@ -47,9 +47,9 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
             else:
                 self.logger.log("Processing query image '{}'...".format(image_set["query_image"]))
 
-                query_image = common.load(data["config"]["readers"]["query"]).execute(image_set["query_image"], data=data)
-                query_coefficients = common.load(data["config"]["curvelets"]["transform"]).execute(query_image, data=data)
-                query_features = common.load(data["config"]["features"]["extractor"]).execute(query_coefficients, data=data)
+                query_image = common.load(config["readers"]["query"]).execute(image_set["query_image"], data=data)
+                query_coefficients = common.load(config["curvelets"]["transform"]).execute(query_image, data=data)
+                query_features = common.load(config["features"]["extractor"]).execute(query_coefficients, data=data)
                 query_signature = codebook.quantize(query_features)
                 #self.logger.log(query_signature)
 
@@ -64,16 +64,16 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
                     self.logger.log("Processing image '{}'...".format(source_image_filename))
 
                     signature = codebook.quantize(features,\
-                            use_stopwords=data["config"]["features"]["use_stopwords"],
-                            use_weights=data["config"]["features"]["use_weights"],
+                            use_stopwords=config["codebook"]["use_stopwords"],
+                            use_weights=config["codebook"]["use_weights"],
                             )
                     #self.logger.log(signature)
                     a = data["distances"][image_set["query_image"]][source_image_filename] =\
-                            common.load(data["config"]["metric"]["metric"]).execute(query_signature, signature, data=data)
-                    self.logger.log(a)
+                            common.load(config["metric"]["metric"]).execute(query_signature, signature, data=data)
+                    self.logger.log("Distance: {}".format(a))
 
         correlations, mean_correlation = self.correlate_to_study(data["distances"], study)
-        self.logger.log("Mean correlation: {}".format(mean_correlation))
+        #self.logger.log("Mean correlation: {}".format(mean_correlation))
         return (correlations, mean_correlation)
 
 if __name__ == "__main__":

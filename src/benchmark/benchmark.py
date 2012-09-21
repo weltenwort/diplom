@@ -1,0 +1,37 @@
+import logging
+import sys
+
+from cliff.app import App
+from cliff.interactive import InteractiveApp
+#from cliff.command import Command
+from cliff.commandmanager import CommandManager
+
+from benchmark_global import (
+        ListCodebook,
+        ShowCodebook,
+        )
+
+
+class BenchmarkApp(App):
+    log = logging.getLogger(__name__)
+
+    def __init__(self):
+        command_manager = CommandManager("diplom.benchmark")
+        command_manager.add_command("codebook list", ListCodebook)
+        command_manager.add_command("codebook show", ShowCodebook)
+        super(BenchmarkApp, self).__init__(
+                description="Benchmark management application",
+                version="0.1",
+                command_manager=command_manager,
+                interactive_app_factory=InteractiveBenchmarkApp,
+                )
+
+
+class InteractiveBenchmarkApp(InteractiveApp):
+    def completenames(self, text, *ignored):
+        return InteractiveApp.completenames(self, text) + [n for n in self.command_manager.commands.keys() if n.startswith(text)]
+
+
+if __name__ == "__main__":
+    app = BenchmarkApp()
+    sys.exit(app.run(sys.argv[1:]))
