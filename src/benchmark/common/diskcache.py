@@ -20,11 +20,12 @@ class BaseDiskCache(object):
 
     def __init__(self, cache_directory):
         self._cache_directory = pathlib.Path(cache_directory)
+        self._initialized = False
 
-        self.initialize()
+        self.check_suitability()
 
     def __cmp__(self, other):
-        return self.modification_date.__cmp__(other.modification_date)
+        return cmp(self.modification_date, other.modification_date)
 
     @property
     def id(self):
@@ -35,6 +36,10 @@ class BaseDiskCache(object):
         if self._cache_directory.exists():
             return datetime.datetime.fromtimestamp(self._cache_directory.st_mtime)
 
+    @property
+    def size(self):
+        return len(self.get_keys())
+
     @classmethod
     def from_dict_key(cls, dictionary, prefix="cache_"):
         return cls("".join([str(prefix), dict_to_filename(dictionary)]))
@@ -44,18 +49,32 @@ class BaseDiskCache(object):
         directory = hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
         return cls("".join([str(prefix), directory]), **kwargs)
 
-    def initialize(self):
+    def check_suitability(self):
         if self._cache_directory.exists():
             if self.contains([self.METADATA_KEY, "cache_type"]):
                 if not self.get_metadata("cache_type") == self.CACHE_TYPE:
                     raise IOError("Could not initialize cache at location '{}': incompatible cache type")
             else:
                 raise IOError("Could not initialize cache at location '{}': directory is not a cache".format(self._cache_directory))
-        else:
+
+    def initialize(self, force=False):
+        if not self._initialized or force:
+            self._initialized = True
             self.update_metadata(dict(
                 cache_type=self.CACHE_TYPE,
                 creation_date=datetime.datetime.now(),
                 ))
+
+    def exists(self):
+        if self._cache_directory.exists():
+            try:
+                self.check_suitability()
+            except:
+                return False
+            else:
+                return True
+        else:
+            return False
 
     def set_metadata(self, key, value):
         self.set([self.METADATA_KEY, key], value, serializer=PickleSerializerMixin)
@@ -99,6 +118,7 @@ class BaseDiskCache(object):
         3
         >>> d.clear()
         """
+        self.initialize()
         if serializer is None:
             serializer = self
         filepath = self._key_to_path(key)
@@ -128,11 +148,16 @@ class BaseDiskCache(object):
             else:
                 return default
 
+    def get_keys(self):
+        metadata_key = self._key_to_path(self.METADATA_KEY)
+        return [f for f in self._cache_directory if f.is_file()] # if f.is_file() and not str(f).startswith(metadata_key)]
+
     def contains(self, key):
         filepath = self._key_to_path(key)
         return filepath.exists() and filepath.is_file()
 
     def remove(self, key):
+        self.initialize()
         filepath = self._key_to_path(key)
         if filepath.exists():
             filepath.unlink()
@@ -223,11 +248,21 @@ class ConfigDiskCache(BaseDiskCache):
     PREFIX = "cache_"
 
     @classmethod
-    def from_config(cls, config, prefix=None, root_directory="."):
+    def get_root_directory(self, config):
+        return "."
+
+    @classmethod
+    def get_config_hash(cls, config):
+        dictionary = {key: value for key, value in config.iteritems() if key in cls.CONFIG_KEYS}
+        return hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
+
+    @classmethod
+    def from_config(cls, config, prefix=None, root_directory=None):
         if prefix is None:
             prefix = cls.PREFIX
-        dictionary = {key: value for key, value in config.iteritems() if key in cls.CONFIG_KEYS}
-        directory = hashlib.sha1(dict_to_filename(dictionary)).hexdigest()
+        if root_directory is None:
+            root_directory = cls.get_root_directory(config)
+        directory = cls.get_config_hash(config)
         return cls(str(pathlib.Path(str(root_directory)).join("".join([str(prefix), directory]))))
 
 
@@ -236,14 +271,26 @@ class ReaderDiskCache(ConfigDiskCache, GzipBackendMixin, NumpySerializerMixin):
     CONFIG_KEYS = ["readers"]
     PREFIX = "rcache_"
 
+    @classmethod
+    def get_root_directory(self, config):
+        return config.get("cache", {}).get("reader_path", super(ReaderDiskCache, self).get_root_directory(config))
+
 
 class FeatureDiskCache(ConfigDiskCache, GzipBackendMixin, PickleSerializerMixin):
     CACHE_TYPE = "gzip_pickle"
     CONFIG_KEYS = ReaderDiskCache.CONFIG_KEYS + ["curvelets", "features"]
     PREFIX = "fcache_"
 
+    @classmethod
+    def get_root_directory(self, config):
+        return config.get("cache", {}).get("feature_path", super(FeatureDiskCache, self).get_root_directory(config))
+
 
 class CodebookDiskCache(ConfigDiskCache, FileBackendMixin, PickleSerializerMixin):
     CACHE_TYPE = "gzip_pickle"
     CONFIG_KEYS = FeatureDiskCache.CONFIG_KEYS + ["codebook"]
     PREFIX = "ccache_"
+
+    @classmethod
+    def get_root_directory(self, config):
+        return config.get("cache", {}).get("codebook_path", super(CodebookDiskCache, self).get_root_directory(config))

@@ -13,12 +13,12 @@ def process_image(source_image_filename, data):
     cache_config = data["config"].get("cache", {})
 
     if cache_config.get("reader_enabled", False):
-        reader_cache = common.diskcache.ReaderDiskCache.from_config(data["config"], root_directory=cache_config.get("reader_path", "."))
+        reader_cache = common.diskcache.ReaderDiskCache.from_config(data["config"])
     else:
         reader_cache = common.diskcache.NullCache()
 
     if cache_config.get("feature_enabled", False):
-        feature_cache = common.diskcache.FeatureDiskCache.from_config(data["config"], root_directory=cache_config.get("feature_path", "."))
+        feature_cache = common.diskcache.FeatureDiskCache.from_config(data["config"])
     else:
         feature_cache = common.diskcache.NullCache()
 
@@ -47,6 +47,10 @@ class CodebookManager(common.ApplicationBase):
             codebook = common.codebook.Codebook.create_from_path(args.codebook, size=config["codebook"]["codebook_size"])
         else:
             codebook = common.codebook.Codebook.create_from_config(config)
+        codebook.storage.update_metadata(dict(
+            config_file=args.config,
+            config=config,
+            ))
 
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(

@@ -64,8 +64,8 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
                     self.logger.log("Processing image '{}'...".format(source_image_filename))
 
                     signature = codebook.quantize(features,\
-                            use_stopwords=config["codebook"]["use_stopwords"],
-                            use_weights=config["codebook"]["use_weights"],
+                            use_stopwords=config["weights"]["use_stopwords"],
+                            use_weights=config["weights"]["use_weights"],
                             )
                     #self.logger.log(signature)
                     a = data["distances"][image_set["query_image"]][source_image_filename] =\

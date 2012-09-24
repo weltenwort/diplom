@@ -6,9 +6,8 @@ from cliff.interactive import InteractiveApp
 #from cliff.command import Command
 from cliff.commandmanager import CommandManager
 
-from benchmark_global import (
-        ListCodebook,
-        ShowCodebook,
+from clicommands.configs import (
+        ListConfigs,
         )
 
 
@@ -17,8 +16,8 @@ class BenchmarkApp(App):
 
     def __init__(self):
         command_manager = CommandManager("diplom.benchmark")
-        command_manager.add_command("codebook list", ListCodebook)
-        command_manager.add_command("codebook show", ShowCodebook)
+        command_manager.add_command("config list", ListConfigs)
+        #command_manager.add_command("codebook show", ShowCodebook)
         super(BenchmarkApp, self).__init__(
                 description="Benchmark management application",
                 version="0.1",
