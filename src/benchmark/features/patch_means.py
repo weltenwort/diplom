@@ -62,8 +62,9 @@ def execute(coefficients, data):
         means_by_angle = numpy.dstack(means_by_angle)
         for y in iter_overlap_slices(0, grid_size, patch_size):
             for x in iter_overlap_slices(0, grid_size, patch_size):
-                feature = means_by_angle[y, x].reshape(-1)
-                features.append(feature)
+                if numpy.max(means_by_angle) > 0:
+                    feature = means_by_angle[y, x].reshape(-1)
+                    features.append(feature)
 
     return features
 

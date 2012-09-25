@@ -8,6 +8,10 @@ from cliff.commandmanager import CommandManager
 
 from clicommands.configs import (
         ListConfigs,
+        ShowConfig,
+        )
+from clicommands.results import (
+        CollectResults,
         )
 
 
@@ -16,7 +20,9 @@ class BenchmarkApp(App):
 
     def __init__(self):
         command_manager = CommandManager("diplom.benchmark")
+        command_manager.add_command("config show", ShowConfig)
         command_manager.add_command("config list", ListConfigs)
+        command_manager.add_command("results collect", CollectResults)
         #command_manager.add_command("codebook show", ShowCodebook)
         super(BenchmarkApp, self).__init__(
                 description="Benchmark management application",

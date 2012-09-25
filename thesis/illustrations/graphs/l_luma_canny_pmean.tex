@@ -1,0 +1,11 @@
+\pgfplotstableread[]{results/l_luma_canny_results_1.csv}\resultslumacannypmean
+\begin{tikzpicture}
+    \begin{axis}[
+        hbarplot,
+        yticklabels from table={\resultslumacannypmean}{Description},
+        width=0.8\textwidth,
+        height=0.2\textheight,
+        ]
+        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultslumacannypmean};
+    \end{axis}
+\end{tikzpicture}

@@ -235,8 +235,11 @@
     },
     "codebook": {
         "codebook_size": 1000,
-        "use_stopwords": false,
-        "use_weights": true
+        "metric": "kmeans"
+    },
+    "weights": {
+        "use_weights": "weights.tfidf",
+        "use_stopwords": false
     },
     "metric": {
         "metric": "metrics.histogram_intersection"

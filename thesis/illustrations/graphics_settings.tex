@@ -14,3 +14,19 @@
 	vh connector/.style={connector, to path={|- (\tikztotarget)}},
 	hv connector/.style={connector, to path={-| (\tikztotarget)}}
 }
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+%\pgfplotstableset{col sep=comma}
+\pgfplotsset{
+    /pgfplots/flexible yticklabels from table/.code n args={2}{%
+        \pgfplotstablegetcolumn{#2}\of{#1}\to\pgfplots@yticklabels
+        \let\pgfplots@yticklabel=\pgfplots@user@ticklabel@list@y
+    },
+    hbarplot/.style={
+        xbar,
+        xmin=0,
+        ytick=data
+    }
+    }

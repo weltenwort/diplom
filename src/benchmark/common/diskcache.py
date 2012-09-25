@@ -24,6 +24,12 @@ class BaseDiskCache(object):
 
         self.check_suitability()
 
+    def __repr__(self):
+        return "{cls}(directory='{directory}')".format(
+                cls=self.__class__.__name__,
+                directory=self._cache_directory,
+                )
+
     def __cmp__(self, other):
         return cmp(self.modification_date, other.modification_date)
 
@@ -149,8 +155,8 @@ class BaseDiskCache(object):
                 return default
 
     def get_keys(self):
-        metadata_key = self._key_to_path(self.METADATA_KEY)
-        return [f for f in self._cache_directory if f.is_file()] # if f.is_file() and not str(f).startswith(metadata_key)]
+        metadata_key = str(self._key_to_path(self.METADATA_KEY))
+        return [f for f in self._cache_directory if f.is_file() and not str(f).startswith(metadata_key)]
 
     def contains(self, key):
         filepath = self._key_to_path(key)

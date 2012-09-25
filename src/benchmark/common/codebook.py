@@ -23,9 +23,11 @@ class Codebook(object):
         self.document_count = 0
         self.codewords = numpy.asarray([])
         self.signature = numpy.asarray([])
-        self.inverted_index = numpy.asarray([])
+        self.inverted_index = []
         #self.frequencies = numpy.asarray([])
         #self.stopwords = numpy.asarray([])
+
+        self._df_cache = None
 
     def __cmp__(self, other):
         return cmp(self.storage, other.storage)
@@ -74,6 +76,12 @@ class Codebook(object):
     def modification_date(self):
         return self.storage.modification_date
 
+    @property
+    def document_frequencies(self):
+        if self._df_cache is None:
+            self._df_cache = numpy.asarray([len(s) for s in self.inverted_index])
+        return self._df_cache
+
     def add_observations(self, observations, new_document=True):
         self.observations += observations
         if new_document:
@@ -101,10 +109,10 @@ class Codebook(object):
 
         self.codewords = codebook
         self.signature = numpy.bincount(code, minlength=self.size)
-        iindex = [set()] * len(code)
+        iindex = [set() for _ in range(len(self.codewords))]
         for document_index, term_index in zip(self.document_indices, code):
             iindex[term_index].add(document_index)
-        self.inverted_index = numpy.asarray([len(s) for s in iindex])
+        self.inverted_index = iindex
 
         #signature_sum = float(numpy.sum(signature))
         #self.frequencies = numpy.clip(signature / signature_sum, 0.0, 1.0)
@@ -125,13 +133,13 @@ class Codebook(object):
 
     def load(self):
         if not self.exists():
-            raise IOError("Codebook does not exist in strage {}".format(self.storage))
+            raise IOError("Codebook does not exist in storage {}".format(self.storage))
         self.size = self.storage.get("size")
         self._stopword_ratio = self.storage.get("stopword_ratio", 0)
         self.document_count = self.storage.get("document_count", 0)
         self.codewords = numpy.asarray(self.storage.get("codewords", []))
         self.signature = numpy.asarray(self.storage.get("signature", []))
-        self.inverted_index = numpy.asarray(self.storage.get("inverted_index", []))
+        self.inverted_index = self.storage.get("inverted_index", [])
         #self.frequencies = numpy.asarray(self.storage.get("frequencies", []))
         #self.stopwords = numpy.asarray(self.storage.get("stopwords", []))
 
@@ -144,16 +152,20 @@ class Codebook(object):
             return True
 
     def quantize(self, observations, use_stopwords=True, use_weights="weights.tfidf"):
-        observations = vq.whiten(numpy.asarray(observations))
-        code = vq.vq(observations, self.codewords)[0]
-        signature = numpy.bincount(code, minlength=self.size)
-        if use_stopwords and len(self.stopwords) > 0:
-            signature[self.stopwords] = 0  # set stopword bins to 0
-        if use_weights is not None:
-            #signature_sum = float(numpy.sum(signature))
-            #signature = signature / signature_sum * self.frequencies
-            signature = load(use_weights).execute(signature, codebook=self)
-        return signature
+        if len(observations) > 0:
+            observations = vq.whiten(numpy.asarray(observations))
+            code = vq.vq(observations, self.codewords)[0]
+            signature = numpy.bincount(code, minlength=self.size)
+            if use_stopwords:
+                if len(self.stopwords) > 0:
+                    signature[self.stopwords] = 0  # set stopword bins to 0
+            if use_weights is not None:
+                #signature_sum = float(numpy.sum(signature))
+                #signature = signature / signature_sum * self.frequencies
+                signature = load(use_weights).execute(signature, codebook=self)
+            return signature
+        else:
+            return numpy.zeros(self.size)
 
     def find_stopwords(self, signatures):
         number = self.size * self._stopword_ratio

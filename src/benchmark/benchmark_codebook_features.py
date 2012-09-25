@@ -50,7 +50,10 @@ class CodebookFeaturesBenchmark(common.BenchmarkBase):
                 query_image = common.load(config["readers"]["query"]).execute(image_set["query_image"], data=data)
                 query_coefficients = common.load(config["curvelets"]["transform"]).execute(query_image, data=data)
                 query_features = common.load(config["features"]["extractor"]).execute(query_coefficients, data=data)
-                query_signature = codebook.quantize(query_features)
+                query_signature = codebook.quantize(query_features,
+                        use_stopwords=config["weights"]["use_stopwords"],
+                        use_weights=config["weights"]["use_weights"],
+                        )
                 #self.logger.log(query_signature)
 
                 for source_image_filename, features in self.logger.sync_loop(

@@ -12,6 +12,7 @@ import os
 import sys
 
 import numpy
+import pathlib
 import scipy.stats
 
 
@@ -241,7 +242,11 @@ class BenchmarkBase(ApplicationBase):
         return self.load_json(args.study)
 
     def dispatch_subcommand(self, args, config, **kwargs):
-        output_filename = args.output_filename or "r_" + args.config + datetime.datetime.now().isoformat()
+        config_path = pathlib.Path(args.config)
+        output_filename = args.output_filename or "r_{base}.{timestamp}.json".format(
+                base=config_path.parts[-1][:-len(config_path.ext)],
+                timestamp=datetime.datetime.now().isoformat(),
+                )
         study = self.load_study(args)
         old_stdout = sys.stdout
         sys.stdout = open(os.devnull, 'w')

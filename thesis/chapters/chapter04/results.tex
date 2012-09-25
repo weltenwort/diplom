@@ -21,8 +21,25 @@ TBD
 \subsection{Local Features}
 
 \begin{figure}[h]
-    \input{illustrations/pipelines/local_luma_canny_pmean_l2.tex}
-    \caption[canny stuff]{
+    \centering
+    \subfloat[CANNY+PMEAN+$L_2$]{%
+        \input{illustrations/pipelines/local_luma_canny_pmean_l2.tex}
+        \label{fig:pipeline_local_luma_canny_pmean_l2}
     }
-    \label{fig:pipeline_local_luma_canny_pmean_l2}
+    \quad
+    \subfloat[CANNY+PMEAN+HI]{%
+        \input{illustrations/pipelines/local_luma_canny_pmean_hi.tex}
+        \label{fig:pipeline_local_luma_canny_pmean_hi}
+    }
+    \caption[Pipelines using canny edge detector]{
+    }
+    \label{fig:pipeline_local_luma_canny_pmean}
+\end{figure}
+
+\begin{figure}[h]
+    \input{illustrations/graphs/l_luma_canny_pmean.tex}
+    \caption[Results for canny edge detector]{
+        Graph description
+    }
+    \label{fig:results_local_luma_canny_pmean}
 \end{figure}
