@@ -67,7 +67,7 @@ class ListConfigs(Lister):
 
         return (
                 ("Configuration File", "RCache", "FCache", "CCache"),
-                [(c["config_filename"], c["rcache"], c["fcache"], c["ccache"]) for c in configs.itervalues()]
+                sorted([(c["config_filename"], c["rcache"], c["fcache"], c["ccache"]) for c in configs.itervalues()])
                 )
 
 

@@ -1,11 +1,12 @@
-\pgfplotstableread[]{results/l_luma_canny_results_1.csv}\resultslumacannypmean
+\pgfplotstableread[]{results/l_luma_canny_pmean_1.csv}\resultsllumacannypmean
 \begin{tikzpicture}
     \begin{axis}[
         hbarplot,
-        yticklabels from table={\resultslumacannypmean}{Description},
-        width=0.8\textwidth,
-        height=0.2\textheight,
+        yticklabels from table={\resultsllumacannypmean}{Description},
+        %width=0.8\textwidth,
+        %height=0.2\textheight,
         ]
-        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultslumacannypmean};
+        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultsllumacannypmean};
+        \addreferenceplot;
     \end{axis}
 \end{tikzpicture}

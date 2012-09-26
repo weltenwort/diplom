@@ -1,39 +1,60 @@
 {
-    "duration": 0.069408, 
+    "duration": 50.587055, 
     "correlations": {
-        "/home/laeroth/Downloads/benchmark/sketches/28.png": 0.46035591295955691, 
-        "/home/laeroth/Downloads/benchmark/sketches/48.png": 0.35613644412383139, 
-        "/home/laeroth/Downloads/benchmark/sketches/23.png": 0.40514678894881206, 
-        "/home/laeroth/Downloads/benchmark/sketches/26.png": 0.40771914951356641, 
-        "/home/laeroth/Downloads/benchmark/sketches/43.png": 0.46688344250291675, 
-        "/home/laeroth/Downloads/benchmark/sketches/4.png": 0.17620669868567382, 
-        "/home/laeroth/Downloads/benchmark/sketches/0.png": 0.53703056805731553, 
-        "/home/laeroth/Downloads/benchmark/sketches/11.png": 0.24597802997349466, 
-        "/home/laeroth/Downloads/benchmark/sketches/25.png": 0.33656272628135675, 
-        "/home/laeroth/Downloads/benchmark/sketches/27.png": 0.40926945983948604, 
-        "/home/laeroth/Downloads/benchmark/sketches/33.png": 0.063022833836481884, 
-        "/home/laeroth/Downloads/benchmark/sketches/30.png": 0.31117634209790268, 
-        "/home/laeroth/Downloads/benchmark/sketches/6.png": 0.11218757542711892, 
-        "/home/laeroth/Downloads/benchmark/sketches/2.png": 0.2059217407997414, 
-        "/home/laeroth/Downloads/benchmark/sketches/1.png": 0.13264783815324582, 
-        "/home/laeroth/Downloads/benchmark/sketches/38.png": 0.35871714299429391, 
-        "/home/laeroth/Downloads/benchmark/sketches/9.png": 0.29787735544441918, 
-        "/home/laeroth/Downloads/benchmark/sketches/14.png": 0.42517741094257416, 
-        "/home/laeroth/Downloads/benchmark/sketches/13.png": 0.45857503234591834, 
-        "/home/laeroth/Downloads/benchmark/sketches/42.png": -0.052870006810481332, 
-        "/home/laeroth/Downloads/benchmark/sketches/34.png": 0.43489425239166607, 
-        "/home/laeroth/Downloads/benchmark/sketches/7.png": 0.35006695935956039, 
-        "/home/laeroth/Downloads/benchmark/sketches/21.png": 0.0025773538283950055, 
-        "/home/laeroth/Downloads/benchmark/sketches/8.png": 0.09793944547901022, 
-        "/home/laeroth/Downloads/benchmark/sketches/20.png": 0.51031605802221114, 
-        "/home/laeroth/Downloads/benchmark/sketches/24.png": 0.18418894374102127, 
-        "/home/laeroth/Downloads/benchmark/sketches/10.png": 0.35977394878351926, 
-        "/home/laeroth/Downloads/benchmark/sketches/12.png": 0.23340173738285661, 
-        "/home/laeroth/Downloads/benchmark/sketches/46.png": -0.025773538283950057, 
-        "/home/laeroth/Downloads/benchmark/sketches/47.png": 0.20618830627160045, 
-        "/home/laeroth/Downloads/benchmark/sketches/45.png": 0.11054021100968679
+        "/home/laeroth/Downloads/benchmark/sketches/42.png": -0.28258440905777843, 
+        "/home/laeroth/Downloads/benchmark/sketches/21.png": 0.1855694756444404, 
+        "/home/laeroth/Downloads/benchmark/sketches/48.png": 0.24516639269394189, 
+        "/home/laeroth/Downloads/benchmark/sketches/23.png": 0.40771914951356641, 
+        "/home/laeroth/Downloads/benchmark/sketches/26.png": 0.41286387064307517, 
+        "/home/laeroth/Downloads/benchmark/sketches/43.png": 0.096463521178288589, 
+        "/home/laeroth/Downloads/benchmark/sketches/4.png": 0.038610166515872082, 
+        "/home/laeroth/Downloads/benchmark/sketches/0.png": 0.38764076974880574, 
+        "/home/laeroth/Downloads/benchmark/sketches/11.png": 0.2614321470398922, 
+        "/home/laeroth/Downloads/benchmark/sketches/25.png": 0.11218757542711892, 
+        "/home/laeroth/Downloads/benchmark/sketches/27.png": 0.29086445887963469, 
+        "/home/laeroth/Downloads/benchmark/sketches/33.png": 0.19421322263895435, 
+        "/home/laeroth/Downloads/benchmark/sketches/30.png": 0.29051733183414152, 
+        "/home/laeroth/Downloads/benchmark/sketches/6.png": 0.05161359069548465, 
+        "/home/laeroth/Downloads/benchmark/sketches/2.png": 0.12355304447984483, 
+        "/home/laeroth/Downloads/benchmark/sketches/1.png": 0.02446901868846282, 
+        "/home/laeroth/Downloads/benchmark/sketches/38.png": -0.020645590963700368, 
+        "/home/laeroth/Downloads/benchmark/sketches/9.png": 0.16376806987636899, 
+        "/home/laeroth/Downloads/benchmark/sketches/14.png": 0.14772024851479162, 
+        "/home/laeroth/Downloads/benchmark/sketches/13.png": 0.28644882972868291, 
+        "/home/laeroth/Downloads/benchmark/sketches/28.png": 0.33398370155889423, 
+        "/home/laeroth/Downloads/benchmark/sketches/34.png": 0.11674152497829383, 
+        "/home/laeroth/Downloads/benchmark/sketches/7.png": 0.46074989503942138, 
+        "/home/laeroth/Downloads/benchmark/sketches/8.png": 0.054124430396295116, 
+        "/home/laeroth/Downloads/benchmark/sketches/20.png": 0.26546744432468561, 
+        "/home/laeroth/Downloads/benchmark/sketches/24.png": -0.16084104946399039, 
+        "/home/laeroth/Downloads/benchmark/sketches/10.png": 0.21534856432561908, 
+        "/home/laeroth/Downloads/benchmark/sketches/12.png": 0.18955831710099402, 
+        "/home/laeroth/Downloads/benchmark/sketches/46.png": 0.46907839676789104, 
+        "/home/laeroth/Downloads/benchmark/sketches/47.png": 0.37629365894567085, 
+        "/home/laeroth/Downloads/benchmark/sketches/45.png": 0.077121077448618694
     }, 
     "config": {
+        "features": {
+            "extractor": "features.global_means", 
+            "grid_size": 8
+        }, 
+        "curvelets": {
+            "transform": "transforms.curvelet", 
+            "angles": 12, 
+            "scales": 4
+        }, 
+        "readers": {
+            "query": "readers.luma", 
+            "image": "readers.canny", 
+            "canny_sigma": 1.5
+        }, 
+        "metric": {
+            "metric": "metrics.cosine_means"
+        }, 
+        "cache": {
+            "reader_enabled": false, 
+            "feature_enabled": true
+        }, 
         "images": [
             {
                 "query_image": "/home/laeroth/Downloads/benchmark/sketches/0.png", 
@@ -252,9 +273,8 @@
                 ], 
                 "key": "set48"
             }
-        ], 
-        "is_reference": true
+        ]
     }, 
-    "mean_correlation": 0.27670439239041295, 
-    "datetime": "2012-05-21 11:19:58.793120"
+    "mean_correlation": 0.18758764016588006, 
+    "datetime": "2012-09-26 17:15:49.373608"
 }

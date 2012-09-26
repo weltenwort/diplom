@@ -26,7 +26,18 @@
     },
     hbarplot/.style={
         xbar,
+        small,
+        y=0.5cm,
+        enlarge y limits={true, abs value=0.75},
         xmin=0,
-        ytick=data
+        xmax=0.3,
+        ytick=data,
+        xticklabel style={/pgf/number format/.cd,fixed,precision=2},
+        nodes near coords,
+        nodes near coords align=horizontal,
+        every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3}
     }
     }
+
+\pgfplotstableread[]{results/reference.csv}\resultsreference
+\newcommand{\addreferenceplot}{\addplot[const plot, red, update limits=false] table[x=MeanCorrelation, y expr=\coordindex*100-1] {\resultsreference}}

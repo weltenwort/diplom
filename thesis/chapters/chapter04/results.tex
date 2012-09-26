@@ -2,44 +2,114 @@
 
 \subsection{Global Features}
 
-TBD
+\paragraph{LUMA+MEAN}
+
+The most straightforward combination of processing steps consists of a LUMA
+input image, on which the means of $G \times G$ grid cells is computed for each
+scale and angle (Figure \ref{fig:pipeline_global_luma_mean_l2} and
+\ref{fig:pipeline_global_luma_mean_cos}). The distance measure COS outperforms
+the $L_2$ measure (Figure \ref{fig:results_global_luma_mean}). A possible
+explanation would be that the COS measure normalizes the magnitude of the
+feature vector as discussed in \ref{sec:anatomy_ranking_distance_euclidean}.
 
 \begin{figure}[h]
-    \input{illustrations/pipelines/global_luma_mean_l2.tex}
-    \caption[canny stuff]{
+    \centering
+    \subfloat[LUMA+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_mean_l2.tex}
+        \label{fig:pipeline_global_luma_mean_l2}
     }
-    \label{fig:pipeline_global_luma_mean_l2}
+    \quad
+    \subfloat[LUMA+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_mean_cos.tex}
+        \label{fig:pipeline_global_luma_mean_cos}
+    }
+    \quad
+    \subfloat[LUMA+MEAN Results]{%
+        \input{illustrations/graphs/g_luma_mean.tex}
+        \label{fig:results_global_luma_mean}
+    }
+    \caption[Global LUMA+MEAN Pipelines and Results]{
+        Global LUMA+MEAN Pipelines and Results
+    }
+    \label{fig:pipeline_global_luma_mean}
 \end{figure}
 
+\paragraph{SOBEL+MEAN}
+
+foo
+
 \begin{figure}[h]
-    \input{illustrations/pipelines/global_luma_canny_mean_l2.tex}
-    \caption[canny stuff]{
+    \centering
+    \subfloat[SOBEL+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_sobel_mean_l2.tex}
+        \label{fig:pipeline_global_luma_sobel_mean_l2}
     }
-    \label{fig:pipeline_global_luma_canny_mean_l2}
+    \quad
+    \subfloat[SOBEL+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_sobel_mean_cos.tex}
+        \label{fig:pipeline_global_luma_sobel_mean_cos}
+    }
+    \quad
+    \subfloat[SOBEL+MEAN Results]{%
+        \input{illustrations/graphs/g_luma_sobel_mean.tex}
+        \label{fig:results_global_luma_sobel_mean}
+    }
+    \caption[Global SOBEL+MEAN Pipelines and Results]{
+        Global SOBEL+MEAN Pipelines and Results
+    }
+    \label{fig:pipeline_global_luma_sobel_mean}
+\end{figure}
+
+\paragraph{CANNY+MEAN}
+
+foo
+
+\begin{figure}[h]
+    \centering
+    \subfloat[CANNY+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean_l2.tex}
+        \label{fig:pipeline_global_luma_canny_mean_l2}
+    }
+    \quad
+    \subfloat[CANNY+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean_cos.tex}
+        \label{fig:pipeline_global_luma_canny_mean_cos}
+    }
+    \quad
+    \subfloat[CANNY+MEAN Results]{%
+        \input{illustrations/graphs/g_luma_canny_mean.tex}
+        \label{fig:results_global_luma_canny_mean}
+    }
+    \caption[Global CANNY+MEAN Pipelines and Results]{
+        Global CANNY+MEAN Pipelines and Results
+    }
+    \label{fig:pipeline_global_luma_canny_mean}
 \end{figure}
 
 \subsection{Local Features}
 
+\paragraph{CANNY+PMEAN}
+
 \begin{figure}[h]
     \centering
-    \subfloat[CANNY+PMEAN+$L_2$]{%
+    \subfloat[CANNY+PMEAN+$L_2$ Pipeline]{%
         \input{illustrations/pipelines/local_luma_canny_pmean_l2.tex}
         \label{fig:pipeline_local_luma_canny_pmean_l2}
     }
     \quad
-    \subfloat[CANNY+PMEAN+HI]{%
+    \subfloat[CANNY+PMEAN+HI(B) Pipeline]{%
         \input{illustrations/pipelines/local_luma_canny_pmean_hi.tex}
         \label{fig:pipeline_local_luma_canny_pmean_hi}
     }
-    \caption[Pipelines using canny edge detector]{
+    \quad
+    \subfloat[CANNY+PMEAN Results]{%
+        \input{illustrations/graphs/l_luma_canny_pmean.tex}
+        \label{fig:results_local_luma_canny_pmean}
+    }
+    \caption[Local CANNY+PMEAN Pipelines and Results]{
+        Local CANNY+PMEAN Pipelines and Results
     }
     \label{fig:pipeline_local_luma_canny_pmean}
 \end{figure}
 
-\begin{figure}[h]
-    \input{illustrations/graphs/l_luma_canny_pmean.tex}
-    \caption[Results for canny edge detector]{
-        Graph description
-    }
-    \label{fig:results_local_luma_canny_pmean}
-\end{figure}
+\paragraph{CANNY+PMEAN2}

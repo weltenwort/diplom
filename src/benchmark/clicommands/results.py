@@ -6,6 +6,8 @@ import pathlib
 
 
 TRANSLATIONS = {
+        "metrics.l2_means": "$L_2$",
+        "metrics.cosine_means": "COS",
         "metrics.histogram_intersection": "HI",
         "metrics.histogram_intersection_binary": "HIB",
         }
@@ -30,14 +32,20 @@ class CollectResults(Lister):
 
         config = result_info["config"]
 
-        if "canny_sigma" in config["readers"]:
-            description.append("$\sigma = {}$".format(config["readers"]["canny_sigma"]))
-        if "curvelets" in config:
-            description.append("$N = ({}, {})$".format(config["curvelets"]["scales"], config["curvelets"]["angles"]))
-        if "grid_size" in config["features"] and "patch_size" in config["features"]:
-            description.append("$G = ({}, {})$".format(config["features"]["grid_size"], config["features"]["patch_size"]))
-        if "metric" in config:
-            description.append(TRANSLATIONS.get(config["metric"]["metric"], ""))
+        if config.get("is_reference", False):
+            description.append("SHOG")
+        else:
+            if "readers" in config and "canny_sigma" in config["readers"]:
+                description.append("$\sigma = {}$".format(config["readers"]["canny_sigma"]))
+            if "curvelets" in config:
+                description.append("$N = ({}, {})$".format(config["curvelets"]["scales"], config["curvelets"]["angles"]))
+            if "features" in config:
+                if "grid_size" in config["features"] and "patch_size" in config["features"]:
+                    description.append("$G = ({}, {})$".format(config["features"]["grid_size"], config["features"]["patch_size"]))
+                elif "grid_size" in config["features"]:
+                    description.append("$G={}$".format(config["features"]["grid_size"]))
+            if "metric" in config:
+                description.append(TRANSLATIONS.get(config["metric"]["metric"], ""))
 
         return ", ".join(description)
 

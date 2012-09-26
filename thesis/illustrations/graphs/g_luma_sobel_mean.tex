@@ -1,0 +1,10 @@
+\pgfplotstableread[]{results/g_luma_sobel_mean_1.csv}\resultsglumasobelmean
+\begin{tikzpicture}
+    \begin{axis}[
+        hbarplot,
+        yticklabels from table={\resultsglumasobelmean}{Description},
+        ]
+        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultsglumasobelmean};
+        \addreferenceplot;
+    \end{axis}
+\end{tikzpicture}
