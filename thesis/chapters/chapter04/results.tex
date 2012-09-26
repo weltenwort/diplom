@@ -7,8 +7,9 @@
 The most straightforward combination of processing steps consists of a LUMA
 input image, on which the means of $G \times G$ grid cells is computed for each
 scale and angle (Figure \ref{fig:pipeline_global_luma_mean_l2} and
-\ref{fig:pipeline_global_luma_mean_cos}). The distance measure COS outperforms
-the $L_2$ measure (Figure \ref{fig:results_global_luma_mean}). A possible
+\ref{fig:pipeline_global_luma_mean_cos}). Varying $G$ appears to have a
+negligible influence on the results. The distance measure COS outperforms the
+$L_2$ measure (Figure \ref{fig:results_global_luma_mean}). A possible
 explanation would be that the COS measure normalizes the magnitude of the
 feature vector as discussed in \ref{sec:anatomy_ranking_distance_euclidean}.
 
@@ -36,7 +37,11 @@ feature vector as discussed in \ref{sec:anatomy_ranking_distance_euclidean}.
 
 \paragraph{SOBEL+MEAN}
 
-foo
+In addition to reading the images like in the previous LUMA+MEAN configuration,
+this pipeline applies a SOBEL processing step to the database images in an
+attempt to bring the query and database image domains closer together (Figure
+\ref{fig:pipeline_global_luma_mean_l2} and
+\ref{fig:pipeline_global_luma_mean_cos}).
 
 \begin{figure}[h]
     \centering
