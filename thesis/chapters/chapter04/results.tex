@@ -35,6 +35,32 @@ feature vector as discussed in \ref{sec:anatomy_ranking_distance_euclidean}.
     \label{fig:pipeline_global_luma_mean}
 \end{figure}
 
+\paragraph{CANNY+MEAN}
+
+foo
+
+\begin{figure}[h]
+    \centering
+    \subfloat[CANNY+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean_l2.tex}
+        \label{fig:pipeline_global_luma_canny_mean_l2}
+    }
+    \quad
+    \subfloat[CANNY+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean_cos.tex}
+        \label{fig:pipeline_global_luma_canny_mean_cos}
+    }
+    \quad
+    \subfloat[CANNY+MEAN Results]{%
+        \input{illustrations/graphs/g_luma_canny_mean.tex}
+        \label{fig:results_global_luma_canny_mean}
+    }
+    \caption[Global CANNY+MEAN Pipelines and Results]{
+        Global CANNY+MEAN Pipelines and Results
+    }
+    \label{fig:pipeline_global_luma_canny_mean}
+\end{figure}
+
 \paragraph{SOBEL+MEAN}
 
 In addition to reading the images like in the previous LUMA+MEAN configuration,
@@ -65,35 +91,19 @@ attempt to bring the query and database image domains closer together (Figure
     \label{fig:pipeline_global_luma_sobel_mean}
 \end{figure}
 
-\paragraph{CANNY+MEAN}
+\subsection{Local Features}
+
+\paragraph{LUMA+PMEAN}
 
 foo
 
-\begin{figure}[h]
-    \centering
-    \subfloat[CANNY+MEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/global_luma_canny_mean_l2.tex}
-        \label{fig:pipeline_global_luma_canny_mean_l2}
-    }
-    \quad
-    \subfloat[CANNY+MEAN+COS Pipeline]{%
-        \input{illustrations/pipelines/global_luma_canny_mean_cos.tex}
-        \label{fig:pipeline_global_luma_canny_mean_cos}
-    }
-    \quad
-    \subfloat[CANNY+MEAN Results]{%
-        \input{illustrations/graphs/g_luma_canny_mean.tex}
-        \label{fig:results_global_luma_canny_mean}
-    }
-    \caption[Global CANNY+MEAN Pipelines and Results]{
-        Global CANNY+MEAN Pipelines and Results
-    }
-    \label{fig:pipeline_global_luma_canny_mean}
-\end{figure}
+\paragraph{LUMA+PMEAN2}
 
-\subsection{Local Features}
+foo
 
 \paragraph{CANNY+PMEAN}
+
+foo
 
 \begin{figure}[h]
     \centering
@@ -118,3 +128,5 @@ foo
 \end{figure}
 
 \paragraph{CANNY+PMEAN2}
+
+foo

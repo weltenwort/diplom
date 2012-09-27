@@ -1,10 +1,49 @@
 \pgfplotstableread[]{results/g_luma_mean_1.csv}\resultsglumamean
-\begin{tikzpicture}
-    \begin{axis}[
-        hbarplot,
-        yticklabels from table={\resultsglumamean}{Description},
-        ]
-        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultsglumamean};
-        \addreferenceplot;
-    \end{axis}
-\end{tikzpicture}
+
+\plottablexbars{scales,angles,gridsize,metric}{\resultsglumamean}
+
+%\newcommand{\plotxbars}[#1]{%
+%\begin{tikzpicture} %[trim axis left,trim axis right]
+    %\begin{axis}[
+        %hbarplot,
+        %width=6cm,
+        %%xcomb,
+        %%small,
+        %%y=-\baselineskip,
+        %%scale only axis,
+        %%enlarge y limits={abs=0.45},
+        %%ytick=\empty,
+        %%axis x line*=bottom,
+        %%axis y line*=left,
+        %%yticklabels from table={\resultsglumamean}{Description},
+        %]
+        %\addplot table[x=MeanCorrelation, y expr=\coordindex] {#1};
+        %\addreferenceplot;
+    %\end{axis}
+%\end{tikzpicture}%
+%}
+
+%\newcommand{\tablexbars}[1]{
+    %\pgfplotstabletypeset[columns={scales,angles,grid_size,metric,graph},
+      %% Booktabs rules
+      %every head row/.style={after row=\midrule},
+      %every last row/.style={after row=[3ex]},
+      %% Set header name
+      %columns/scales/.style={string type,column name=$N_s$},
+      %columns/angles/.style={string type,column name=$N_{\theta}$},
+      %columns/grid_size/.style={string type,column name=$G$},
+      %columns/canny_sigma/.style={string type,column name=$\sigma$},
+      %columns/metric/.style={string type,column name=Metric},
+      %columns/graph/.style={
+        %column name={},
+        %assign cell content/.code={% use \multirow for Z column:
+        %\ifnum\pgfplotstablerow=0
+        %\pgfkeyssetvalue{/pgfplots/table/@cell content}
+        %{\multirow{\pgfplotstablegetrowsof{\resultsglumamean}\pgfplotsretval}{5cm}{\theplot}}%
+        %\else
+        %\pgfkeyssetvalue{/pgfplots/table/@cell content}{}%
+        %\fi
+        %}
+      %},
+    %]{\resultsglumamean}
+%}

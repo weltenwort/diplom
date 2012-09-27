@@ -17,6 +17,9 @@
 
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usepackage{multirow}
+\usepackage{booktabs}
+
 
 %\pgfplotstableset{col sep=comma}
 \pgfplotsset{
@@ -27,17 +30,63 @@
     hbarplot/.style={
         xbar,
         small,
-        y=0.5cm,
-        enlarge y limits={true, abs value=0.75},
+        y=-\baselineskip,
+        enlarge y limits={true, abs value=0.45},
         xmin=0,
         xmax=0.3,
-        ytick=data,
+        ytick=\empty,
         xticklabel style={/pgf/number format/.cd,fixed,precision=2},
         nodes near coords,
         nodes near coords align=horizontal,
-        every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3}
+        every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3},
+        axis x line*=bottom,
+        axis y line*=left,
     }
     }
 
+\pgfplotstableset{create on use/graph/.style={
+create col/expr=0
+}}
 \pgfplotstableread[]{results/reference.csv}\resultsreference
 \newcommand{\addreferenceplot}{\addplot[const plot, red, update limits=false] table[x=MeanCorrelation, y expr=\coordindex*100-1] {\resultsreference}}
+
+\newcommand{\plotxbars}[1]{%
+    \begin{tikzpicture}
+        \begin{axis}[
+            hbarplot,
+            width=6cm,
+            ]
+            \addplot table[x=MeanCorrelation, y expr=\coordindex] {#1};
+            \addreferenceplot;
+        \end{axis}
+    \end{tikzpicture}%
+}
+
+\newcommand{\plottablexbars}[2]{
+    \pgfplotstablegetrowsof{#2}
+    \let\numberofrows=\pgfplotsretval
+
+    \pgfplotstabletypeset[columns={#1,graph},
+      % Booktabs rules
+      every head row/.style={after row=\midrule},
+      every last row/.style={after row=[3ex]},
+      % Set header name
+      columns/scales/.style={string type,column name=$N_s$},
+      columns/angles/.style={string type,column name=$N_{\theta}$},
+      columns/gridsize/.style={string type,column name=$G$},
+      columns/patchsize/.style={string type,column name=$P$},
+      columns/cannysigma/.style={string type,column name=$\sigma$},
+      columns/metric/.style={string type,column name=Metric},
+      columns/graph/.style={
+        column name={},
+        assign cell content/.code={% use \multirow for Z column:
+        \ifnum\pgfplotstablerow=0
+        \pgfkeyssetvalue{/pgfplots/table/@cell content}
+        {\multirow{\numberofrows}{5cm}{\plotxbars{#2}}}%
+        \else
+        \pgfkeyssetvalue{/pgfplots/table/@cell content}{}%
+        \fi
+        }
+      },
+    ]{#2}
+}

@@ -1,10 +1,2 @@
 \pgfplotstableread[]{results/g_luma_canny_mean_1.csv}\resultsglumacannymean
-\begin{tikzpicture}
-    \begin{axis}[
-        hbarplot,
-        yticklabels from table={\resultsglumacannymean}{Description},
-        ]
-        \addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultsglumacannymean};
-        \addreferenceplot;
-    \end{axis}
-\end{tikzpicture}
+\plottablexbars{scales,angles,gridsize,cannysigma,metric}{\resultsglumacannymean}

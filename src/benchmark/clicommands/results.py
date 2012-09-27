@@ -56,6 +56,7 @@ class CollectResults(Lister):
             result_path = pathlib.Path(result_filename)
             with result_path.open() as fp:
                 result_info = json.load(fp)
+            config = result_info.get("config", {})
 
             correlations_keys = sorted(result_info["correlations"].keys())
 
@@ -63,11 +64,17 @@ class CollectResults(Lister):
                 str(result_path.parts[-1]).replace("_", "\_"),
                 result_info["mean_correlation"],
                 self._format_description(result_info),
+                config.get("curvelets", {}).get("scales", ""),
+                config.get("curvelets", {}).get("angles", ""),
+                config.get("features", {}).get("grid_size", ""),
+                config.get("features", {}).get("patch_size", ""),
+                config.get("readers", {}).get("canny_sigma", ""),
+                TRANSLATIONS.get(config.get("metric", {}).get("metric", ""), ""),
                 ] + [result_info["correlations"][p] for p in correlations_keys])
 
         return (
-                ["ConfigFilename", "MeanCorrelation", "Description"] + [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys],
-                sorted(results, key=lambda x: x[2]),
+                ["ConfigFilename", "MeanCorrelation", "Description", "scales", "angles", "gridsize", "patchsize", "cannysigma", "metric"] + [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys],
+                sorted(results, key=lambda x: x[3:8]),
                 )
 
 
