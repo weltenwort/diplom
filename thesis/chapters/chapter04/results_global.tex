@@ -1,0 +1,121 @@
+\subsection{Global Features}
+
+\paragraph{LUMA+MEAN}
+
+The most straightforward combination of processing steps consists of a LUMA
+input image, on which the means of $G \times G$ grid cells is computed for each
+scale and angle (Figure \ref{fig:pipeline_global_luma_mean_l2} and
+\ref{fig:pipeline_global_luma_mean_cos}). Varying $G$ determines the feature
+size that can be encoded best. Setting $G=12$ seems to yield the best
+correlation, although the advantage over $G=8$ and $G=16$ is below $0.01$. The
+distance measure COS outperforms the $L_2$ measure (Table
+\ref{tab:results_global_luma_mean}). A possible explanation would be that the
+COS measure normalizes the magnitude of the feature vector as discussed in
+\ref{sec:anatomy_ranking_distance_euclidean}.
+
+\begin{figure}[h]
+    \centering
+    \subfloat[LUMA+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_mean_l2.tex}
+        \label{fig:pipeline_global_luma_mean_l2}
+    }
+    \quad
+    \subfloat[LUMA+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_mean_cos.tex}
+        \label{fig:pipeline_global_luma_mean_cos}
+    }
+    %\quad
+    %\subfloat[LUMA+MEAN Results]{%
+        %\input{illustrations/graphs/g_luma_mean.tex}
+        %\label{fig:results_global_luma_mean}
+    %}
+    \caption[Global LUMA+MEAN Pipelines]{
+        Global LUMA+MEAN Pipelines
+    }
+    \label{fig:pipeline_global_luma_mean}
+\end{figure}
+
+\begin{table}[h]
+    \input{illustrations/graphs/g_luma_mean.tex}
+    \caption[Global LUMA+MEAN Results]{
+        Global LUMA+MEAN Results
+    }
+    \label{tab:results_global_luma_mean}
+\end{table}
+
+\paragraph{CANNY+MEAN}
+
+In addition to reading the images like in the previous LUMA+MEAN configuration,
+this pipeline applies a CANNY processing step to the database images in an
+attempt to bring the query and database image domains closer together (Figure
+\ref{fig:pipeline_global_luma_canny_mean_l2} and
+\ref{fig:pipeline_global_luma_canny_mean_cos}). Again, the COS distance measure
+produces the best rankings (Table~\ref{tab:results_global_luma_canny_mean}).
+Surprisingly, the Canny edge detector does not lead to increased performance in
+comparison to plain the LUMA preprocessing step.
+
+\begin{figure}[h]
+    \centering
+    \subfloat[CANNY+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean.tex}
+        \label{fig:pipeline_global_luma_canny_mean_l2}
+    }
+    \quad
+    \subfloat[CANNY+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_canny_mean_cos.tex}
+        \label{fig:pipeline_global_luma_canny_mean_cos}
+    }
+    %\quad
+    %\subfloat[CANNY+MEAN Results]{%
+        %\input{illustrations/graphs/g_luma_canny_mean.tex}
+        %\label{fig:results_global_luma_canny_mean}
+    %}
+    \caption[Global CANNY+MEAN Pipelines]{
+        Global CANNY+MEAN Pipelines
+    }
+    \label{fig:pipeline_global_luma_canny_mean}
+\end{figure}
+
+\begin{table}[h]
+    \input{illustrations/graphs/g_luma_canny_mean.tex}
+    \caption[Global CANNY+MEAN Results]{
+        Global CANNY+MEAN Results
+    }
+    \label{tab:results_global_luma_canny_mean}
+\end{table}
+
+\paragraph{SOBEL+MEAN}
+
+The SOBEL step used in this variant also attempts to bring the database images
+into the sketch domain. The results are even slightly better than with the
+CANNY preprocessor.
+
+\begin{figure}[h]
+    \centering
+    \subfloat[SOBEL+MEAN+$L_2$ Pipeline]{%
+        \input{illustrations/pipelines/global_luma_sobel_mean_l2.tex}
+        \label{fig:pipeline_global_luma_sobel_mean_l2}
+    }
+    \quad
+    \subfloat[SOBEL+MEAN+COS Pipeline]{%
+        \input{illustrations/pipelines/global_luma_sobel_mean_cos.tex}
+        \label{fig:pipeline_global_luma_sobel_mean_cos}
+    }
+    %\quad
+    %\subfloat[SOBEL+MEAN Results]{%
+        %\input{illustrations/graphs/g_luma_sobel_mean.tex}
+        %\label{fig:results_global_luma_sobel_mean}
+    %}
+    \caption[Global SOBEL+MEAN Pipelines]{
+        Global SOBEL+MEAN Pipelines
+    }
+    \label{fig:pipeline_global_luma_sobel_mean}
+\end{figure}
+
+\begin{table}[h]
+    \input{illustrations/graphs/g_luma_sobel_mean.tex}
+    \caption[Global SOBEL+MEAN Results]{
+        Global SOBEL+MEAN Results
+    }
+    \label{tab:results_global_luma_sobel_mean}
+\end{table}

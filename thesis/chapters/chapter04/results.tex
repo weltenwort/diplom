@@ -1,132 +1,31 @@
 \section{Variants and Results}\label{sec:results}
 
-\subsection{Global Features}
+Some of the variations below include a Canny edge detector as a preprocessing
+step. The parameter $\sigma$ determines the size of the gaussian kernel used by
+the Canny algorithm. A value of $\sigma = 1.5$ was determined to be appropriate
+for the image dataset used in the benchmark. Value larger than $\sigma = 2$
+tended not to detect any edges, while smaller values produced more "false"
+edges resulting from noise in the images.
 
-\paragraph{LUMA+MEAN}
+The SEGMENT preprocessing step could unfortunately not use the same $1024
+\times 768$ pixel images as inputs as the other preprocessors, because the
+implementation provided by Arbelaez et al.\ could not be run on any machine
+available due to extreme memory requirements. Therefore, the images in the
+database were rescaled to $320 \times 240$ pixels for the evaluation of this
+algorithm. This measure might lead to loss of small features and puts limits on
+some parameters like the grid size $G$.
 
-The most straightforward combination of processing steps consists of a LUMA
-input image, on which the means of $G \times G$ grid cells is computed for each
-scale and angle (Figure \ref{fig:pipeline_global_luma_mean_l2} and
-\ref{fig:pipeline_global_luma_mean_cos}). Varying $G$ appears to have a
-negligible influence on the results. The distance measure COS outperforms the
-$L_2$ measure (Figure \ref{fig:results_global_luma_mean}). A possible
-explanation would be that the COS measure normalizes the magnitude of the
-feature vector as discussed in \ref{sec:anatomy_ranking_distance_euclidean}.
+All pipeline variants utilize the FDCT to extract curve information. The number
+of scales and the number of angles at the coarsest scale will be called $N_s$
+and $N_{\theta}$ respectively. Based on experimentation and other publications
+using the curvelet transform \autocite{mandal_curvelet_2009}
+\autocite{guha_curvelet_????}, 4 scales and 12 angles were used in almost all
+cases, since larger values did not consistently lead to better results. The
+size of the codebook was set at 1000 visual words, as values beyond that did
+not show improvements in evaluations performed by Nowak at al.\
+\autocite{nowak_sampling_2006}. Eitz et al.\ \autocite{eitz_sketch-based_2010}
+reported similar optimal values of 500 to 1000 visual words and attributed the
+low number to the sparsity of edge-like features in sketches.
 
-\begin{figure}[h]
-    \centering
-    \subfloat[LUMA+MEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/global_luma_mean_l2.tex}
-        \label{fig:pipeline_global_luma_mean_l2}
-    }
-    \quad
-    \subfloat[LUMA+MEAN+COS Pipeline]{%
-        \input{illustrations/pipelines/global_luma_mean_cos.tex}
-        \label{fig:pipeline_global_luma_mean_cos}
-    }
-    \quad
-    \subfloat[LUMA+MEAN Results]{%
-        \input{illustrations/graphs/g_luma_mean.tex}
-        \label{fig:results_global_luma_mean}
-    }
-    \caption[Global LUMA+MEAN Pipelines and Results]{
-        Global LUMA+MEAN Pipelines and Results
-    }
-    \label{fig:pipeline_global_luma_mean}
-\end{figure}
-
-\paragraph{CANNY+MEAN}
-
-foo
-
-\begin{figure}[h]
-    \centering
-    \subfloat[CANNY+MEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/global_luma_canny_mean_l2.tex}
-        \label{fig:pipeline_global_luma_canny_mean_l2}
-    }
-    \quad
-    \subfloat[CANNY+MEAN+COS Pipeline]{%
-        \input{illustrations/pipelines/global_luma_canny_mean_cos.tex}
-        \label{fig:pipeline_global_luma_canny_mean_cos}
-    }
-    \quad
-    \subfloat[CANNY+MEAN Results]{%
-        \input{illustrations/graphs/g_luma_canny_mean.tex}
-        \label{fig:results_global_luma_canny_mean}
-    }
-    \caption[Global CANNY+MEAN Pipelines and Results]{
-        Global CANNY+MEAN Pipelines and Results
-    }
-    \label{fig:pipeline_global_luma_canny_mean}
-\end{figure}
-
-\paragraph{SOBEL+MEAN}
-
-In addition to reading the images like in the previous LUMA+MEAN configuration,
-this pipeline applies a SOBEL processing step to the database images in an
-attempt to bring the query and database image domains closer together (Figure
-\ref{fig:pipeline_global_luma_mean_l2} and
-\ref{fig:pipeline_global_luma_mean_cos}).
-
-\begin{figure}[h]
-    \centering
-    \subfloat[SOBEL+MEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/global_luma_sobel_mean_l2.tex}
-        \label{fig:pipeline_global_luma_sobel_mean_l2}
-    }
-    \quad
-    \subfloat[SOBEL+MEAN+COS Pipeline]{%
-        \input{illustrations/pipelines/global_luma_sobel_mean_cos.tex}
-        \label{fig:pipeline_global_luma_sobel_mean_cos}
-    }
-    \quad
-    \subfloat[SOBEL+MEAN Results]{%
-        \input{illustrations/graphs/g_luma_sobel_mean.tex}
-        \label{fig:results_global_luma_sobel_mean}
-    }
-    \caption[Global SOBEL+MEAN Pipelines and Results]{
-        Global SOBEL+MEAN Pipelines and Results
-    }
-    \label{fig:pipeline_global_luma_sobel_mean}
-\end{figure}
-
-\subsection{Local Features}
-
-\paragraph{LUMA+PMEAN}
-
-foo
-
-\paragraph{LUMA+PMEAN2}
-
-foo
-
-\paragraph{CANNY+PMEAN}
-
-foo
-
-\begin{figure}[h]
-    \centering
-    \subfloat[CANNY+PMEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/local_luma_canny_pmean_l2.tex}
-        \label{fig:pipeline_local_luma_canny_pmean_l2}
-    }
-    \quad
-    \subfloat[CANNY+PMEAN+HI(B) Pipeline]{%
-        \input{illustrations/pipelines/local_luma_canny_pmean_hi.tex}
-        \label{fig:pipeline_local_luma_canny_pmean_hi}
-    }
-    \quad
-    \subfloat[CANNY+PMEAN Results]{%
-        \input{illustrations/graphs/l_luma_canny_pmean.tex}
-        \label{fig:results_local_luma_canny_pmean}
-    }
-    \caption[Local CANNY+PMEAN Pipelines and Results]{
-        Local CANNY+PMEAN Pipelines and Results
-    }
-    \label{fig:pipeline_local_luma_canny_pmean}
-\end{figure}
-
-\paragraph{CANNY+PMEAN2}
-
-foo
+\input{chapters/chapter04/results_global.tex}
+\input{chapters/chapter04/results_local.tex}

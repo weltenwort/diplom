@@ -1,0 +1,43 @@
+\begin{tikzpicture}[font=\tiny]
+    \matrix[node grid] {
+        \node [document node] (dbimg) {$I_{db}$}; &
+        \node [operation node] (dbluma) {LUMA}; &
+        \node [operation node] (dbcurvelet) {FDCT}; &
+        \node [operation node] (dbpmean) {PMEAN}; &&
+        \node [operation node] (dbquant) {VQ}; \\
+        &&&
+        \node [operation node] (cluster) {CLUSTER}; \\
+        \node [document node] (qimg) {$I_q$}; &
+        \node [operation node] (qluma) {LUMA}; &
+        \node [operation node] (qcurvelet) {FDCT}; &
+        \node [operation node] (qpmean) {PMEAN}; &&
+        \node [operation node] (qquant) {VQ}; \\
+    };
+    \node [operation node, split node=3, right=3ex of $(dbquant.east)!0.5!(qquant.east)$] (dist) {$L_2$ \nodepart{two} HI(B) \nodepart{three} EMD};
+    \node [document node, right=of dist] (result) {distances};
+
+    { [start chain=going right, every join/.style={connector}]
+        \chainin (dbimg);
+        \chainin (dbluma) [join];
+        \chainin (dbcurvelet) [join];
+        \chainin (dbpmean) [join];
+        { [start branch]
+            \chainin (cluster) [join];
+            { [start branch]
+                \chainin (qquant) [join=with cluster.-2 by hv connector];
+            }
+            \chainin (dbquant) [join=with cluster.2 by hv connector];
+        }
+        \chainin (dbquant) [join];
+        \chainin (dist) [join=with dbquant.east by hvh connector top];
+    }
+    { [start chain=going right, every join/.style={connector}]
+        \chainin (qimg);
+        \chainin (qluma) [join];
+        \chainin (qcurvelet) [join];
+        \chainin (qpmean) [join];
+        \chainin (qquant) [join];
+        \chainin (dist) [join=with qquant.east by hvh connector bottom];
+        \chainin (result) [join];
+    }
+\end{tikzpicture}

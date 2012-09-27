@@ -1,0 +1,13 @@
+\pgfplotstableread[]{results/l_luma_pmean_1.csv}\resultsllumapmean
+\plottablexbars{scales,angles,gridsize,patchsize,metric}{\resultsllumapmean}
+%\begin{tikzpicture}
+    %\begin{axis}[
+        %hbarplot,
+        %yticklabels from table={\resultsllumacannypmean}{Description},
+        %%width=0.8\textwidth,
+        %%height=0.2\textheight,
+        %]
+        %\addplot table[x=MeanCorrelation, y expr=\coordindex] {\resultsllumacannypmean};
+        %\addreferenceplot;
+    %\end{axis}
+%\end{tikzpicture}

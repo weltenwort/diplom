@@ -225,8 +225,7 @@
     },
     "readers": {
         "query": "readers.luma",
-        "image": "readers.canny",
-        "canny_sigma": 1.5
+        "image": "readers.sobel"
     },
     "features": {
         "extractor": "features.patch_means",
@@ -234,7 +233,7 @@
         "patch_size": 3
     },
     "codebook": {
-        "codebook_size": 10000,
+        "codebook_size": 1000,
         "metric": "kmeans"
     },
     "weights": {
@@ -242,11 +241,11 @@
         "use_stopwords": false
     },
     "metric": {
-        "metric": "metrics.histogram_intersection"
+        "metric": "metrics.histogram_intersection_binary"
     },
     "cache": {
         "feature_enabled": true,
-        "reader_enabled": true,
+        "reader_enabled": false,
         "reader_path": "/media/data0/unsorted/caches"
     }
 }

@@ -8,6 +8,7 @@ import pathlib
 TRANSLATIONS = {
         "metrics.l2_means": "$L_2$",
         "metrics.cosine_means": "COS",
+        "metrics.emd": "EMD",
         "metrics.histogram_intersection": "HI",
         "metrics.histogram_intersection_binary": "HIB",
         }

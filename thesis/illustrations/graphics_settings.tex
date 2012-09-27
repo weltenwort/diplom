@@ -3,16 +3,20 @@
 \colorlet{graybg}{black!10}
 \colorlet{grayborder}{black!50}
 
-\usetikzlibrary{fit,positioning,chains,scopes}
+\usetikzlibrary{fit,positioning,chains,scopes,shapes,shapes.multipart,calc}
 
 \tikzset{
 	node grid/.style={row sep=1ex, column sep=1.5ex},
-	small node/.style={very thick, text height=1ex, text depth=.25ex, rounded corners},
+	small node/.style={very thick, text height=1ex, text depth=.25ex, rounded corners, node distance=1.5ex},
+    split node/.style={rectangle split, rectangle split parts=#1},
 	document node/.style={small node, draw=lightborder, fill=lightbg},
 	operation node/.style={small node, draw=grayborder, fill=graybg},
 	connector/.style={very thick, draw=grayborder, ->, rounded corners},
 	vh connector/.style={connector, to path={|- (\tikztotarget)}},
-	hv connector/.style={connector, to path={-| (\tikztotarget)}}
+	hv connector/.style={connector, to path={-| (\tikztotarget)}},
+    hvh connector top/.style={to path={-- ++(1.5ex,0) |- (\tikztotarget.178)}},
+    hvh connector bottom/.style={to path={-- ++(1.5ex,0) |- (\tikztotarget.182)}},
+    left offset/.style={right=1.5ex}
 }
 
 \usepackage{pgfplots}
