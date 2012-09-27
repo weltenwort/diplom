@@ -90,12 +90,19 @@ class Codebook(object):
         else:
             self.document_indices += [self.document_count - 1] * len(observations)
 
-    def cluster(self):
+    def cluster(self, empty_retries=10):
         self.storage.clear()
 
         observations = vq.whiten(numpy.array(self.observations))
         #if self._cluster_method == "kmeans":
-        codebook, code = vq.kmeans2(observations, self.size, minit="points")
+        for x in range(empty_retries):
+            try:
+                codebook, code = vq.kmeans2(observations, self.size, minit="points", missing="raise")
+            except vq.ClusterError:
+                if x >= (empty_retries - 1):
+                    raise vq.ClusterError("Empty cluster after {} tries.".format(empty_retries))
+            else:
+                break
         #elif self._cluster_method == "hierarchy_single":
             #distances = distance.pdist(observations, "euclidean")
             #cluster_hierarchy = hierarchy.linkage(distances,
