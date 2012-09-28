@@ -6,15 +6,7 @@ foo
 
 \begin{figure}[h]
     \centering
-    \subfloat[LUMA+PMEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/local_luma_pmean.tex}
-        \label{fig:pipeline_local_luma_pmean_l2}
-    }
-    \quad
-    \subfloat[LUMA+PMEAN+HI(B) Pipeline]{%
-        \input{illustrations/pipelines/local_luma_pmean_hi.tex}
-        \label{fig:pipeline_local_luma_pmean_hi}
-    }
+    \input{illustrations/pipelines/local_luma_pmean.tex}
     \caption[Local LUMA+PMEAN Pipelines]{
         Local LUMA+PMEAN Pipelines
     }
@@ -22,6 +14,7 @@ foo
 \end{figure}
 
 \begin{table}[h]
+    \centering
     \input{illustrations/graphs/l_luma_pmean.tex}
     \caption[Local LUMA+PMEAN Results]{
         Local LUMA+PMEAN Results
@@ -39,20 +32,7 @@ foo
 
 \begin{figure}[h]
     \centering
-    \subfloat[CANNY+PMEAN+$L_2$ Pipeline]{%
-        \input{illustrations/pipelines/local_luma_canny_pmean_l2.tex}
-        \label{fig:pipeline_local_luma_canny_pmean_l2}
-    }
-    \quad
-    \subfloat[CANNY+PMEAN+HI(B) Pipeline]{%
-        \input{illustrations/pipelines/local_luma_canny_pmean_hi.tex}
-        \label{fig:pipeline_local_luma_canny_pmean_hi}
-    }
-    %\quad
-    %\subfloat[CANNY+PMEAN Results]{%
-        %\input{illustrations/graphs/l_luma_canny_pmean.tex}
-        %\label{fig:results_local_luma_canny_pmean}
-    %}
+    \input{illustrations/pipelines/local_luma_canny_pmean.tex}
     \caption[Local CANNY+PMEAN Pipelines]{
         Local CANNY+PMEAN Pipelines
     }
@@ -60,6 +40,7 @@ foo
 \end{figure}
 
 \begin{table}[h]
+    \centering
     \input{illustrations/graphs/l_luma_canny_pmean.tex}
     \caption[Local CANNY+PMEAN Results]{
         Local CANNY+PMEAN Results
@@ -70,3 +51,47 @@ foo
 \paragraph{CANNY+PMEAN2}
 
 foo
+
+\paragraph{SOBEL+PMEAN}
+
+foo
+
+\begin{figure}[h]
+    \centering
+    \input{illustrations/pipelines/local_luma_sobel_pmean.tex}
+    \caption[Local SOBEL+PMEAN Pipelines]{
+        Local SOBEL+PMEAN Pipelines
+    }
+    \label{fig:pipeline_local_luma_sobel_pmean}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \input{illustrations/graphs/l_luma_sobel_pmean.tex}
+    \caption[Local SOBEL+PMEAN Results]{
+        Local SOBEL+PMEAN Results
+    }
+    \label{tab:results_local_luma_sobel_pmean}
+\end{table}
+
+\paragraph{SEGMENT+PMEAN}
+
+foo
+
+\begin{figure}[h]
+    \centering
+    \input{illustrations/pipelines/local_luma_segment_pmean.tex}
+    \caption[Local SEGMENT+PMEAN Pipelines]{
+        Local SEGMENT+PMEAN Pipelines
+    }
+    \label{fig:pipeline_local_luma_segment_pmean}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \input{illustrations/graphs/l_luma_segment_pmean.tex}
+    \caption[Local SEGMENT+PMEAN Results]{
+        Local SEGMENT+PMEAN Results
+    }
+    \label{tab:results_local_luma_segment_pmean}
+\end{table}

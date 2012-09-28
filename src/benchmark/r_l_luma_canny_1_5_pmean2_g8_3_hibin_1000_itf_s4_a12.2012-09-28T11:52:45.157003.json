@@ -1,0 +1,290 @@
+{
+    "duration": 68.846352, 
+    "correlations": {
+        "/home/laeroth/Downloads/benchmark/sketches/42.png": -0.15619041593416441, 
+        "/home/laeroth/Downloads/benchmark/sketches/21.png": 0.079014613906593409, 
+        "/home/laeroth/Downloads/benchmark/sketches/48.png": 0.10210174492380659, 
+        "/home/laeroth/Downloads/benchmark/sketches/23.png": 0.38333038339016717, 
+        "/home/laeroth/Downloads/benchmark/sketches/26.png": 0.34710786647343783, 
+        "/home/laeroth/Downloads/benchmark/sketches/43.png": 0.38450057747563821, 
+        "/home/laeroth/Downloads/benchmark/sketches/4.png": 0.25483931016190392, 
+        "/home/laeroth/Downloads/benchmark/sketches/0.png": 0.27504125808333429, 
+        "/home/laeroth/Downloads/benchmark/sketches/11.png": 0.38813509487781228, 
+        "/home/laeroth/Downloads/benchmark/sketches/25.png": 0.3436470188938886, 
+        "/home/laeroth/Downloads/benchmark/sketches/27.png": 0.3514176897264471, 
+        "/home/laeroth/Downloads/benchmark/sketches/33.png": 0.074424093625906948, 
+        "/home/laeroth/Downloads/benchmark/sketches/30.png": -0.023439599494175109, 
+        "/home/laeroth/Downloads/benchmark/sketches/6.png": 0.013136820317810147, 
+        "/home/laeroth/Downloads/benchmark/sketches/2.png": 0.25105426714871509, 
+        "/home/laeroth/Downloads/benchmark/sketches/1.png": 0.058539768049587132, 
+        "/home/laeroth/Downloads/benchmark/sketches/38.png": 0.24042387573190382, 
+        "/home/laeroth/Downloads/benchmark/sketches/9.png": 0.36619653678749675, 
+        "/home/laeroth/Downloads/benchmark/sketches/14.png": 0.20531452849958226, 
+        "/home/laeroth/Downloads/benchmark/sketches/13.png": 0.49844659695882926, 
+        "/home/laeroth/Downloads/benchmark/sketches/28.png": 0.22426479070076824, 
+        "/home/laeroth/Downloads/benchmark/sketches/34.png": 0.23655522067852419, 
+        "/home/laeroth/Downloads/benchmark/sketches/7.png": 0.39046643300294609, 
+        "/home/laeroth/Downloads/benchmark/sketches/8.png": 0.014052041707636855, 
+        "/home/laeroth/Downloads/benchmark/sketches/20.png": 0.09058197582311675, 
+        "/home/laeroth/Downloads/benchmark/sketches/24.png": -0.15682195531266305, 
+        "/home/laeroth/Downloads/benchmark/sketches/10.png": 0.38727247464450776, 
+        "/home/laeroth/Downloads/benchmark/sketches/12.png": 0.023074664902408625, 
+        "/home/laeroth/Downloads/benchmark/sketches/46.png": -0.077125545187918393, 
+        "/home/laeroth/Downloads/benchmark/sketches/47.png": 0.15393666803473702, 
+        "/home/laeroth/Downloads/benchmark/sketches/45.png": 0.17077173296989603
+    }, 
+    "config": {
+        "features": {
+            "extractor": "features.patch_means2", 
+            "patch_size": 3, 
+            "grid_size": 8
+        }, 
+        "curvelets": {
+            "transform": "transforms.curvelet_strictangles", 
+            "angles": 12, 
+            "scales": 4
+        }, 
+        "readers": {
+            "query": "readers.luma", 
+            "image": "readers.canny", 
+            "canny_sigma": 1.5
+        }, 
+        "metric": {
+            "metric": "metrics.histogram_intersection_binary"
+        }, 
+        "cache": {
+            "reader_enabled": true, 
+            "reader_path": "/media/data0/unsorted/caches", 
+            "feature_enabled": true
+        }, 
+        "codebook": {
+            "codebook_size": 1000, 
+            "metric": "kmeans"
+        }, 
+        "weights": {
+            "use_stopwords": false, 
+            "use_weights": "weights.tfidf"
+        }, 
+        "images": [
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/0.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/0/*.jpg"
+                ], 
+                "key": "set0"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/1.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/1/*.jpg"
+                ], 
+                "key": "set1"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/2.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/2/*.jpg"
+                ], 
+                "key": "set2"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/4.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/4/*.jpg"
+                ], 
+                "key": "set4"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/6.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/6/*.jpg"
+                ], 
+                "key": "set6"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/7.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/7/*.jpg"
+                ], 
+                "key": "set7"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/8.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/8/*.jpg"
+                ], 
+                "key": "set8"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/9.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/9/*.jpg"
+                ], 
+                "key": "set9"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/10.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/10/*.jpg"
+                ], 
+                "key": "set10"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/11.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/11/*.jpg"
+                ], 
+                "key": "set11"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/12.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/12/*.jpg"
+                ], 
+                "key": "set12"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/13.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/13/*.jpg"
+                ], 
+                "key": "set13"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/14.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/14/*.jpg"
+                ], 
+                "key": "set14"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/20.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/20/*.jpg"
+                ], 
+                "key": "set20"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/21.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/21/*.jpg"
+                ], 
+                "key": "set21"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/23.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/23/*.jpg"
+                ], 
+                "key": "set23"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/24.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/24/*.jpg"
+                ], 
+                "key": "set24"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/25.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/25/*.jpg"
+                ], 
+                "key": "set25"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/26.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/26/*.jpg"
+                ], 
+                "key": "set26"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/27.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/27/*.jpg"
+                ], 
+                "key": "set27"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/28.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/28/*.jpg"
+                ], 
+                "key": "set28"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/30.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/30/*.jpg"
+                ], 
+                "key": "set30"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/33.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/33/*.jpg"
+                ], 
+                "key": "set33"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/34.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/34/*.jpg"
+                ], 
+                "key": "set34"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/38.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/38/*.jpg"
+                ], 
+                "key": "set38"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/42.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/42/*.jpg"
+                ], 
+                "key": "set42"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/43.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/43/*.jpg"
+                ], 
+                "key": "set43"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/45.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/45/*.jpg"
+                ], 
+                "key": "set45"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/46.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/46/*.jpg"
+                ], 
+                "key": "set46"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/47.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/47/*.jpg"
+                ], 
+                "key": "set47"
+            }, 
+            {
+                "query_image": "/home/laeroth/Downloads/benchmark/sketches/48.png", 
+                "source_images": [
+                    "/home/laeroth/Downloads/benchmark/images/48/*.jpg"
+                ], 
+                "key": "set48"
+            }
+        ]
+    }, 
+    "mean_correlation": 0.19013130746995105, 
+    "datetime": "2012-09-28 11:52:45.159438"
+}

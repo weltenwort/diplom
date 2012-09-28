@@ -2,11 +2,10 @@
     \matrix[node grid] {
         \node [document node] (dbimg) {$I_{db}$}; &
         \node [operation node] (dbluma) {LUMA}; &
-        \node [operation node] (dbcanny) {CANNY};  &
         \node [operation node] (dbcurvelet) {FDCT}; &
         \node [operation node] (dbmean) {MEAN}; \\
         \node [document node] (qimg) {$I_q$}; &
-        \node [operation node] (qluma) {LUMA}; &&
+        \node [operation node] (qluma) {LUMA}; &
         \node [operation node] (qcurvelet) {FDCT}; &
         \node [operation node] (qmean) {MEAN}; \\
     };
@@ -17,7 +16,6 @@
     { [start chain=going right, every join/.style={connector}]
         \chainin (dbimg);
         \chainin (dbluma) [join];
-        \chainin (dbcanny) [join];
         \chainin (dbcurvelet) [join];
         \chainin (dbmean) [join];
         \chainin (dist) [join=with dbmean.east by hvh connector top];
