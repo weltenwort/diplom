@@ -4,24 +4,24 @@ Some of the variations below include a Canny edge detector as a preprocessing
 step. The parameter $\sigma$ determines the size of the gaussian kernel used by
 the Canny algorithm. A value of $\sigma = 1.5$ was determined to be appropriate
 for the image dataset used in the benchmark. Value larger than $\sigma = 2$
-tended not to detect any edges, while smaller values produced more "false"
-edges resulting from noise in the images.
+tend not to detect any edges, while smaller values produced more "false" edges
+resulting from noise in the images.
 
 The SEGMENT preprocessing step could unfortunately not use the same $1024
 \times 768$ pixel images as inputs as the other preprocessors, because the
-implementation provided by Arbelaez et al.\ could not be run on any machine
-available due to extreme memory requirements. Therefore, the images in the
-database were rescaled to $320 \times 240$ pixels for the evaluation of this
-algorithm. This might lead to loss of small features and puts limits on some
-parameters like the grid size $G$.
+implementation provided by Arbelaez et al.\ \autocite{arbelaez_contour_2011}
+could not be run on any machine available due to extreme memory requirements.
+Therefore, the images in the database are rescaled to $320 \times 240$ pixels
+for the evaluation of this algorithm. This might lead to loss of small features
+    and puts limits on some parameters like the grid size $G$.
 
 All pipeline variants utilize the FDCT to extract curve information. The number
 of scales and the number of angles at the coarsest scale will be called $N_s$
 and $N_{\theta}$ respectively. Based on experimentation and other publications
 using the curvelet transform \autocite{mandal_curvelet_2009}
-\autocite{guha_curvelet_????}, 4 scales and 12 angles were used in almost all
+\autocite{guha_curvelet_????}, 4 scales and 12 angles are used in almost all
 cases, since larger values did not consistently lead to better results. The
-size of the codebook was set at 1000 visual words, as values beyond that did
+size of the codebook is set at 1000 visual words, as values beyond that did
 not show improvements in evaluations performed by Nowak at al.\
 \autocite{nowak_sampling_2006}. Eitz et al.\ \autocite{eitz_sketch-based_2010}
 reported similar optimal values of 500 to 1000 visual words and attributed the

@@ -67,8 +67,9 @@ comparison to plain the LUMA preprocessing step.
 \paragraph{SOBEL+MEAN}
 
 The SOBEL step used in this variant also attempts to bring the database images
-into the sketch domain. The results are slightly better than with the CANNY
-preprocessor.
+into the sketch domain (Figure~\ref{fig:pipeline_global_luma_sobel_mean}). The
+results are slightly better than with the CANNY preprocessor
+(Table~\ref{tab:results_global_luma_sobel_mean}).
 
 \begin{figure}[h]
     \centering
@@ -90,10 +91,11 @@ preprocessor.
 
 \paragraph{SEGMENT+MEAN}
 
-When the gPb contour detector in the SEGMENT step to find edges in the database
-images, the $L_2$ distance metric produces results comparable to the COS metric
-in the CANNY+MEAN variant. Unlike in the other cases, the COS distance measure
-performs worse than the $L_2$ metric.
+With the gPb contour detector in the SEGMENT step to find edges in the database
+images (Figure~\ref{fig:pipeline_global_luma_segment_mean}), the $L_2$ distance
+metric produces results comparable to the COS metric in the CANNY+MEAN variant
+(Table~\ref{tab:results_global_luma_segment_mean}).  Unlike in the other cases,
+the COS distance measure performs worse than the $L_2$ metric.
 
 \begin{figure}[h]
     \centering
