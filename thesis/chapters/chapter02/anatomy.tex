@@ -54,7 +54,8 @@ Another factor usually is the accepted input format of the feature extraction
 algorithm. Many algorithms like SIFT \autocite{lowe_object_1999} or SURF
 \autocite{bay_speeded-up_2008} are defined for single-channel data, but some
 have been specifically developed to operate on multi-channel images, like cSIFT
-\autocite{abdel-hakim_csift:_2006} and \autocite{yang_robust_2008}.
+\autocite{abdel-hakim_csift:_2006} and Yang and Xiao's YIQ-based descriptor
+\autocite{yang_robust_2008}.
 
 \subsection{Signature Extraction}\label{sec:anatomy_signature_extraction}
 
@@ -69,14 +70,14 @@ the way these features are encoded.
 
 Over the last two decades, a wide variety of feature descriptors have been
 published, which mostly focus on specific types of features. Some techniques
-use color histograms \autocite{utenpattanant_color_2006}, while others
-\autocite{stricker_color_1996} \autocite{deng_efficient_2001}
-\autocite{lee_spatial_2003} include spatial relations between colors in a
-region.
-Many descriptors attempt to capture texture characteristics, such as
-\autocite{schaffalitzky_viewpoint_2001} and \autocite{manjunath_texture_1996}.
-Rubner and Thomasi \autocite{rubner_texture-based_1999} combine Gabor filters
-and the earth mover's distance and thereby bypass segmentation.
+use color histograms \autocite{utenpattanant_color_2006}, while others include
+spatial relations between colors in a region \autocite{stricker_color_1996}
+\autocite{deng_efficient_2001} \autocite{lee_spatial_2003}.
+Many descriptors attempt to capture texture characteristics in an
+affine-invariant way \autocite{schaffalitzky_viewpoint_2001}. Manjunath et al.\
+\autocite{manjunath_texture_1996} use Gabor wavelets for image retrieval, which
+Rubner and Thomasi \autocite{rubner_texture-based_1999} combine with the earth
+mover's distance to bypass segmentation.
 Another class of descriptors focuses on representing shapes using detection of
 edges and salient points. Lowe \autocite{lowe_object_1999} developed the now
 widely adopted SIFT descriptor, that employs clustering of salient points. More
@@ -99,11 +100,12 @@ Aside from the nature of the features captured by a descriptor, there are also
 differences in the geometrical scope the features are derived from. Global
 feature descriptors attempt to capture the structure of the whole scene or
 describe the distribution of properties across the image like the binary Haar
-color descriptor published in \autocite{utenpattanant_color_2006}. Some global
-algorithms subdivide the image into regular segments and derive the localized
-distribution of features for each division. \autocite{lazebnik_beyond_2006} and
-later \autocite{lazebnik_spatial_2009} improve upon this concept by creating
-feature pyramids using iterative subdivision for multiscale analysis. While the
+color descriptor published by Utenpattanant et al.\
+\autocite{utenpattanant_color_2006}. Some global algorithms subdivide the image
+into regular segments and derive the localized distribution of features for
+each division. Lazebnik at al.\ \autocite{lazebnik_beyond_2006}
+\autocite{lazebnik_spatial_2009} improves upon this concept by creating feature
+pyramids using iterative subdivision for multiscale analysis. While the
 computational complexity of those global approaches is usually quite low, they
 are especially susceptible to problems like partial occlusion or reflections
 within the scene. The spatial envelope descriptor
@@ -152,7 +154,7 @@ of each observation that vary the least between all observations.
 PCA has been applied to the face recognition problem using intensity images
 (eigenfaces) \autocite{turk_face_1991}, wavelets (waveletfaces)
 \autocite{feng_human_2000} and more recently curvelets (curveletfaces)
-\autocite{mandal_face_2008}. In \autocite{ke_pca-sift:_2004} it was used to
+\autocite{mandal_face_2008}. Ke et al.\ \autocite{ke_pca-sift:_2004} used it to
 improve the robustness of the SIFT \autocite{lowe_object_1999} descriptor. To
 overcome the limited between-class discrimination of PCA, it has been combined
 with Linear Discriminant Analysis (LDA), yielding even better results
@@ -204,9 +206,9 @@ The centers are then recalculated as
 The greedy nature of the algorithm and the random initialization mean that it
 is merely a heuristic and can converge on a local minimum, that is not a global
 minimum.  Other clusting methods are hierarchical agglomorative and divisive
-algorithms as used in \autocite{nister_scalable_2006} and \autocite
-{philbin_object_2007}, that recursively divide or merge partitions to optimize
-the vocabulary.
+algorithms as used by Nister and Stewenius \autocite{nister_scalable_2006} and
+Philbin et al.\ \autocite {philbin_object_2007}, that recursively divide or
+merge partitions to optimize the vocabulary.
 
 Once the clustering algorithm has converged, the cluster centers $m_i$ will be
 used as the visual words of the codebook. To create the signature vector of an
@@ -222,6 +224,86 @@ The final image signature $\tilde{I}$ then is the vector of the cardinality of t
 
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
+\subsubsection{Weighting}\label{sec:anatomy_ranking_weighting}
+
+In the vocabulary of visual words created via clustering, a set of
+representatives for a group of features has been defined. How representative
+the presence of visual word in the signature of a specific image has not yet
+been taken into account though. To remedy this, weighting schemes are often
+used that modify the signatures to enhance distinguishing characteristics and
+make the ranking more accurate.
+
+\paragraph{Linear Support Vector Machines}
+
+The concept of support vector machines (SVMs) is usually is usually employed
+when a feature needs to be classified into one or more classes. While such
+classification problem occur frequently in computer vision in the fields of
+object detection \autocite{pontil_support_1998} \autocite{csurka_visual_2004},
+human detection \autocite{dalal_histograms_2005} or scene classification
+\autocite{yang_evaluating_2007}, the class concept is too limited for general
+image retrieval. To achieve the classification, a SVM constructs a hyperplane,
+that optimally separates two sets of points $x_i \in \mathbb{R}^n$ with labels
+$y_i \in \{-1, 1 \}$ in a training dataset $\{ (x_i, y_i) \}$. The hyperplane
+can be defined using its normal vector $w$ and offset $b$ as
+\begin{equation*}
+    w \cdot x - b = 0.
+\end{equation*}
+To turn the problem into an optimization problem, the plane is split up into
+two parallel hyperplanes described by
+\begin{equation*}
+    w \cdot x - b = 1 \text{ and } w \cdot x - b = -1.
+\end{equation*}
+The region between these two planes is characterized by their distance
+$\frac{2}{\| w \|}$, which needs to be minimized while satisfying
+\begin{alignat*}{3}
+    w \cdot x_i - b & \geq & 1 & \quad \text{if } y_i = 1 \qquad \text{or} \\
+    w \cdot x_i - b & \leq & -1 & \quad \text{if } y_i = -1
+\end{alignat*}
+for all $i$. It is possible to transform this into an equivalent quadratic
+optimization problem solvable by standard quadratic programming algorithms.
+
+Even though image retrieval as described in this thesis is not a simple
+classification problem, linear SVMs can still be of use. Guyon et al.\
+\autocite{guyon_gene_2002} showed, that the components of $w$ can be used as
+weights describing the discriminative power of feature vectors. This was
+applied to image retrieval by Shrivastava et al.\ 
+\autocite{shrivastava_data-driven_2011}. There the authors trained a SVM for
+each query image $I_q$ with the query image's signature constituting one class
+and the database images' signatures $x_i$ making up the other class. The
+pairwise similarity could then easily be obtained from the learned weights
+$w_q$ as
+\begin{equation*}
+    S(I_q, I_i) = w_q^T x_i.
+\end{equation*}
+That way, common features in the query signature are effectively down-voted,
+while unique features are assigned larger weights.
+
+\paragraph{TF-IDF}
+
+Along with the visual word analogy from the field of text retrieval, the
+statistical method of TF-IDF weighting \autocite{baeza-yates_modern_1999} has
+been applied to CBIR \autocite{sivic_video_2003}. It is a technique to weight
+features (terms) in a document in relation to their occurence in the document
+and the whole database. The term frequency $tf_{i, j}$ is the number of
+normalized occurences of term $t_i$ in document $d_j$. The normalization can be
+performed in different ways. The most common ones are dividing by the total
+number of words $n_j$ in the document or the maximum term count $\max \{ tc_{i,
+j} : \forall t_i \in d_j \}$ of any term in the document $j$:
+\begin{equation*}
+    tf_{i, j} = \frac{tc_{i, j}}{n_j} \text{ or } tf_{i, j} = \frac{tc_{i, j}}{\max \{ tc_{i, j} : \forall t_i \in d_j \}}
+\end{equation*}
+The occurence of a term in the database $D$ is measured as the logarithm of the
+quotient of the overall number of documents $|D|$ and the number of documents
+$m_i$ containing the term $t_i$:
+\begin{equation*}
+    idf_{i} = \log \frac{|D|}{m_i}
+\end{equation*}
+Therefore, the total weight $w_{i, j}$ of a term is given as
+\begin{equation*}
+    w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}
+\end{equation*}
+assuming the document length is used for normalization.
+
 \subsubsection{Distance Metrics}\label{sec:anatomy_ranking_distance}
 
 To retrieve the similar images from the database, a ranking of database image
@@ -229,7 +311,7 @@ in respect to their similarity to the query image must be obtained. Since each
 image is represented by a signature vector, this means the pairwise distance
 between the query image's signature and each database image's signature can be
 used to sort the list of query results. This section will describe several
-distance metrics and similarity measure candidates, that can be used to that
+distance metrics and similarity measure candidates, which can be used to that
 end.
 
 \paragraph{Euclidean Distance}\label{sec:anatomy_ranking_distance_euclidean}
@@ -274,12 +356,12 @@ invariance regarding the document size.
 
 The Earth Mover's Distance (EMD) is an application of the discrete
 transportation problem, which was first introduced into the field of computer
-vision in \autocite{peleg_unified_1989}. The use of the algorithm as a signature
-comparison metric in image retrieval was published by Rubner et al.\
-\autocite{rubner_metric_1998}. At the abstract level, the distance is calculated
-as the amount of work necessary to transform one signature into the other.
-A main advantage of the EMD over most other distance measures is that it
-accounts for inter-bin distances (ground distances) in binned distributions.
+vision by Peleg et al.\ \autocite{peleg_unified_1989}. The use of the algorithm
+as a signature comparison metric in image retrieval was published by Rubner et
+al.\ \autocite{rubner_metric_1998}. At the abstract level, the distance is
+calculated as the amount of work necessary to transform one signature into the
+other.  A main advantage of the EMD over most other distance measures is that
+it accounts for inter-bin distances (ground distances) in binned distributions.
 Another useful property is the ability to compare distributions of different
 sizes, e.g. for partial matching.
 For signatures $P = \{ (p_1, w_{p_1}), \dots, (p_n, w_{p_n}) \}$ and $Q = \{
@@ -301,7 +383,7 @@ The distance between signatures $P$ and $Q$ can then be calculated as
 \begin{equation*}
     d_{EMD}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\displaystyle\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}.
 \end{equation*}
-In \autocite{rubner_metric_1998} the authors propose using a simplex-based
+Rubner et al.\ \autocite{rubner_metric_1998} propose using a simplex-based
 algorithm to solve the transportation problem, that achieves good performance
 by exploiting the specific problem structure. Zhang at al.\
 \autocite{zhang_local_2006} use Rubner's implementation to train a support
@@ -324,76 +406,3 @@ by adjusting the denominator:
 \begin{equation*}
     s_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle \min \left( \sum_{i=1}^n p_i, \sum_{i=1}^n q_i \right)}
 \end{equation*}
-
-\subsubsection{Weighting}\label{sec:anatomy_ranking_weighting}
-
-\paragraph{Linear Support Vector Machines}
-
-The concept of support vector machines (SVMs) is usually is usually employed
-when a feature needs to be classified into one or more classes. While such
-classification problem occur frequently in computer vision in the fields of
-object detection \autocite{pontil_support_1998} \autocite{csurka_visual_2004},
-human detection \autocite{dalal_histograms_2005} or scene classification
-\autocite{yang_evaluating_2007}, the class concept is too limited for general
-image retrieval. To achieve the classification, a SVM constructs a hyperplane,
-that optimally separates two sets of points $x_i \in \mathbb{R}^n$ with labels
-$y_i \in \{-1, 1 \}$ in a training dataset $\{ (x_i, y_i) \}$. The hyperplane
-can be defined using its normal vector $w$ and offset $b$ as
-\begin{equation*}
-    w \cdot x - b = 0.
-\end{equation*}
-To turn the problem into an optimization problem, the plane is split up into
-two parallel hyperplanes described by
-\begin{equation*}
-    w \cdot x - b = 1 \text{ and } w \cdot x - b = -1.
-\end{equation*}
-The region between these two planes is characterized by their distance
-$\frac{2}{\| w \|}$, which needs to be minimized while satisfying
-\begin{alignat*}{3}
-    w \cdot x_i - b & \geq & 1 & \quad \text{if } y_i = 1 \qquad \text{or} \\
-    w \cdot x_i - b & \leq & -1 & \quad \text{if } y_i = -1
-\end{alignat*}
-for all $i$. It is possible to transform this into an equivalent quadratic
-optimization problem solvable by standard quadratic programming algorithms.
-
-Even though image retrieval as described in this thesis is not a simple
-classification problem, linear SVMs can still be of use. Guyon et al.\
-\autocite{guyon_gene_2002} showed, that the components of $w$ can be used as
-weights describing the discriminative power of feature vectors. This was
-applied to image retrieval by Shrivastava et al.\ in
-\autocite{shrivastava_data-driven_2011}. There the authors trained a SVM for
-each query image $I_q$ with the query image's signature constituting one class
-and the database images' signatures $x_i$ making up the other class. The
-pairwise similarity could then easily be obtained from the learned weights
-$w_q$ as
-\begin{equation*}
-    S(I_q, I_i) = w_q^T x_i.
-\end{equation*}
-That way, common features in the query signature are effectively down-voted,
-while unique features are assigned larger weights.
-
-\paragraph{TF-IDF}
-
-Along with the visual word analogy from the field of text retrieval, the
-statistical method of TF-IDF weighting \autocite{baeza-yates_modern_1999} has
-been applied to CBIR \autocite{sivic_video_2003}. It is a technique to weight
-features (terms) in a document in relation to their occurence in the document
-and the whole database. The term frequency $tf_{i, j}$ is the number of
-normalized occurences of term $t_i$ in document $d_j$. The normalization can be
-performed in different ways. The most common ones are dividing by the total
-number of words $n_j$ in the document or the maximum term count $\max \{ tc_{i,
-j} : \forall t_i \in d_j \}$ of any term in the document $j$:
-\begin{equation*}
-    tf_{i, j} = \frac{tc_{i, j}}{n_j} \text{ or } tf_{i, j} = \frac{tc_{i, j}}{\max \{ tc_{i, j} : \forall t_i \in d_j \}}
-\end{equation*}
-The occurence of a term in the database $D$ is measured as the logarithm of the
-quotient of the overall number of documents $|D|$ and the number of documents
-$m_i$ containing the term $t_i$:
-\begin{equation*}
-    idf_{i} = \log \frac{|D|}{m_i}
-\end{equation*}
-Therefore, the total weight $w_{i, j}$ of a term is given as
-\begin{equation*}
-    w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}
-\end{equation*}
-assuming the document length is used for normalization.
