@@ -65,7 +65,6 @@ For each of these grid cells, the mean $\bar{C}_{s, \theta}$ is calculated:
     \label{fig:signature_examples}
 \end{figure}
 
-
 \subsection{Global Features}
 
 \paragraph{MEAN}
@@ -77,22 +76,23 @@ $\bar{C}_{s, \theta}$ and concatenates them as the image signature.
 
 The local feature extraction methods used here follow the bag-of-features
 approach, that aims to represent an image using a set of local feature
-descriptions or "visual words" similar to what was described in
-\autocite{sivic_video_2003}. The exact way to extract the words will be
-detailed towards the end of this section.
+descriptions or "visual words" similar to what was described by Sivic et al.\ 
+\autocite{sivic_video_2003}. 
 
-The set of visual words extracted from the images are diverse and hard to
-compare. In order to create meaningful image signatures from these words, the
-whole set is condensed into a dictionary using k-means clustering. As already
-discussed in \ref{sec:anatomy_clustering}, the goal thereof is to derive a
-dictionary of predefined size that contains the visual words corresponding to
-the most discriminating features of the images in the image database. A
-universally optimal size for the codebook does not seem to exist, as Nowak et
-al.\ \autocite{nowak_sampling_2006} observe an increase in accuracy up to 1000
-words, but overfitting for some sampling algorithms beyond that. At the same
-time \autocite{yang_evaluating_2007} report optimal sizes of 20000 to 80000
-depending on the image database. In \autocite{eitz_sketch-based_2010} a size of
-1000 visual words was found optimal for sketches.
+\subsubsection{Sampling}
+
+Both of the feature vector extraction methods described above use dense,
+overlapping sampling of a grid of mean values. By using $m \times m$ windows,
+the small-scale spatial relationship between features can be captured. The
+overlap helps to avoid misinterpretation of features on grid boundaries that
+would occur with dense, non-overlapping sampling. Evaluations by Nowak et al.\
+\autocite{nowak_sampling_2006} have shown that random sampling, which dense
+sampling is a special case of, outperforms keypoint-based sampling for large
+enough numbers of samples. Dense sampling on grids has previously been
+successfully used by Lazebnik in \autocite{lazebnik_beyond_2006} and
+\autocite{lazebnik_spatial_2009}. The R-HOG descriptor
+\autocite{dalal_histograms_2005} also uses a dense grid for sampling with
+overlapping windows to improve matching performance.
 
 \paragraph{PMEAN}
 
@@ -133,17 +133,32 @@ concatenating all vectors $\bar{W}_{s, \theta, u, v}$, each scale is handled
 separately. Therefore, each combination of $(u, v, s)$ produces a vector of
 length $N_{\theta_s} \cdot m^2$.
 
-\paragraph{Sampling}
+\subsubsection{Clustering and Vector Quantization}
 
-Both of the feature vector extraction methods described above use dense,
-overlapping sampling of a grid of mean values. By using $m \times m$ windows,
-the small-scale spatial relationship between features can be captured. The
-overlap helps to avoid misinterpretation of features on grid boundaries that
-would occur with dense, non-overlapping sampling. Evaluations by Nowak et al.\
-\autocite{nowak_sampling_2006} have shown that random sampling, which dense
-sampling is a special case of, outperforms keypoint-based sampling for large
-enough numbers of samples. Dense sampling on grids has previously been
-successfully used by Lazebnik in \autocite{lazebnik_beyond_2006} and
-\autocite{lazebnik_spatial_2009}. The R-HOG descriptor
-\autocite{dalal_histograms_2005} also uses a dense grid for sampling with
-overlapping windows to improve matching performance.
+\paragraph{CLUSTER}
+
+The set of feature vectors extracted from the images are numerous and large.
+In order to create meaningful image signatures from these vectors, the whole
+set is condensed into a dictionary using k-means clustering. As already
+discussed in section \ref{sec:anatomy_clustering}, the goal thereof is to
+derive a dictionary of predefined size that contains the visual words
+corresponding to the most discriminating features of the images in the image
+database. A universally optimal size for the codebook does not seem to exist,
+as Nowak et al.\ \autocite{nowak_sampling_2006} observed an increase in accuracy
+up to 1000 words, but overfitting for some sampling algorithms beyond that. At
+the same time Yang et al.\ \autocite{yang_evaluating_2007} report optimal sizes
+of 20000 to 80000 depending on the image database. The findings of Eitz et al.\
+\autocite{eitz_sketch-based_2010} agree with Nowak et al.\ in that a size of
+1000 visual words was optimal for sketches, which is why that size was chosen
+for the following evaluation.
+
+\paragraph{VQ}
+
+The dictionary generated in the clusting step is then used to quantize the
+feature vectors extracted by the previous PMEAN and PMEAN2 procedures and
+record their number in signature vector as explained in section
+\ref{sec:anatomy_clustering}. To improve the extend in which this vector
+describes the image it was generated from, its components are then weighted.
+The tf-idf statistic detailed in \ref{sec:anatomy_ranking_weighting} is used to
+calculate a factor for each value that diminishes common, non-distinguishing
+visual words and boosts the importance of rare or unique words.

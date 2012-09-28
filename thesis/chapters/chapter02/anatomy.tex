@@ -202,11 +202,11 @@ The centers are then recalculated as
 \end{equation*}
 
 The greedy nature of the algorithm and the random initialization mean that it
-is merely a heuristic and can converge on a local minimum, that not a global
-minimum.
-Other clusting methods are hierarchical agglomorative and divisive algorithms as
-used in \autocite{nister_scalable_2006} and \autocite {philbin_object_2007},
-that recursively divide or merge partitions to optimize the vocabulary.
+is merely a heuristic and can converge on a local minimum, that is not a global
+minimum.  Other clusting methods are hierarchical agglomorative and divisive
+algorithms as used in \autocite{nister_scalable_2006} and \autocite
+{philbin_object_2007}, that recursively divide or merge partitions to optimize
+the vocabulary.
 
 Once the clustering algorithm has converged, the cluster centers $m_i$ will be
 used as the visual words of the codebook. To create the signature vector of an
@@ -223,6 +223,14 @@ The final image signature $\tilde{I}$ then is the vector of the cardinality of t
 \subsection{Comparison and Ranking}\label{sec:anatomy_ranking}
 
 \subsubsection{Distance Metrics}\label{sec:anatomy_ranking_distance}
+
+To retrieve the similar images from the database, a ranking of database image
+in respect to their similarity to the query image must be obtained. Since each
+image is represented by a signature vector, this means the pairwise distance
+between the query image's signature and each database image's signature can be
+used to sort the list of query results. This section will describe several
+distance metrics and similarity measure candidates, that can be used to that
+end.
 
 \paragraph{Euclidean Distance}\label{sec:anatomy_ranking_distance_euclidean}
 
@@ -317,7 +325,7 @@ by adjusting the denominator:
     s_{HI}(P, Q) = \frac{\displaystyle\sum_{i=1}^n \min (p_i, q_i)}{\displaystyle \min \left( \sum_{i=1}^n p_i, \sum_{i=1}^n q_i \right)}
 \end{equation*}
 
-\subsubsection{Weighting}
+\subsubsection{Weighting}\label{sec:anatomy_ranking_weighting}
 
 \paragraph{Linear Support Vector Machines}
 
