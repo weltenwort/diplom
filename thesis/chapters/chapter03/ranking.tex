@@ -23,8 +23,16 @@ partial matches in a signature. As can be seen from the definition in
 being a perfect match. Therefore, $1 - s_{HI}$ is used as a distance value to
 sort the result list.
 
+\paragraph{HIB}
+
+The binary variant of the histogram intersection measure converts converts the
+bin counts into a boolean representation, where a 1 indicates the presence of a
+codeword irrespective of the actual count, and a 0 denotes a codeword's
+absence. The resulting sequence of zeros and ones is then treated like in the
+HI measure.
+
 \paragraph{EMD}
 
-The Earth Mover's Distance is solved using a simplex algorithm veriant, which
+The Earth Mover's Distance is solved using a simplex algorithm variant, which
 has an exponential worst case complexity. That makes it computationally more
 expensive than the linear complexity measures described previously.

@@ -13,7 +13,7 @@
         \node [operation node] (qpmean) {PMEAN}; &&
         \node [operation node] (qquant) {VQ}; \\
     };
-    \node [operation node, split node=3, right=3ex of $(dbquant.east)!0.5!(qquant.east)$] (dist) {$L_2$ \nodepart{two} HI(B) \nodepart{three} EMD};
+    \node [operation node, split node=4, right=3ex of $(dbquant.east)!0.5!(qquant.east)$] (dist) {$L_2$ \nodepart{two} COS \nodepart{three} HI(B) \nodepart{four} EMD};
     \node [document node, right=of dist] (result) {distances};
 
     { [start chain=going right, every join/.style={connector}]

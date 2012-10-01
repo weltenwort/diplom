@@ -2,10 +2,13 @@
 
 The local feature extraction pipelines utilize the same preprocessing steps as
 the ones based on global features. The curvelet transform remains unchanged as
-well. The the curvelet coefficients are sampled using the PMEANS and PMEANS2
+well. The the curvelet coefficients are sampled using the PMEAN and PMEAN2
 strategy to produce features for local patches. From these feature vectors, a
 codebook of size $1000$ is generated and the feature vectors from both the
-database images and the query images are quantized 
+database images and the query images are quantized and weighted using the
+TF-ITF method. The metrics used for ranking are the generic cosine and $L_2$
+distance measures as well as histogram intersection and the earth mover's
+distance.
 
 \paragraph{LUMA+PMEAN}
 
