@@ -4,14 +4,16 @@
         \node [operation node] (dbluma) {LUMA}; &
         \node [operation node] (dbsegment) {SEGMENT}; &
         \node [operation node] (dbcurvelet) {FDCT}; &
-        \node [operation node] (dbpmean) {PMEAN}; &&
+        %\node [operation node] (dbpmean) {PMEAN}; &&
+        \node [operation node, split node=2] (dbpmean) {PMEAN \nodepart{two} PMEAN2}; &
         \node [operation node] (dbquant) {VQ}; \\
         &&&&
         \node [operation node] (cluster) {CLUSTER}; \\
         \node [document node] (qimg) {$I_q$}; &
         \node [operation node] (qluma) {LUMA}; &&
         \node [operation node] (qcurvelet) {FDCT}; &
-        \node [operation node] (qpmean) {PMEAN}; &&
+        %\node [operation node] (qpmean) {PMEAN}; &&
+        \node [operation node, split node=2] (qpmean) {PMEAN \nodepart{two} PMEAN2}; &
         \node [operation node] (qquant) {VQ}; \\
     };
     \node [operation node, split node=4, right=3ex of $(dbquant.east)!0.5!(qquant.east)$] (dist) {$L_2$ \nodepart{two} COS \nodepart{three} HI(B) \nodepart{four} EMD};

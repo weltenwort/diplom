@@ -10,35 +10,50 @@ TF-ITF method. The metrics used for ranking are the generic cosine and $L_2$
 distance measures as well as histogram intersection and the earth mover's
 distance.
 
-\paragraph{LUMA+PMEAN}
+\paragraph{LUMA+PMEAN(2)}
 
-foo
+Analogous to the global LUMA+MEAN variant, this pipeline configuration directly
+uses the LUMA image representations as input for the curvelet transform
+(Figure~\ref{fig:pipeline_local_luma_pmean}). For both, the PMEAN
+(Table~\ref{tab:results_local_luma_pmean}) and PMEAN2
+(Table~\ref{tab:results_local_luma_pmean2}) sampling method, histogram
+intersection and the cosine measures are far superior to the $L_2$ metric and
+even the EMD metric, although the results cannot compete with the global
+LUMA+MEAN version.
 
 \begin{figure}[h]
     \centering
     \input{illustrations/pipelines/local_luma_pmean.tex}
-    \caption[Local LUMA+PMEAN Pipelines]{
-        Local LUMA+PMEAN Pipelines
+    \caption[Local LUMA+PMEAN(2) Pipelines]{
+        Local LUMA+PMEAN(2) Pipelines
     }
     \label{fig:pipeline_local_luma_pmean}
 \end{figure}
 
 \begin{table}[h]
     \centering
-    \input{illustrations/graphs/l_luma_pmean.tex}
-    \caption[Local LUMA+PMEAN Results]{
-        Local LUMA+PMEAN Results
+    \subfloat[Local LUMA+PMEAN Results]{%
+        \input{illustrations/graphs/l_luma_pmean.tex}
+        \label{tab:results_local_luma_pmean}
     }
-    \label{tab:results_local_luma_pmean}
+    \quad
+    \subfloat[Local LUMA+PMEAN2 Results]{%
+        \input{illustrations/graphs/l_luma_pmean2.tex}
+        \label{tab:results_local_luma_pmean2}
+    }
+    \caption[Local LUMA+PMEAN(2) Results]{
+        Local LUMA+PMEAN(2) Results
+    }
+    \label{tab:results_local_luma_pmean_all}
 \end{table}
 
-\paragraph{LUMA+PMEAN2}
+\paragraph{CANNY+PMEAN(2)}
 
-foo
-
-\paragraph{CANNY+PMEAN}
-
-foo
+Using the Canny edge detector and PMEAN sampling
+(Figure~\ref{fig:pipeline_local_luma_canny_pmean}), the rank correlation
+coefficient for COS and HI exceed all previous results. In an attempt to
+improve the result further, several sets of parameter values are examined: For
+the number of angles $N_{\theta} \in \{8, 12, 16\}$, no improvement is visible.
 
 \begin{figure}[h]
     \centering
@@ -51,18 +66,22 @@ foo
 
 \begin{table}[h]
     \centering
-    \input{illustrations/graphs/l_luma_canny_pmean.tex}
-    \caption[Local CANNY+PMEAN Results]{
-        Local CANNY+PMEAN Results
+    \subfloat[Local CANNY+PMEAN Results]{%
+        \input{illustrations/graphs/l_luma_canny_pmean.tex}
+        \label{tab:results_local_luma_canny_pmean}
     }
-    \label{tab:results_local_luma_canny_pmean}
+    \quad
+    \subfloat[Local CANNY+PMEAN2 Results]{%
+        \input{illustrations/graphs/l_luma_canny_pmean2.tex}
+        \label{tab:results_local_luma_canny_pmean2}
+    }
+    \caption[Local CANNY+PMEAN(2) Results]{
+        Local CANNY+PMEAN(2) Results
+    }
+    \label{tab:results_local_luma_canny_pmean_all}
 \end{table}
 
-\paragraph{CANNY+PMEAN2}
-
-foo
-
-\paragraph{SOBEL+PMEAN}
+\paragraph{SOBEL+PMEAN(2)}
 
 foo
 
@@ -77,14 +96,22 @@ foo
 
 \begin{table}[h]
     \centering
-    \input{illustrations/graphs/l_luma_sobel_pmean.tex}
-    \caption[Local SOBEL+PMEAN Results]{
-        Local SOBEL+PMEAN Results
+    \subfloat[Local SOBEL+PMEAN Results]{%
+        \input{illustrations/graphs/l_luma_sobel_pmean.tex}
+        \label{tab:results_local_luma_sobel_pmean}
     }
-    \label{tab:results_local_luma_sobel_pmean}
+    \quad
+    \subfloat[Local SOBEL+PMEAN2 Results]{%
+        \input{illustrations/graphs/l_luma_sobel_pmean2.tex}
+        \label{tab:results_local_luma_sobel_pmean2}
+    }
+    \caption[Local SOBEL+PMEAN(2) Results]{
+        Local SOBEL+PMEAN(2) Results
+    }
+    \label{tab:results_local_luma_sobel_pmean_all}
 \end{table}
 
-\paragraph{SEGMENT+PMEAN}
+\paragraph{SEGMENT+PMEAN(2)}
 
 foo
 
@@ -99,9 +126,17 @@ foo
 
 \begin{table}[h]
     \centering
-    \input{illustrations/graphs/l_luma_segment_pmean.tex}
-    \caption[Local SEGMENT+PMEAN Results]{
-        Local SEGMENT+PMEAN Results
+    \subfloat[Local SEGMENT+PMEAN Results]{
+        \input{illustrations/graphs/l_luma_segment_pmean.tex}
+        \label{tab:results_local_luma_segment_pmean}
     }
-    \label{tab:results_local_luma_segment_pmean}
+    \quad
+    \subfloat[Local SEGMENT+PMEAN2 Results]{
+        \input{illustrations/graphs/l_luma_segment_pmean2.tex}
+        \label{tab:results_local_luma_segment_pmean2}
+    }
+    \caption[Local SEGMENT+PMEAN(2) Results]{
+        Local SEGMENT+PMEAN(2) Results
+    }
+    \label{tab:results_local_luma_segment_pmean_all}
 \end{table}
