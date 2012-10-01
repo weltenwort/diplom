@@ -51,11 +51,17 @@ LUMA+MEAN version.
 
 Using the Canny edge detector and PMEAN sampling
 (Figure~\ref{fig:pipeline_local_luma_canny_pmean}), the rank correlation
-coefficient for COS and HI exceed all previous results. In an attempt to
-improve the result further, several sets of parameter values are examined: For
-the number of angles $N_{\theta} \in \{8, 12, 16\}$, no improvement is visible.
+coefficient for COS and HI exceed all previous results
+(Table~\ref{tab:results_local_luma_canny_pmean}). In an attempt to improve the
+result further, several sets of parameter values are examined: For the number
+of angles $N_{\theta} \in \{8, 12, 16\}$ the differences are small with
+$N_{\theta} = 12$ yielding the highest results. For the grid and patch sizes of
+the best results, $\frac{P}{G} \approx \frac{1}{3}$ seems to hold.
 
-\begin{figure}[h]
+Treating the coefficients on different scales separately using the PMEAN2
+sampling method is inferior to PMEAN in this case.
+
+\begin{figure}[h!]
     \centering
     \input{illustrations/pipelines/local_luma_canny_pmean.tex}
     \caption[Local CANNY+PMEAN Pipelines]{
@@ -64,7 +70,7 @@ the number of angles $N_{\theta} \in \{8, 12, 16\}$, no improvement is visible.
     \label{fig:pipeline_local_luma_canny_pmean}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[h!]
     \centering
     \subfloat[Local CANNY+PMEAN Results]{%
         \input{illustrations/graphs/l_luma_canny_pmean.tex}

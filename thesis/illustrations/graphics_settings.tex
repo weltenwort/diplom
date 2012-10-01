@@ -11,7 +11,9 @@
     split node/.style={rectangle split, rectangle split parts=#1},
 	document node/.style={small node, draw=lightborder, fill=lightbg},
 	operation node/.style={small node, draw=grayborder, fill=graybg},
+	parameter node/.style={small node},
 	connector/.style={very thick, draw=grayborder, ->, rounded corners},
+	parameter connector/.style={draw=black, ->, rounded corners},
 	vh connector/.style={connector, to path={|- (\tikztotarget)}},
 	hv connector/.style={connector, to path={-| (\tikztotarget)}},
     hvh connector top/.style={to path={-- ++(1.5ex,0) |- (\tikztotarget.170)}},
@@ -45,12 +47,14 @@
         every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3},
         axis x line*=bottom,
         axis y line*=left,
-    }
-    }
+    },
+}
 
 \pgfplotstableset{create on use/graph/.style={
-create col/expr=0
-}}
+    create col/expr=0
+    },
+    every table/.style={font=\small},
+}
 \pgfplotstableread[]{results/reference.csv}\resultsreference
 \newcommand{\addreferenceplot}{\addplot[const plot, red, update limits=false] table[x=MeanCorrelation, y expr=\coordindex*100-1] {\resultsreference}}
 

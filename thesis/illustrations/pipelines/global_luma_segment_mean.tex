@@ -13,6 +13,16 @@
     \node [operation node, split node=2, right=3ex of $(dbmean.east)!0.5!(qmean.east)$] (dist) {$L_2$ \nodepart{two} COS};
     \node [document node, right=of dist] (result) {distances};
 
+    \node [parameter node, above=of dbcurvelet] (dbcurveletparam) {$(N_s, N_{\theta})$};
+    \node [parameter node, above=of dbmean] (dbmeanparam) {$G$};
+    \node [parameter node, below=of qcurvelet] (qcurveletparam) {$(N_s, N_{\theta})$};
+    \node [parameter node, below=of qmean] (qmeanparam) {$G$};
+
+    \path [parameter connector] (dbcurveletparam) -- (dbcurvelet);
+    \path [parameter connector] (dbmeanparam) -- (dbmean);
+    \path [parameter connector] (qcurveletparam) -- (qcurvelet);
+    \path [parameter connector] (qmeanparam) -- (qmean);
+
     { [start chain=going right, every join/.style={connector}]
         \chainin (dbimg);
         \chainin (dbsegment) [join];
