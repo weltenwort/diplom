@@ -14,6 +14,13 @@ TRANSLATIONS = {
         "metrics.emd": "EMD",
         "metrics.histogram_intersection": "HI",
         "metrics.histogram_intersection_binary": "HIB",
+        "features.patch_means": "PMEAN",
+        "features.patch_means2": "PMEAN2",
+        "features.global_means": "MEAN",
+        "readers.canny": "CANNY",
+        "readers.sobel": "SOBEL",
+        "readers.segment": "SEGMENT",
+        "readers.luma": "LUMA",
         }
 
 
@@ -55,6 +62,22 @@ class CollectResults(Lister):
 
     def take_action(self, args):
         results = []
+        columns = [
+                "ConfigFilename",
+                "MeanCorrelation",
+                "StandardDeviation",
+                "Description",
+                "features",
+                "scales",
+                "angles",
+                "gridsize",
+                "patchsize",
+                "cannysigma",
+                "queryreader",
+                "imagereader",
+                "metric",
+                ]
+        sort_keys = columns[4:]
 
         for result_filename in args.results:
             result_path = pathlib.Path(result_filename)
@@ -63,24 +86,33 @@ class CollectResults(Lister):
             config = result_info.get("config", {})
 
             correlations_keys = sorted(result_info["correlations"].keys())
+            short_correlation_keys = [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys]
             std_dev = numpy.std(result_info["correlations"].values())
 
-            results.append([
-                str(result_path.parts[-1]).replace("_", "\_"),
-                result_info["mean_correlation"],
-                std_dev,
-                self._format_description(result_info),
-                config.get("curvelets", {}).get("scales", ""),
-                config.get("curvelets", {}).get("angles", ""),
-                config.get("features", {}).get("grid_size", ""),
-                config.get("features", {}).get("patch_size", ""),
-                config.get("readers", {}).get("canny_sigma", ""),
-                TRANSLATIONS.get(config.get("metric", {}).get("metric", ""), ""),
-                ] + [result_info["correlations"][p] for p in correlations_keys])
+            entry = {
+                    "ConfigFilename": str(result_path.parts[-1]).replace("_", "\_"),
+                    "MeanCorrelation": result_info["mean_correlation"],
+                    "StandardDeviation": std_dev,
+                    "Description": self._format_description(result_info),
+                    "scales": config.get("curvelets", {}).get("scales", ""),
+                    "angles": config.get("curvelets", {}).get("angles", ""),
+                    "features": TRANSLATIONS.get(config.get("features", {}).get("extractor", ""), ""),
+                    "gridsize": config.get("features", {}).get("grid_size", ""),
+                    "patchsize": config.get("features", {}).get("patch_size", ""),
+                    "cannysigma": config.get("readers", {}).get("canny_sigma", ""),
+                    "queryreader": TRANSLATIONS.get(config.get("readers", {}).get("query", ""), ""),
+                    "imagereader": TRANSLATIONS.get(config.get("readers", {}).get("image", ""), ""),
+                    "metric": TRANSLATIONS.get(config.get("metric", {}).get("metric", ""), ""),
+                    }
+            for s, k in zip(short_correlation_keys, correlations_keys):
+                entry[s] = result_info["correlations"][k]
+
+            results.append(entry)
+            results.sort(key=lambda x: [x[k] for k in sort_keys])
 
         return (
-                ["ConfigFilename", "MeanCorrelation", "StandardDeviation", "Description", "scales", "angles", "gridsize", "patchsize", "cannysigma", "metric"] + [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys],
-                sorted(results, key=lambda x: x[3:8]),
+                columns + short_correlation_keys,
+                [[row[c] for c in columns + short_correlation_keys] for row in results]
                 )
 
 

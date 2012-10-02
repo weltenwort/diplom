@@ -13,5 +13,16 @@ eval "$CMD r_l_luma_segment_pmean_* > ${TARGET_DIR}/l_luma_segment_pmean_1.csv"
 eval "$CMD r_l_luma_segment_pmean2_* > ${TARGET_DIR}/l_luma_segment_pmean2_1.csv"
 eval "$CMD r_l_luma_sobel_pmean_* > ${TARGET_DIR}/l_luma_sobel_pmean_1.csv"
 eval "$CMD r_l_luma_sobel_pmean2_* > ${TARGET_DIR}/l_luma_sobel_pmean2_1.csv"
-eval "$CMD r_l_luma_canny*_pmean_* > ${TARGET_DIR}/l_luma_canny_pmean_1.csv"
-eval "$CMD r_l_luma_canny*_pmean2_* > ${TARGET_DIR}/l_luma_canny_pmean2_1.csv"
+eval "$CMD r_l_luma_canny_1_5_pmean_g8_3_*_s4_a12* > ${TARGET_DIR}/l_luma_canny_pmean_1.csv"
+eval "$CMD r_l_luma_canny_1_5_pmean2_g8_3_*_s4_a12* > ${TARGET_DIR}/l_luma_canny_pmean2_1.csv"
+eval "$CMD\
+    r_g_luma_mean_g12_cos_s4_a12.*.json\
+    r_g_luma_canny_1_5_mean_g8_cos_s4_a12.*.json\
+    r_g_luma_sobel_mean_g12_cos_s4_a12.*.json\
+    r_l_luma_canny_1_5_pmean_g8_3_hi_1000_itf_s4_a12.*.json\
+    r_l_luma_canny_1_5_pmean2_g8_3_cos_1000_itf_s4_a12.*.json\
+    r_l_luma_sobel_pmean_g8_3_hibin_1000_itf_s4_a12.*.json\
+    > ${TARGET_DIR}/best_performers.csv"
+eval "$CMD\
+    r_l_luma_canny_1_5_pmean_g8_3_hi_1000_itf_s4_a*.*.json\
+    > ${TARGET_DIR}/parameter_angles.csv"

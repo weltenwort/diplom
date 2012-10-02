@@ -1,0 +1,165 @@
+\subsection{Parameter Variations}
+
+In an attempt to improve the results, the best performing configurations
+presented in the previous sections will be re-used with varying parameter
+values (Table~\ref{tab:results_best_performers}). The following sections
+compare the results of changing the parameters $N_{\theta}$, $P$, $G$ and
+$\sigma$.
+
+\begin{table}[h]
+    \centering
+    \pgfplotstableread[]{results/best_performers.csv}\resultsbestperformers
+    \plottablexbars{imagereader,features,gridsize,patchsize,cannysigma,metric}{\resultsbestperformers}
+    \caption[Best Performing Configurations]{
+        Best Performing Configurations with default assumptions $N_s=4$ and
+        $N_{\theta}=12$.
+    }
+    \label{tab:results_best_performers}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Curvelet Angles}
+
+The parameter $N_{\theta}$ controls the number of angles, the curvelet
+coronization is divided into (see Section~\ref{sec:background_fdct}).
+Therefore, it determines how finely the angles of the lines are resolved and
+how sensitive to angular differences the descriptor is.
+
+\begin{table}[h]
+    \centering
+    \pgfplotstableread[]{results/parameter_angles.csv}\resultsparameterangles
+    \plottablexbars{scales,angles,cannysigma,metric}{\resultsparameterangles}
+    \caption[Angle Parameter Results]{
+        Influence of $N_{\theta}$ on the results of CANNY+PMEAN for $G=8$,
+        $P=3$ and $\sigma=1.5$.
+    }
+    \label{tab:results_best_performers}
+\end{table}
+
+\FloatBarrier
+%In an attempt to improve the
+%result further, several sets of parameter values are examined: For the number
+%of angles $N_{\theta} \in \{8, 12, 16\}$ the differences are small with
+%$N_{\theta} = 12$ yielding the highest results. For the grid and patch sizes of
+%the best results, $\frac{P}{G} \approx \frac{1}{3}$ seems to hold.
+
+
+%The processing steps applied to the database images and the query images in the
+%pipelines based on global features are almost identical, with the exception of
+%the CANNY, SOBEL and SEGMENT steps for the database images. The curvelet
+%responses are averaged on a grid and the features are ranked using the $L_2$
+%and the COS distance measures.
+
+%\paragraph{LUMA+MEAN}
+
+%The most straightforward combination of processing steps consists of a LUMA
+%input image, on which the means of $G \times G$ grid cells is computed for each
+%scale and angle (Figure \ref{fig:pipeline_global_luma_mean}).  Varying $G$
+%determines the feature size that can be encoded best. Setting $G=12$ seems to
+%yield the best correlation, although the advantage over $G=8$ and $G=16$ is
+%below $0.01$. The distance measure COS outperforms the $L_2$ measure (Table
+%\ref{tab:results_global_luma_mean}). A possible explanation would be that the
+%COS measure normalizes the magnitude of the feature vector as discussed in
+%\ref{sec:anatomy_ranking_distance_euclidean}.
+
+%\begin{figure}[h]
+    %\centering
+    %\input{illustrations/pipelines/global_luma_mean.tex}
+    %\caption[Global LUMA+MEAN Pipelines]{
+        %Global LUMA+MEAN Pipelines
+    %}
+    %\label{fig:pipeline_global_luma_mean}
+%\end{figure}
+
+%\begin{table}[h]
+    %\centering
+    %\input{illustrations/graphs/g_luma_mean.tex}
+    %\caption[Global LUMA+MEAN Results]{
+        %Global LUMA+MEAN Results
+    %}
+    %\label{tab:results_global_luma_mean}
+%\end{table}
+
+%\FloatBarrier
+%\paragraph{CANNY+MEAN}
+
+%In addition to reading the images like in the previous LUMA+MEAN configuration,
+%this pipeline applies a CANNY processing step to the database images in an
+%attempt to bring the query and database image domains closer together (Figure
+%\ref{fig:pipeline_global_luma_canny_mean}). Again, the COS distance measure
+%produces the best rankings (Table~\ref{tab:results_global_luma_canny_mean}).
+%Surprisingly, the Canny edge detector does not lead to increased performance in
+%comparison to plain the LUMA preprocessing step.
+
+%\begin{figure}[h]
+    %\centering
+    %\input{illustrations/pipelines/global_luma_canny_mean.tex}
+    %\caption[Global CANNY+MEAN Pipelines]{
+        %Global CANNY+MEAN Pipelines
+    %}
+    %\label{fig:pipeline_global_luma_canny_mean}
+%\end{figure}
+
+%\begin{table}[h]
+    %\centering
+    %\input{illustrations/graphs/g_luma_canny_mean.tex}
+    %\caption[Global CANNY+MEAN Results]{
+        %Global CANNY+MEAN Results
+    %}
+    %\label{tab:results_global_luma_canny_mean}
+%\end{table}
+
+%\FloatBarrier
+%\paragraph{SOBEL+MEAN}
+
+%The SOBEL step used in this variant also attempts to bring the database images
+%into the sketch domain (Figure~\ref{fig:pipeline_global_luma_sobel_mean}). The
+%results are slightly better than with the CANNY preprocessor
+%(Table~\ref{tab:results_global_luma_sobel_mean}).
+
+%\begin{figure}[h!]
+    %\centering
+    %\input{illustrations/pipelines/global_luma_sobel_mean.tex}
+    %\caption[Global SOBEL+MEAN Pipelines]{
+        %Global SOBEL+MEAN Pipelines
+    %}
+    %\label{fig:pipeline_global_luma_sobel_mean}
+%\end{figure}
+
+%\begin{table}[h!]
+    %\centering
+    %\input{illustrations/graphs/g_luma_sobel_mean.tex}
+    %\caption[Global SOBEL+MEAN Results]{
+        %Global SOBEL+MEAN Results
+    %}
+    %\label{tab:results_global_luma_sobel_mean}
+%\end{table}
+
+%\FloatBarrier
+%\paragraph{SEGMENT+MEAN}
+
+%With the gPb contour detector in the SEGMENT step to find edges in the database
+%images (Figure~\ref{fig:pipeline_global_luma_segment_mean}), the $L_2$ distance
+%metric produces results comparable to the COS metric in the CANNY+MEAN variant
+%(Table~\ref{tab:results_global_luma_segment_mean}).  Unlike in the other cases,
+%the COS distance measure performs worse than the $L_2$ metric.
+
+%\begin{figure}[h]
+    %\centering
+    %\input{illustrations/pipelines/global_luma_segment_mean.tex}
+    %\caption[Global SEGMENT+MEAN Pipelines]{
+        %Global SEGMENT+MEAN Pipelines
+    %}
+    %\label{fig:pipeline_global_luma_segment_mean}
+%\end{figure}
+
+%\begin{table}[h]
+    %\centering
+    %\input{illustrations/graphs/g_luma_segment_mean.tex}
+    %\caption[Global SEGMENT+MEAN Results]{
+        %Global SEGMENT+MEAN Results
+    %}
+    %\label{tab:results_global_luma_segment_mean}
+%\end{table}
+
+%\FloatBarrier

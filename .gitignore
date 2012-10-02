@@ -2,3 +2,5 @@
 *.pyo
 *.pyc
 *.aux
+fcache_*
+ccache_*

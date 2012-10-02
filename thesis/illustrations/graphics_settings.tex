@@ -35,6 +35,7 @@
     },
     hbarplot/.style={
         xbar,
+        %xcomb,
         small,
         y=-\baselineskip,
         enlarge y limits={true, abs value=0.45},
@@ -62,7 +63,7 @@
 \newcommand{\addreferenceplot}{\addplot[const plot, red, update limits=false] table[x=MeanCorrelation, y expr=\coordindex*100-1] {\resultsreference}}
 
 \newcommand{\plotxbars}[1]{%
-    \begin{tikzpicture}
+    \begin{tikzpicture}[trim axis left, trim axis right]
         \begin{axis}[
             hbarplot,
             width=6cm,
@@ -88,6 +89,9 @@
       columns/patchsize/.style={string type,column name=$P$},
       columns/cannysigma/.style={string type,column name=$\sigma$},
       columns/metric/.style={string type,column name=Metric},
+      columns/queryreader/.style={string type,column name=Preproc.},
+      columns/imagereader/.style={string type,column name=Preproc.},
+      columns/features/.style={string type,column name=Sampling},
       columns/graph/.style={
         column name={},
         assign cell content/.code={% use \multirow for Z column:
