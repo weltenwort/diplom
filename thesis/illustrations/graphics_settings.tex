@@ -39,14 +39,17 @@
         y=-\baselineskip,
         enlarge y limits={true, abs value=0.45},
         xmin=0,
-        xmax=0.3,
+        xmax=0.4,
         ytick=\empty,
         xticklabel style={/pgf/number format/.cd,fixed,precision=2},
         nodes near coords,
-        nodes near coords align=horizontal,
-        every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3},
+        nodes near coords align={anchor=west},
+        every node near coord/.append style={font=\tiny, overlay, text depth=0.6em, /pgf/number format/.cd,fixed,precision=3},
         axis x line*=bottom,
         axis y line*=left,
+        error bars/error bar style={
+            gray,
+        },
     },
 }
 
@@ -64,7 +67,7 @@
             hbarplot,
             width=6cm,
             ]
-            \addplot table[x=MeanCorrelation, y expr=\coordindex] {#1};
+            \addplot+[error bars/.cd, x dir=both, x explicit] table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
             \addreferenceplot;
         \end{axis}
     \end{tikzpicture}%

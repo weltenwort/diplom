@@ -2,6 +2,7 @@ import json
 
 from cliff.lister import Lister
 from cliff.formatters.base import ListFormatter
+import numpy
 import pathlib
 
 
@@ -62,10 +63,12 @@ class CollectResults(Lister):
             config = result_info.get("config", {})
 
             correlations_keys = sorted(result_info["correlations"].keys())
+            std_dev = numpy.std(result_info["correlations"].values())
 
             results.append([
                 str(result_path.parts[-1]).replace("_", "\_"),
                 result_info["mean_correlation"],
+                std_dev,
                 self._format_description(result_info),
                 config.get("curvelets", {}).get("scales", ""),
                 config.get("curvelets", {}).get("angles", ""),
@@ -76,7 +79,7 @@ class CollectResults(Lister):
                 ] + [result_info["correlations"][p] for p in correlations_keys])
 
         return (
-                ["ConfigFilename", "MeanCorrelation", "Description", "scales", "angles", "gridsize", "patchsize", "cannysigma", "metric"] + [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys],
+                ["ConfigFilename", "MeanCorrelation", "StandardDeviation", "Description", "scales", "angles", "gridsize", "patchsize", "cannysigma", "metric"] + [str(pathlib.Path(str(p)).parts[-1]) for p in correlations_keys],
                 sorted(results, key=lambda x: x[3:8]),
                 )
 
