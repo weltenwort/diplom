@@ -36,6 +36,7 @@ COS measure normalizes the magnitude of the feature vector as discussed in
     \label{tab:results_global_luma_mean}
 \end{table}
 
+\FloatBarrier
 \paragraph{CANNY+MEAN}
 
 In addition to reading the images like in the previous LUMA+MEAN configuration,
@@ -64,6 +65,7 @@ comparison to plain the LUMA preprocessing step.
     \label{tab:results_global_luma_canny_mean}
 \end{table}
 
+\FloatBarrier
 \paragraph{SOBEL+MEAN}
 
 The SOBEL step used in this variant also attempts to bring the database images
@@ -71,7 +73,7 @@ into the sketch domain (Figure~\ref{fig:pipeline_global_luma_sobel_mean}). The
 results are slightly better than with the CANNY preprocessor
 (Table~\ref{tab:results_global_luma_sobel_mean}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \input{illustrations/pipelines/global_luma_sobel_mean.tex}
     \caption[Global SOBEL+MEAN Pipelines]{
@@ -80,7 +82,7 @@ results are slightly better than with the CANNY preprocessor
     \label{fig:pipeline_global_luma_sobel_mean}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[h!]
     \centering
     \input{illustrations/graphs/g_luma_sobel_mean.tex}
     \caption[Global SOBEL+MEAN Results]{
@@ -89,6 +91,7 @@ results are slightly better than with the CANNY preprocessor
     \label{tab:results_global_luma_sobel_mean}
 \end{table}
 
+\FloatBarrier
 \paragraph{SEGMENT+MEAN}
 
 With the gPb contour detector in the SEGMENT step to find edges in the database
@@ -114,3 +117,5 @@ the COS distance measure performs worse than the $L_2$ metric.
     }
     \label{tab:results_global_luma_segment_mean}
 \end{table}
+
+\FloatBarrier
