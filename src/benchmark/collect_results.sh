@@ -26,3 +26,6 @@ eval "$CMD\
 eval "$CMD\
     r_l_luma_canny_1_5_pmean_g8_3_hi_1000_itf_s4_a*.*.json\
     > ${TARGET_DIR}/parameter_angles.csv"
+eval "$CMD\
+    r_l_luma_canny_1_5_pmean_g*_*_hi_*.json\
+    > ${TARGET_DIR}/parameter_grid.csv"

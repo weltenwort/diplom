@@ -28,15 +28,43 @@ how sensitive to angular differences the descriptor is.
 \begin{table}[h]
     \centering
     \pgfplotstableread[]{results/parameter_angles.csv}\resultsparameterangles
-    \plottablexbars{scales,angles,cannysigma,metric}{\resultsparameterangles}
+    \plottablexbars{imagereader,features,scales,angles,metric}{\resultsparameterangles}
     \caption[Angle Parameter Results]{
         Influence of $N_{\theta}$ on the results of CANNY+PMEAN for $G=8$,
         $P=3$ and $\sigma=1.5$.
     }
-    \label{tab:results_best_performers}
+    \label{tab:results_parameter_angles}
 \end{table}
 
 \FloatBarrier
+\subsubsection{Grid and Patch Sizes}
+
+All of the MEAN, PMEAN and PMEAN2 sampling methods use a regular grid to divide
+the curvelet coefficients into cells, in which the mean of the coefficients is
+calculated. Using a small number $G$ of subdivisions means that smaller
+features might vanish within a large grid cell, unable to influence the mean
+value. A finer subdivision allows for smaller features to be represented at the
+risk of cutting apart larger features that lie on the grid lines. In addition
+to $G$, the local sampling methods PMEAN and PMEAN2 are influenced by the
+number of grid cells that make up a patch. As explained in section
+\ref{sec:solution_signature_extraction_local}, a patch captures the geometric
+relationships within a $P \times P$ neighborhood of cells. It thus defines an
+upper limit on the size of a feature that can be represented atomically.
+
+\begin{table}[h]
+    \centering
+    \pgfplotstableread[]{results/parameter_grid.csv}\resultsparametergrid
+    \plottablexbars{imagereader,features,gridsize,patchsize,metric}{\resultsparametergrid}
+    \caption[Grid Size Parameter Results]{
+        Influence of grid parameters $P$ and $G$ on the results for $N_s=4$,
+        $N_{\theta}=12$ and $\sigma=1.5$.
+    }
+    \label{tab:results_parameter_grid}
+\end{table}
+
+\FloatBarrier
+\subsubsection{Canny Sigma}
+
 %In an attempt to improve the
 %result further, several sets of parameter values are examined: For the number
 %of angles $N_{\theta} \in \{8, 12, 16\}$ the differences are small with
