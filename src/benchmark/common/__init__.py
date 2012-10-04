@@ -289,3 +289,85 @@ class BenchmarkBase(ApplicationBase):
                 image_set["distances"])[0] for query_image, image_set\
                 in benchmark_data.iteritems()}
         return results, numpy.mean(results.values())
+
+
+@ApplicationBase.argument("-s", "--study", action="store", dest="study",\
+                required=True)
+@ApplicationBase.argument("-o", "--output-filename", action="store", dest="output_filename",\
+                default=None)
+class PRBenchmarkBase(ApplicationBase):
+    DEFAULT_COMMAND = "execute"
+
+    def load_study(self, args):
+        return self.load_json(args.study)
+
+    def dispatch_subcommand(self, args, config, **kwargs):
+        config_path = pathlib.Path(args.config)
+        output_filename = args.output_filename or "r_{base}.{timestamp}.json".format(
+                base=config_path.parts[-1][:-len(config_path.ext)],
+                timestamp=datetime.datetime.now().isoformat(),
+                )
+        study = self.load_study(args)
+        old_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+        try:
+            start_time = datetime.datetime.now()
+            correlations, mean_correlation = super(BenchmarkBase, self)\
+                    .dispatch_subcommand(args, config, study=study)
+            stop_time = datetime.datetime.now()
+        finally:
+            sys.stdout = old_stdout
+        duration = (stop_time - start_time).total_seconds()
+        result_summary = json.dumps(dict(
+            correlations=correlations,
+            mean_correlation=mean_correlation,
+            datetime=str(start_time),
+            duration=duration,
+            config=config,
+            ), indent=4)
+        with open(output_filename, "w") as fp:
+            fp.write(result_summary)
+        self.logger.log("Duration: {}\nMean Correlation: {}".format(duration, mean_correlation))
+
+    def get_benchmark_for_distances(self, distances, study):
+        benchmark = {}
+        for query_image, images in distances.iteritems():
+            benchmark_row = []
+            distance_row = []
+            for image, distance in images.iteritems():
+                benchmark_row.append(study[query_image][image])
+                distance_row.append(distance)
+            benchmark[query_image] = dict(
+                    benchmark=benchmark_row,
+                    distances=distance_row,
+                    )
+        return benchmark
+
+    def get_precision_recall(self, query_image_filename, category_distances, study):
+        results = []
+        recall_indices = [int(i) for i in numpy.linspace(1, 0, 10, endpoint=False)]
+        recall_breakpoint = recall_indices.pop(-1)
+
+        max_count = len(study[query_image_filename])
+        count = 0
+        positive_count = 0
+        for source_image_filename, distance in sorted(category_distances.items(), key=lambda x: x[1]):
+            count += 1
+            if source_image_filename in study[query_image_filename]:
+                positive_count += 1
+            recall = float(positive_count) / max_count
+            if recall >= recall_breakpoint:
+                recall_breakpoint = recall_indices.pop(-1)
+                precision = positive_count / count
+                results.append((recall, precision))
+        return results
+
+    def get_mean_average_precision(self, pr_map):
+        return numpy.mean([numpy.mean(v, axis=0)[0] for v in pr_map.values()])
+
+    def correlate_to_study(self, all_distances, study):
+        results = {}
+        for query_image_filename, category_distances in all_distances:
+            self.logger.log("Evaluating query")
+            #results[query_image_filename] = 
+        return results, numpy.mean(results.values())

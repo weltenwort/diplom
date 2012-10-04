@@ -59,12 +59,14 @@ class CodebookFeaturesBenchmark(common.PRBenchmarkBase):
                     #self.logger.log(signature)
                     data["distances"][image_set["query_image"]][source_image_filename] =\
                             common.load(config["metric"]["metric"]).execute(query_signature, signature, data=data)
-                    #self.logger.log("Distance: {}".format(a))
+                self.logger.log("Calculating precisions for '{}'...".format(image_set["query_image"]))
+                a = data["precisions"][image_set["query_image"]] = self.get_precision_recall(image_set["query_image"], data["distances"][image_set["query_image"]], study)
+                self.logger.log("Precisions: {}".format(a))
 
         #correlations, mean_correlation = self.correlate_to_study(data["distances"], study)
-        precision_recall_stats, mean_stats = self.correlate_to_study(data["distances"], study)
+        #precision_recall_stats, mean_stats = self.correlate_to_study(data["distances"], study)
         #self.logger.log("Mean correlation: {}".format(mean_correlation))
-        return (precision_recall_stats, mean_stats)
+        return (data["precisions"], self.get_mean_average_precision(data["precisions"]))
 
 if __name__ == "__main__":
     CodebookFeaturesBenchmark()()
