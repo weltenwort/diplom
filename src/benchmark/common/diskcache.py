@@ -300,3 +300,13 @@ class CodebookDiskCache(ConfigDiskCache, FileBackendMixin, PickleSerializerMixin
     @classmethod
     def get_root_directory(self, config):
         return config.get("cache", {}).get("codebook_path", super(CodebookDiskCache, self).get_root_directory(config))
+
+
+class SignatureDiskCache(ConfigDiskCache, FileBackendMixin, PickleSerializerMixin):
+    CACHE_TYPE = "gzip_pickle"
+    CONFIG_KEYS = CodebookDiskCache.CONFIG_KEYS
+    PREFIX = "scache_"
+
+    @classmethod
+    def get_root_directory(self, config):
+        return config.get("cache", {}).get("signature_path", super(CodebookDiskCache, self).get_root_directory(config))
