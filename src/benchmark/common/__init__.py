@@ -364,10 +364,3 @@ class PRBenchmarkBase(ApplicationBase):
 
     def get_mean_average_precision(self, pr_map):
         return numpy.mean([numpy.mean(v, axis=0)[0] for v in pr_map.values()])
-
-    def correlate_to_study(self, all_distances, study):
-        results = {}
-        for query_image_filename, category_distances in all_distances:
-            self.logger.log("Evaluating query")
-            #results[query_image_filename] = 
-        return results, numpy.mean(results.values())
