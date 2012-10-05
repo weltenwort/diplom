@@ -4154,7 +4154,7 @@
         "/media/data0/unsorted/sketches/png/saxophone/14246.png"
     ],
     "curvelets": {
-        "transform": "transforms.curvelet_strictangles",
+        "transform": "transforms.curvelet",
         "angles": 12, 
         "scales": 4
     },
@@ -4163,26 +4163,15 @@
         "image": "readers.luma"
     },
     "features": {
-        "extractor": "features.patch_means",
-        "grid_size": 8,
-        "patch_size": 3
-    },
-    "codebook": {
-        "codebook_size": 1000,
-        "metric": "kmeans"
-    },
-    "weights": {
-        "use_weights": "weights.tfidf",
-        "use_stopwords": false
+        "extractor": "features.global_means",
+        "grid_size": 12
     },
     "metric": {
-        "metric": "metrics.histogram_intersection"
+        "metric": "metrics.cosine_means"
     },
     "cache": {
-        "signature_enabled": true,
         "feature_enabled": true,
         "reader_enabled": false,
-        "signature_path": "/media/data0/unsorted/caches/",
         "feature_path": "/media/data0/unsorted/caches/"
     }
 }

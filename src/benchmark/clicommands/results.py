@@ -24,19 +24,21 @@ TRANSLATIONS = {
         }
 
 
-class CollectResults(Lister):
+class CustomLister(Lister):
     @property
     def formatter_default(self):
         return "custom"
 
+    def load_formatter_plugins(self):
+        super(CustomLister, self).load_formatter_plugins()
+        self.formatters["custom"] = CustomPgfFormatter()
+
+
+class CollectResults(CustomLister):
     def get_parser(self, prog_name):
         parser = super(CollectResults, self).get_parser(prog_name)
         parser.add_argument("results", nargs="+")
         return parser
-
-    def load_formatter_plugins(self):
-        super(CollectResults, self).load_formatter_plugins()
-        self.formatters["custom"] = CustomPgfFormatter()
 
     def _format_description(self, result_info):
         description = []
@@ -114,6 +116,19 @@ class CollectResults(Lister):
                 columns + short_correlation_keys,
                 [[row[c] for c in columns + short_correlation_keys] for row in results]
                 )
+
+
+class PlotPrResults(CustomLister):
+    def get_parser(self, prog_name):
+        parser = super(PlotPrResults, self).get_parser(prog_name)
+        parser.add_argument("result")
+        return parser
+
+    def take_action(self, args):
+        with pathlib.Path(args.result).open() as fp:
+            result_info = json.load(fp)
+
+        
 
 
 class CustomPgfFormatter(ListFormatter):

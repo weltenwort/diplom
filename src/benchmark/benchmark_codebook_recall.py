@@ -17,7 +17,7 @@ def get_signature(source_image_filename, data, codebook):
         signature = signature_cache.get(source_image_filename)
     else:
         config = data["config"]
-        features = process_image(source_image_filename, data)
+        _, features = process_image(source_image_filename, data)
         signature = codebook.quantize(features,\
                 use_stopwords=config["weights"]["use_stopwords"],
                 use_weights=config["weights"]["use_weights"],
@@ -56,7 +56,7 @@ class CodebookFeaturesBenchmark(common.PRBenchmarkBase):
                 #self.logger.log(query_signature)
 
                 for source_image_filename, signature in self.logger.sync_loop(
-                        process_image,
+                        get_signature,
                         *common.augment_list(
                             common.glob_list(data["config"]["source_images"]),
                             data,

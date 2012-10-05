@@ -309,4 +309,4 @@ class SignatureDiskCache(ConfigDiskCache, FileBackendMixin, PickleSerializerMixi
 
     @classmethod
     def get_root_directory(self, config):
-        return config.get("cache", {}).get("signature_path", super(CodebookDiskCache, self).get_root_directory(config))
+        return config.get("cache", {}).get("signature_path", super(SignatureDiskCache, self).get_root_directory(config))

@@ -308,15 +308,10 @@ class PRBenchmarkBase(ApplicationBase):
                 timestamp=datetime.datetime.now().isoformat(),
                 )
         study = self.load_study(args)
-        old_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
-        try:
-            start_time = datetime.datetime.now()
-            precisions, mean_average_precision = super(BenchmarkBase, self)\
-                    .dispatch_subcommand(args, config, study=study)
-            stop_time = datetime.datetime.now()
-        finally:
-            sys.stdout = old_stdout
+        start_time = datetime.datetime.now()
+        precisions, mean_average_precision = super(PRBenchmarkBase, self)\
+                .dispatch_subcommand(args, config, study=study)
+        stop_time = datetime.datetime.now()
         duration = (stop_time - start_time).total_seconds()
         result_summary = json.dumps(dict(
             precisions=precisions,
@@ -331,8 +326,8 @@ class PRBenchmarkBase(ApplicationBase):
 
     def get_precision_recall(self, query_image_filename, category_distances, study):
         results = []
-        recall_indices = [int(i) for i in numpy.linspace(1, 0, 10, endpoint=False)]
-        recall_breakpoint = recall_indices.pop(-1)
+        recall_breakpoints = numpy.linspace(1.0, 0.0, 10, endpoint=False).tolist()
+        recall_breakpoint = recall_breakpoints.pop(-1)
 
         max_count = len(study[query_image_filename])
         count = 0
@@ -343,9 +338,12 @@ class PRBenchmarkBase(ApplicationBase):
                 positive_count += 1
             recall = float(positive_count) / max_count
             if recall >= recall_breakpoint:
-                recall_breakpoint = recall_indices.pop(-1)
-                precision = positive_count / count
+                precision = float(positive_count) / count
                 results.append((recall, precision))
+                if len(recall_breakpoints) > 0:
+                    recall_breakpoint = recall_breakpoints.pop(-1)
+                else:
+                    break
         return results
 
     def get_mean_average_precision(self, pr_map):
