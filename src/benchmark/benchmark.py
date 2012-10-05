@@ -12,6 +12,7 @@ from clicommands.configs import (
         )
 from clicommands.results import (
         CollectResults,
+        PlotPrResults
         )
 
 
@@ -23,6 +24,7 @@ class BenchmarkApp(App):
         command_manager.add_command("config show", ShowConfig)
         command_manager.add_command("config list", ListConfigs)
         command_manager.add_command("results collect", CollectResults)
+        command_manager.add_command("results plotpr", PlotPrResults)
         #command_manager.add_command("codebook show", ShowCodebook)
         super(BenchmarkApp, self).__init__(
                 description="Benchmark management application",

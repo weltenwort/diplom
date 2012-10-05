@@ -1,0 +1,16 @@
+\pgfplotstableread[]{results/pr_l_luma_pmean.csv}\resultsprllumapmean
+\begin{tikzpicture} %[trim axis left, trim axis right]
+    \begin{axis}[
+        small,
+        no markers,
+        xlabel=Recall,
+        ylabel=Precision,
+        ]
+        \addplot+[draw=none, stack plots=y, no markers] table[x=recall, y=min]{\resultsprllumapmean};
+        \addplot+[draw=none, stack plots=y, fill=gray!20, no markers] table[x=recall, y expr=\thisrow{max}-\thisrow{min}]{\resultsprllumapmean} \closedcycle;
+        \addplot+[stack plots=false] table[x=recall, y=precision]{\resultsprllumapmean};
+        \addplot+ table[x=recall, y=skull]{\resultsprllumapmean};
+        \addplot+ table[x=recall, y=pear]{\resultsprllumapmean};
+        \addplot+ table[x=recall, y=squirrel]{\resultsprllumapmean};
+    \end{axis}
+\end{tikzpicture}

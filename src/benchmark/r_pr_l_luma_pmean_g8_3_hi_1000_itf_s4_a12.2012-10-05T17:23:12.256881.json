@@ -1,5 +1,5 @@
 {
-    "duration": 284.828756, 
+    "duration": 280.550369, 
     "config": {
         "features": {
             "extractor": "features.patch_means", 
@@ -4188,7 +4188,7 @@
             }
         ]
     }, 
-    "mean_average_precision": 0.55569620253164576, 
+    "mean_average_precision": 0.12777332072840661, 
     "precisions": {
         "/media/data0/unsorted/sketches/png/computer monitor/4491.png": [
             [
@@ -6291,5 +6291,5 @@
             ]
         ]
     }, 
-    "datetime": "2012-10-05 15:17:31.461933"
+    "datetime": "2012-10-05 17:23:12.291675"
 }

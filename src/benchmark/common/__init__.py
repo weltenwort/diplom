@@ -325,16 +325,18 @@ class PRBenchmarkBase(ApplicationBase):
         self.logger.log("Duration: {}\nMean Average Precision: {}".format(duration, mean_average_precision))
 
     def get_precision_recall(self, query_image_filename, category_distances, study):
+        category_map = study["category_map"]
+        query_category = category_map[query_image_filename]
         results = []
         recall_breakpoints = numpy.linspace(1.0, 0.0, 10, endpoint=False).tolist()
         recall_breakpoint = recall_breakpoints.pop(-1)
 
-        max_count = len(study[query_image_filename])
+        max_count = study["category_size"][query_category] - 1
         count = 0
         positive_count = 0
         for source_image_filename, distance in sorted(category_distances.items(), key=lambda x: x[1]):
             count += 1
-            if source_image_filename in study[query_image_filename]:
+            if category_map[source_image_filename] == query_category:
                 positive_count += 1
             recall = float(positive_count) / max_count
             if recall >= recall_breakpoint:
@@ -347,4 +349,4 @@ class PRBenchmarkBase(ApplicationBase):
         return results
 
     def get_mean_average_precision(self, pr_map):
-        return numpy.mean([numpy.mean(v, axis=0)[0] for v in pr_map.values()])
+        return numpy.mean([numpy.mean(v, axis=0)[1] for v in pr_map.values()])
