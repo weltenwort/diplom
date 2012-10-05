@@ -312,36 +312,22 @@ class PRBenchmarkBase(ApplicationBase):
         sys.stdout = open(os.devnull, 'w')
         try:
             start_time = datetime.datetime.now()
-            correlations, mean_correlation = super(BenchmarkBase, self)\
+            precisions, mean_average_precision = super(BenchmarkBase, self)\
                     .dispatch_subcommand(args, config, study=study)
             stop_time = datetime.datetime.now()
         finally:
             sys.stdout = old_stdout
         duration = (stop_time - start_time).total_seconds()
         result_summary = json.dumps(dict(
-            correlations=correlations,
-            mean_correlation=mean_correlation,
+            precisions=precisions,
+            mean_average_precision=mean_average_precision,
             datetime=str(start_time),
             duration=duration,
             config=config,
             ), indent=4)
         with open(output_filename, "w") as fp:
             fp.write(result_summary)
-        self.logger.log("Duration: {}\nMean Correlation: {}".format(duration, mean_correlation))
-
-    def get_benchmark_for_distances(self, distances, study):
-        benchmark = {}
-        for query_image, images in distances.iteritems():
-            benchmark_row = []
-            distance_row = []
-            for image, distance in images.iteritems():
-                benchmark_row.append(study[query_image][image])
-                distance_row.append(distance)
-            benchmark[query_image] = dict(
-                    benchmark=benchmark_row,
-                    distances=distance_row,
-                    )
-        return benchmark
+        self.logger.log("Duration: {}\nMean Average Precision: {}".format(duration, mean_average_precision))
 
     def get_precision_recall(self, query_image_filename, category_distances, study):
         results = []

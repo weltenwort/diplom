@@ -52,6 +52,14 @@ class CodebookManager(common.ApplicationBase):
             config=config,
             ))
 
+        # add global image set
+        if "source_images" in config:
+            config["images"].append(dict(
+                query_image=None,
+                key="global images",
+                source_images=config["source_images"],
+                ))
+
         data = common.RDict(config=common.RDict.from_dict(config))
         for image_set in self.logger.loop(
                 data["config"]["images"],
