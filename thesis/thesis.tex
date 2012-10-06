@@ -5,7 +5,7 @@
 % layout based on "A Classic Thesis Style" by Andr\'e Miede
 %
 % **************************************************************************************************************
-\documentclass[ twoside,openright,titlepage,numbers=noenddot,headinclude,%1headlines,% letterpaper a4paper
+\documentclass[ oneside,openright,titlepage,numbers=noenddot,headinclude,%1headlines,% letterpaper a4paper
                 footinclude=true,cleardoublepage=empty,abstractoff, % <--- obsolete, remove (todo)
                 BCOR=5mm,paper=a4,fontsize=11pt,%11pt,a4paper,%
                 ngerman,american,%
@@ -35,9 +35,10 @@
 %********************************************************************
 % Frontmatter
 %*******************************************************
-\include{FrontBackmatter/DirtyTitlepage}
+%\include{FrontBackmatter/DirtyTitlepage}
 \include{FrontBackmatter/Titlepage}
-\include{FrontBackmatter/Titleback}
+%\include{FrontBackmatter/Titleback}
+\cleardoublepage\include{FrontBackmatter/Declaration}
 %\cleardoublepage\include{FrontBackmatter/Dedication}
 %\cleardoublepage\include{FrontBackmatter/Foreword}
 \cleardoublepage\include{FrontBackmatter/Abstract}
@@ -84,7 +85,6 @@
 %*******************************************************
 \cleardoublepage\include{FrontBackmatter/Bibliography}
 \cleardoublepage\include{FrontBackmatter/Colophon}
-\cleardoublepage\include{FrontBackmatter/Declaration}
 % ********************************************************************
 % Game Over: Restore, Restart, or Quit?
 %*******************************************************

@@ -1,2 +1,40 @@
 \chapter{Discussion}\label{ch:discussion}
-Discussion of results goes here\dots
+
+The measurements performed above don't seem to lead to straightforward results,
+that clearly favor one approach over the other. This might be explained by the
+multitude of influencing factors, that can impact the performance.
+
+\section{Structural Choices}
+
+The intention underlying this thesis was to perform an evaluation of the
+applicability of the Fast Discrete Curvelet Transform to sketch-based image
+retrieval. It therefore seemed reasonable to otherwise choose methods and
+algorithms that are frequently used in this area of research in order to
+minimize the number of unknowns involved. The choice of edge detection steps
+includes established algorithms such as the Sobel and Canny operators as well
+as the recently published gPb contour detector
+\autocite{arbelaez_contour_2011}. The simple sampling methods are designed
+based on prior research, that suggests, that keypoint-based sampling barely
+provided any advantages at the cost of increased processing and complexity
+\autocite{nowak_sampling_2006}. Finally, the clustering and ranking process is
+constructed using the often-used k-means clustering algorithm, several
+established distance metrics and the TF-IDF weighting scheme, that has been
+successfully applied to information retrieval for some time.
+
+Based on the results displayed previously, one can conclude that an approach
+based on Canny edge detection and local features performs better than global
+approaches. The distance however, is not large and poorly chosen parameters can
+lead to the global descriptors exceeding the local variants. This is probably
+strongly influenced by the images involved in the retrieval process, as will be
+discussed below.
+
+\section{Parameter Choices}
+
+Since many of the processing steps are based on commonly-used algorithms,
+literature already presented reasonable starting values for the evaluation. As
+the experiments in section \ref{sec:results_parameters} show, the initial
+values already produce competitive results.
+
+\section{Benchmark Dataset Choices}
+
+TBD
