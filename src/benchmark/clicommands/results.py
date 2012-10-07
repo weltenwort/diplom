@@ -69,6 +69,7 @@ class CollectResults(CustomLister):
                 "MeanCorrelation",
                 "StandardDeviation",
                 "Description",
+                "group",
                 "features",
                 "scales",
                 "angles",
@@ -96,6 +97,10 @@ class CollectResults(CustomLister):
                     "MeanCorrelation": result_info["mean_correlation"],
                     "StandardDeviation": std_dev,
                     "Description": self._format_description(result_info),
+                    "group": "{}+{}".format(
+                        TRANSLATIONS.get(config["readers"]["image"], ""),
+                        TRANSLATIONS.get(config["features"]["extractor"], ""),
+                        ),
                     "scales": config.get("curvelets", {}).get("scales", ""),
                     "angles": config.get("curvelets", {}).get("angles", ""),
                     "features": TRANSLATIONS.get(config.get("features", {}).get("extractor", ""), ""),
