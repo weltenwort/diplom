@@ -1,15 +1,11 @@
-\pgfplotstableread{results/best_performers.csv}\resultsbestperformers
-\pgfplotstabletranspose*[
-    colnames from=group,
-    columns={group,0.png,1.png,2.png,6.png,7.png,8.png,9.png,10.png,11.png,12.png,13.png,14.png,20.png,21.png,23.png,24.png,25.png,26.png,27.png,28.png,30.png,33.png,34.png,38.png,42.png,43.png,45.png,46.png,47.png,48.png}
-]{\resultsbestperformerstransposed}{\resultsbestperformers}
-\begin{tikzpicture} %[trim axis left, trim axis right]
+\pgfplotstableread{results/best_performer_means.csv}\resultsbestperformermeans
+\begin{tikzpicture}
     \begin{axis}[
-        ybar=0pt,
+        ybar,
         small,
         width=\textwidth,
         xtick=data,
-        xticklabels from table={\resultsbestperformerstransposed}{colnames},
+        xticklabels from table={\resultsbestperformermeans}{key},
         xticklabel style={
             rotate=90,
         },
@@ -18,18 +14,46 @@
         extra y tick style={grid=major},
         axis x line*=left,
         ymajorgrids,
-        legend style={font=\tiny},
-        legend columns=2,
-        legend pos=south west,
-        vbar/.style={
-            ybar,
-            bar width=1pt,
-        }]
-        \pgfplotsinvokeforeach{1,...,6}{
-            \addplot+[vbar] table[x expr=\coordindex, y index=#1]{\resultsbestperformerstransposed};
-            \pgfplotstablegetcolumnnamebyindex{#1}\of{\resultsbestperformerstransposed}\to{\colname}
-            \addlegendentryexpanded{\colname}
-        }
-        %\addplot+[vbar] table[x expr=\coordindex, y index=2]{\resultsbestperformerstransposed};
+        error bars/error bar style={
+            gray,
+        },
+        bar width=5pt,
+        ]
+        \addplot+[error bars/y dir=both, error bars/y explicit] table[x expr=\coordindex, y=mean, y error=stddev]{\resultsbestperformermeans};
     \end{axis}
 \end{tikzpicture}
+%\pgfplotstableread{results/best_performers.csv}\resultsbestperformers
+%\pgfplotstabletranspose*[
+    %colnames from=group,
+    %columns={group,0.png,1.png,2.png,6.png,7.png,8.png,9.png,10.png,11.png,12.png,13.png,14.png,20.png,21.png,23.png,24.png,25.png,26.png,27.png,28.png,30.png,33.png,34.png,38.png,42.png,43.png,45.png,46.png,47.png,48.png}
+%]{\resultsbestperformerstransposed}{\resultsbestperformers}
+%\begin{tikzpicture} %[trim axis left, trim axis right]
+    %\begin{axis}[
+        %ybar=0pt,
+        %small,
+        %width=\textwidth,
+        %xtick=data,
+        %xticklabels from table={\resultsbestperformerstransposed}{colnames},
+        %xticklabel style={
+            %rotate=90,
+        %},
+        %extra y ticks= 0,
+        %extra y tick labels=,
+        %extra y tick style={grid=major},
+        %axis x line*=left,
+        %ymajorgrids,
+        %legend style={font=\tiny},
+        %legend columns=2,
+        %legend pos=south west,
+        %vbar/.style={
+            %ybar,
+            %bar width=1pt,
+        %}]
+        %\pgfplotsinvokeforeach{1,...,6}{
+            %\addplot+[vbar] table[x expr=\coordindex, y index=#1]{\resultsbestperformerstransposed};
+            %\pgfplotstablegetcolumnnamebyindex{#1}\of{\resultsbestperformerstransposed}\to{\colname}
+            %\addlegendentryexpanded{\colname}
+        %}
+        %%\addplot+[vbar] table[x expr=\coordindex, y index=2]{\resultsbestperformerstransposed};
+    %\end{axis}
+%\end{tikzpicture}

@@ -123,6 +123,37 @@ class CollectResults(CustomLister):
                 )
 
 
+class CollectResultMeans(CustomLister):
+    def get_parser(self, prog_name):
+        parser = super(CustomLister, self).get_parser(prog_name)
+        parser.add_argument("results", nargs="+")
+        return parser
+
+    def take_action(self, args):
+        #results = []
+
+        correlations = {}
+        for result_filename in args.results:
+            result_path = pathlib.Path(result_filename)
+            with result_path.open() as fp:
+                result_info = json.load(fp)
+
+            for key, value in result_info["correlations"].iteritems():
+                correlations.setdefault(key, []).append(value)
+
+        #for key, values in sorted(correlations.items(), key=lambda x: x[0]):
+            #results
+        keys = sorted(correlations.keys())
+        short_keys = [str(pathlib.Path(str(p)).parts[-1]) for p in keys]
+        means = numpy.mean([correlations[k] for k in keys], axis=1)
+        stddevs = numpy.std([correlations[k] for k in keys], axis=1)
+
+        return (
+                ("key", "mean", "stddev"),
+                zip(short_keys, means, stddevs),
+                )
+
+
 class PlotPrResults(CustomLister):
     def get_parser(self, prog_name):
         parser = super(PlotPrResults, self).get_parser(prog_name)
