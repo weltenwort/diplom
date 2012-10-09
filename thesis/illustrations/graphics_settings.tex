@@ -69,7 +69,8 @@
             hbarplot,
             width=6cm,
             ]
-            \addplot+[error bars/.cd, x dir=both, x explicit] table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
+            %\addplot+[error bars/.cd, x dir=both, x explicit] table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
+            \addplot+ table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
             \addreferenceplot;
         \end{axis}
     \end{tikzpicture}%

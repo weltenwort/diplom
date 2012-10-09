@@ -3,14 +3,30 @@
     \begin{axis}[
         small,
         no markers,
+        xmin=0.1,
+        xmax=1,
+        ymin=0,
         xlabel=Recall,
         ylabel=Precision,
+        legend entries={
+            Mean,
+            Category Skull,
+            Category Pear,
+            Category Squirrel
+        },
+        ymajorgrids,
+        legend style={font=\tiny},
+        legend pos=outer north east,
+        cycle list name=exotic,
         ]
-        \addplot+[draw=none, stack plots=y, no markers] table[x=recall, y=min]{\resultsprllumapmean};
-        \addplot+[draw=none, stack plots=y, fill=gray!20, no markers] table[x=recall, y expr=\thisrow{max}-\thisrow{min}]{\resultsprllumapmean} \closedcycle;
-        \addplot+[stack plots=false] table[x=recall, y=precision]{\resultsprllumapmean};
-        \addplot+ table[x=recall, y=skull]{\resultsprllumapmean};
-        \addplot+ table[x=recall, y=pear]{\resultsprllumapmean};
-        \addplot+ table[x=recall, y=squirrel]{\resultsprllumapmean};
+        \addplot+[draw=none, stack plots=y, no markers, forget plot] table[x=recall, y=min]{\resultsprllumapmean};
+        \addplot+[draw=none, stack plots=y, fill=gray!20, no markers, forget plot] table[x=recall, y expr=\thisrow{max}-\thisrow{min}]{\resultsprllumapmean} \closedcycle;
+        \addplot+[stack plots=false, thick] table[x=recall, y=precision]{\resultsprllumapmean};
+        \addlegendentryexpanded{Mean}
+        \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,pumpkin,donut}{
+            \addplot+ table[x=recall, y=#1]{\resultsprllumapmean};
+            \addlegendentryexpanded{Category "#1"}
+        }
+
     \end{axis}
 \end{tikzpicture}

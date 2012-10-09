@@ -1,4 +1,4 @@
-\section{Benchmarking Method}
+\section{Benchmarking Method}\label{sec:results_benchmarking}
 
 A usual way to evaluate the performance of retrieval systems is to calculate
 the ratio of true positive and false positive matches and visualize it in a
@@ -9,29 +9,32 @@ alternative approach is looking the recall and precision characteristics
 defined as
 \begin{align*}
     recall & = \frac{\text{number of correct positive results}}{\text{total number of positives}} \\
-    1 - precision & = \frac{\text{number of false positive results}}{\text{total number of results}}
+    precision & = \frac{\text{number of correct positive results}}{\text{total number of results}}
 \end{align*}
 Even though this metric works better for algorithms that return a set of
 results, it is still based on the notion of a "positive match", which requires
-an a-priori classification of the benchmark data. For systems that assign a
-degree of similarity to each item in the result set, this would require
-applying a threshold for classification. In addition to the distorting
-influence of an unsuitable thresholding choice, this method completely
-disregards the match quality within the positive result set, which can be
-important to the user of such a retrieval system.
+an a-priori classification of the benchmark data. For intra-domain evaluations
+the benchmark dataset created by Eitz et al.\ \autocite{eitz_how_2012} is used.
+It consists of 20.000 hand-drawn sketches obtained via crowd-sourcing, that are
+evenly divided into 250 categories. To speed up computations, 50 of those
+categories are chosen to derive precision-recall statistics. From each
+category, an image is randomly chosen as the query and the rest is used as
+positive results. In this case, both the query images and the database images
+are from the sketch domain, so the effectiveness of the retrieval process
+without preprocessing biases can be examined.
 
 Since sketch-based image retrieval systems are most likely to be used in
 interactive search applications of some form, it is desirable to assess the
 performance in relation to the results a human would achieve.  Therefore the
-benchmark used to evaluate the retrieval pipelines corresponds to the method
-described by Eitz et al.\ \autocite{eitz_sketch-based_2010}, in which the
-authors create a benchmark dataset and perform a user study with 28
-participants to define "ground truth" rankings. The dataset is divided into 31
-groups of one sketch and 40 images each. Participants ranked the 40 images
-within each group by assigning scores indicating the similarity to the
-corresponding sketch in a controlled study environment. Each sketch/image
-pair's final ground truth ranking is calculated as the mean of the scores
-assigned by all participants.
+benchmark used to evaluate the retrieval pipelines in cross-domain applications
+corresponds to the method described by Eitz et al.\
+\autocite{eitz_sketch-based_2010}, in which the authors create a benchmark
+dataset and perform a user study with 28 participants to define "ground truth"
+rankings. The dataset is divided into 31 groups of one sketch and 40 images
+each. Participants ranked the 40 images within each group by assigning scores
+indicating the similarity to the corresponding sketch in a controlled study
+environment. Each sketch/image pair's final ground truth ranking is calculated
+as the mean of the scores assigned by all participants.
 
 To compare a ground truth ranking $x = (x_1, x_2, \dots, x_n)$ to a ranking
 $y = (y_1, y_2, \dots, y_n)$ produced by a retrieval system, the Kendall

@@ -1,13 +1,43 @@
 \subsection{Result Distribution}\label{sec:results_distribution}
 
-\begin{table}[h]
+Each correlation value in the above graphs is the mean of the correlations
+values for 32 benchmark query images with a ground truth ranking of 40 result
+images. Calculating the mean correlation per query image for the best
+performing configurations shown in Table~\ref{tab:results_best_performers}
+shows, that the retrieval pipelines deal quite well with most image categories
+(Figure~\ref{fig:results_distribution}). At the same time the correlation is
+almost zero for two of the categories and even significantly below zero for two
+more across all pipeline configurations. This suggests that those query images
+or image sets have characteristics, that confound the algorithms.
+Figure~\ref{fig:results_distribution_outliers} shows the query images with
+correlations below zero and examples from the corresponding image set.
+
+\begin{figure}[h]
     \centering
     \input{illustrations/graphs/cross_distribution.tex}
-    \caption[Best Performing Configurations]{
-        Best Performing Configurations with default assumptions $N_s=4$ and
-        $N_{\theta}=12$.
+    \caption[Distribution of results]{
+        The distribution of mean correlations for the configurations of
+        Table~\ref{tab:results_best_performers} shows drastically worse
+        performance for some queries.
     }
-    \label{tab:results_distribution}
-\end{table}
+    \label{fig:results_distribution}
+\end{figure}
 
-%\FloatBarrier
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{ccc}
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/sketch_24.png} &
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/result_24_1.jpg} &
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/result_24_2.jpg} \\
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/sketch_42.png} &
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/result_42_1.jpg} &
+        \includegraphics[width=0.3\textwidth,height=2.5cm,keepaspectratio=true]{illustrations/image_examples/result_42_2.jpg}
+    \end{tabular}
+    \caption[Outlier query images]{
+        Outlier query images \texttt{24.png} (top) and \texttt{42.png} (bottom)
+        with two example responses.
+    }
+    \label{fig:results_distribution_outliers}
+\end{figure}
+
+\FloatBarrier
