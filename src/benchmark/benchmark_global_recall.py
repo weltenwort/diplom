@@ -1,5 +1,6 @@
 # flake8: noqa
 import glob
+import time
 
 import common
 import common.diskcache
@@ -42,6 +43,7 @@ class GlobalFeaturesBenchmark(common.PRBenchmarkBase):
                     #features = feature_cache.get(source_image_filename)
                 data["distances"][image_set["query_image"]][source_image_filename] =\
                         common.load(config["metric"]["metric"]).execute(query_features, features, data=data)
+                time.sleep(0.01)
             self.logger.log("Calculating precisions for '{}'...".format(image_set["query_image"]))
             a = data["precisions"][image_set["query_image"]] = self.get_precision_recall(image_set["query_image"], data["distances"][image_set["query_image"]], study)
             self.logger.log("Precisions: {}".format(a))
