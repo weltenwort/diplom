@@ -2,13 +2,35 @@
 
 As described in Section~\ref{sec:results_benchmarking}, the benchmark on a
 dataset consisting purely of sketches is meant to remove the edge detection
-preprocessing steps as possible biases. The pipeline configuration used is
-shown in Figure~\ref{fig:pipeline_local_luma_pmean}.
+preprocessing steps as possible biases. The pipeline configurations used are
+the global LUMA+MEAN variant (Figure~\ref{fig:pipeline_global_luma_mean}) and
+the local LUMA+PMEAN pipeline (Figure~\ref{fig:pipeline_local_luma_pmean}). As
+the two graphs in Figure~\ref{fig:results_precision} show, there is a large
+spread of precision values across the different categories. This is in line
+with the observations made by the creators of the benchmark dataset
+\autocite{eitz_how_2012}, that state that the images appear to be of varying
+difficulty for computational classification. Here, for example, the descriptors
+seem to deal with the "pear" or "donut" category well, and fail to categorize
+images from the "cabinet" category to any significant degree.
 
-\begin{table}[h]
+\begin{figure}[h]
     \centering
-    \input{illustrations/graphs/pr_l_luma_pmean.tex}
-    \caption[Precisions]{
+    \subfloat[Precisions for global LUMA+MEAN]{%
+        %\input{illustrations/graphs/pr_g_luma_mean.tex}
+        \label{fig:results_precision_global_luma_mean}
     }
-    \label{tab:results_precision_local_luma_pmean}
-\end{table}
+    \quad
+    \subfloat[Precisions for local LUMA+PMEAN]{%
+        \input{illustrations/graphs/pr_l_luma_pmean.tex}
+        \label{fig:results_precision_local_luma_pmean}
+    }
+    \caption[Precision and Recall Results]{
+        The graphs show results of applying the global LUMA+MEAN
+        \subref{fig:results_precision_global_luma_mean} and local LUMA+PMEAN
+        \subref{fig:results_precision_global_luma_mean} pipelines to
+        intra-domain retrieval of sketches. The areas indicate the overall
+        spread of values across all categories while the line plots show
+        results for selected categories.
+    }
+    \label{fig:results_precision}
+\end{figure}
