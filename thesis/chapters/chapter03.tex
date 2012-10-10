@@ -1,4 +1,3 @@
-%! TEX root = ../thesis.tex
 \chapter{Proposed Solution}\label{ch:solution}
 
 The image processing pipeline described in this thesis aims to be suitable for
@@ -9,10 +8,11 @@ sketches as well as salient edges in photos or paintings. To explore the
 effects of preprocessing and signature extraction, several variations of the
 pipeline have been implemented. The used preprocessing steps include applying
 the sobel operator, extracting a canny edge map or determining segment borders
-using the $gPb$ algorithm published in \autocite{arbelaez_contour_2011}.
-Signatures are constructed using both, global curvelet features, and a
-bag-of-features approach similar to what was described in
-\autocite{sivic_video_2003} and \autocite{eitz_sketch-based_2010}.
+using the $gPb$ algorithm published by Arbelaez at al.\
+\autocite{arbelaez_contour_2011}.  Signatures are constructed using both,
+global curvelet features, and a bag-of-features approach similar to what was
+described by Sivic and Zisserman \autocite{sivic_video_2003} and Eitz et al.\
+\autocite{eitz_sketch-based_2010}.
 
 The following sections will describe the variations of the processing stages
 \emph{image acquisition}, \emph{signature extraction}, and \emph{ranking}. To

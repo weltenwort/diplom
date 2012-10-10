@@ -45,7 +45,7 @@ filter bank with the signal.
 \subsection{The Continuous Curvelet Transform}\label{sec:background_cct}
 
 The formulation of the continuous curvelet transform (CCT) by Candes and Donoho
-in \autocite{candes_curvelets:_2000} was based on Candes' previous definition and
+\autocite{candes_curvelets:_2000} was based on Candes' previous definition and
 expansion of the ridgelet transform \autocite{candes_ridgelets:_1998}. In that
 publication they looked at the state of research into efficient representations
 of edge discontinuities. They based their research on two realisations:
@@ -317,13 +317,13 @@ using the inverse 2d Fourier transform:
 
 \subsection{gPb Contour Detection}\label{sec:background_gpb}
 
-In \autocite{maire_using_2008}, Maire et al.\ describe an improvement of the
-contour detector published in \autocite{martin_learning_2004} that includes
-global information in addition to local cues. The orientation-specific local
-parameters $G_i$ extracted from a circular neighborhood around the location
-$(x, y)$ are brightness, color and texture gradients on three scales. They are
-summarized as a coefficient $mPb(x, y, \theta)$ using a weighted sum with
-weights $\alpha_i$:
+Maire et al.\ \autocite{maire_using_2008} describe an improvement of the
+contour detector published by Martin et al.\ \autocite{martin_learning_2004}
+that includes global information in addition to local cues. The
+orientation-specific local parameters $G_i$ extracted from a circular
+neighborhood around the location $(x, y)$ are brightness, color and texture
+gradients on three scales. They are summarized as a coefficient $mPb(x, y,
+\theta)$ using a weighted sum with weights $\alpha_i$:
 \begin{equation*}
     mPb(x, y, \theta) = \sum_{i=1}^9 \alpha_i G_i(x, y, \theta)
 \end{equation*}
