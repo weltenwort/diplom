@@ -19,7 +19,7 @@ LUMA+MEAN pipeline show a slight advantage over the local LUMA+PMEAN variant.
 This is probably strongly influenced by the images used in the retrieval
 benchmark, as will be discussed below.
 
-\section{Structural Choices}
+\section{Structural Influences}
 
 The intention underlying this thesis was to perform an evaluation of the
 applicability of the Fast Discrete Curvelet Transform to sketch-based image
@@ -51,7 +51,7 @@ to a human sketch of the object or scene. The advantage of an angluar resultion
 larger than $N_{\theta}=12$ for the curvelet transform is probably limited by
 to the poor accuracy of hand-drawn sketches.
 
-\section{Benchmark Dataset Choices}
+\section{Benchmark Dataset Influences}
 
 Before making generalized statements based on the results above, several
 properties of the benchmark datasets must taken into account. In particular,
@@ -65,4 +65,13 @@ invariance would be expected to be an advantage of the local descriptors in
 general, it can be a confounding factor in this case, which may contribute to
 the relatively poor results.
 
-
+As shown in Figure~\ref{fig:results_distribution} there are a few query images
+in the cross-domain benchmark, for which the proposed solutions don't lead to
+good rankings. Similarly, the results of the intra-domain evaluation
+(Figure~\ref{fig:results_precision}) show, that there are significant
+differences in descriptor performance between different sketch categories.
+Reasons for that might be that the sketches or images contain too much
+distracting patterns or that the datasets contain several representations of
+the same object, that are visually not very similar. It also indicates, that
+one set of pipeline components and parameter values might only be suitable for
+a limited range of image types.
