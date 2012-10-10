@@ -4,6 +4,21 @@ The measurements performed above don't seem to lead to straightforward results,
 that clearly favor one approach over the other. This might be explained by the
 multitude of influencing factors, that can impact the performance.
 
+Based on the results displayed previously, one can conclude that for
+cross-domain retrieval, an approach based on Canny edge detection and local
+features performs better than global approaches. Of the similarity measures
+used to compare the images' signatures, histogram intersection provides the
+most consistent performance. 
+The advantage over the global descriptors, however, is not large and poorly
+chosen parameter values can lead to the global descriptors outperforming the
+local variants.
+
+When both the query image and the database images are sketches, the situation
+seems to be reversed. The precision and recall statistics for the global
+LUMA+MEAN pipeline show a slight advantage over the local LUMA+PMEAN variant.
+This is probably strongly influenced by the images used in the retrieval
+benchmark, as will be discussed below.
+
 \section{Structural Choices}
 
 The intention underlying this thesis was to perform an evaluation of the
@@ -21,20 +36,25 @@ constructed using the often-used k-means clustering algorithm, several
 established distance metrics and the TF-IDF weighting scheme, that has been
 successfully applied to information retrieval for some time.
 
-Based on the results displayed previously, one can conclude that an approach
-based on Canny edge detection and local features performs better than global
-approaches. The distance however, is not large and poorly chosen parameters can
-lead to the global descriptors exceeding the local variants. This is probably
-strongly influenced by the images involved in the retrieval process, as will be
-discussed below.
-
 \section{Parameter Choices}
 
 Since many of the processing steps are based on commonly-used algorithms,
 literature already presented reasonable starting values for the evaluation. As
 the experiments in section \ref{sec:results_parameters} show, the initial
-values already produce competitive results.
+values already produce competitive results. The best parameter values seem to
+strike a balance between losing information due to small resolution and
+becoming overly sensitive to noise or unrelated image background. For local
+sampling methods, a neighborhood size of $\frac{1}{3}$ of the image dimensions
+repeatedly performs best. A value of $\sigma=1.5$ for the Gaussian blur of the
+Canny edge detector appears to be suitable to extract the edges that correspond
+to a human sketch of the object or scene. The advantage of an angluar resultion
+larger than $N_{\theta}=12$ for the curvelet transform is probably limited by
+to the poor accuracy of hand-drawn sketches.
 
 \section{Benchmark Dataset Choices}
 
-TBD
+Assigning general validity to the results presented above would be unjustified,
+because some properties of the benchmark datasets must be taken into account as
+possible biases.
+
+normalization in 2nd dataset
