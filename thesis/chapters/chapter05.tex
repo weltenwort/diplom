@@ -53,8 +53,16 @@ to the poor accuracy of hand-drawn sketches.
 
 \section{Benchmark Dataset Choices}
 
-Assigning general validity to the results presented above would be unjustified,
-because some properties of the benchmark datasets must be taken into account as
-possible biases.
+Before making generalized statements based on the results above, several
+properties of the benchmark datasets must taken into account. In particular,
+the fact that the global descriptor outperforms the local descriptor in the
+intra-domain benchmark can probably be attributed to the nature of the images.
+As stated by Eitz et al.\ \autocite{eitz_how_2012}, the sketches have been
+scaled to a fixed size of the bounding box and centered in a $256 \times 256$
+pixel image. This constitutes a form of preprocessing that is suited to bypass
+the lack of translation invariance of the global descriptor. While that
+invariance would be expected to be an advantage of the local descriptors in
+general, it can be a confounding factor in this case, which may contribute to
+the relatively poor results.
 
-normalization in 2nd dataset
+
