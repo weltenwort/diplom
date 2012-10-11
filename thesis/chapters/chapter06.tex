@@ -1,10 +1,37 @@
 \chapter{Conclusion}\label{ch:conclusion}
 
-This thesis 
+This thesis examined the suitability of image descriptors for sketch-based
+image retrieval. In particular, the theoretical background of the Fast Discrete
+Curvelet Transform was explained and its use in combination with established
+retrieval system architectures was demonstrated. Querying a database of
+photographs using hand-drawn sketches was used as a representative example of
+cross-domain image retrieval.
 
-cross-domain distribution is effect of semantic gap
+The theoretical discussion in literature of the Curvelet transform's advantages
+over related algorithms such as the Gabor filter indicate it might be
+especially well suited for sketch-based image retrieval. To evaluate this,
+common structural features of retrieval systems were examined and based on that
+several processing pipeline variations were implemented, that utilize the Fast
+Discrete Curvelet Transform. This included relying on global image information
+as well as using local neighborhoods to extract image features. The performance
+of these pipelines was measured using both a cross-domain benchmark and an
+intra-domain benchmark.
 
-\section{Future Work}\label{sec:conclusion_future_work}
+The results showed, that the curvelet-based descriptors can compete with other
+descriptors described in literature, although the implementations used in this
+paper did not exceed the best among those. For cross-domain retrieval a local
+feature descriptor, that performed edge detection on the photographs, was most
+successful. The intra-domain evaluation on the other hand resulted in a global
+descriptor showing slightly better performance. In both cases the advantage of
+one type over the other was small and might be attributed to limitations of the
+benchmark dataset. Also noticeable in both cases was a broad distribution of
+the resulting values for different query images and categories, that was
+consistent in several descriptors. This could be an indication, that the
+semantic and sensory gaps were too large for the algorithms to overcome, for
+example when the photographs or sketches contained large amounts of clutter or
+a category included ambiguous representations of an object.
+
+\section{Future Research}\label{sec:conclusion_future_research}
 
 why are some categories so difficult?
 application to specific retrieval scenarios, e.g. medical images
