@@ -14,10 +14,10 @@ chosen parameter values can lead to the global descriptors outperforming the
 local variants.
 
 When both the query image and the database images are sketches, the situation
-seems to be reversed. The precision and recall statistics for the global
-LUMA+MEAN pipeline show a slight advantage over the local LUMA+PMEAN variant.
-This is probably strongly influenced by the images used in the retrieval
-benchmark, as will be discussed below.
+is reversed. The precision and recall statistics for the global LUMA+MEAN
+pipeline show a slight advantage over the local LUMA+PMEAN variant. This is
+probably strongly influenced by the images used in the retrieval benchmark, as
+will be discussed below.
 
 \section{Structural Influences}
 
@@ -35,6 +35,17 @@ provided any advantages at the cost of increased processing and complexity
 constructed using the often-used k-means clustering algorithm, several
 established distance metrics and the TF-IDF weighting scheme, that has been
 successfully applied to information retrieval for some time.
+
+Considering the very different image types used in the cross-domain evaluation,
+it is not surprising that the most successful pipeline configurations involve
+edge detecting preprocessing steps. But even without such steps, that try to
+bridge the gap between the query and database image domains, the Curvelet
+transform on plain images produces viable results in some cases. For example,
+the global LUMA+MEAN pipeline (Figure~\ref{fig:pipeline_global_luma_mean})
+combined with the cosine similarity measure performs almost as good as the best
+global configuration (Table~\ref{tab:results_global_luma_mean}). This indicates
+that the scale-specificity enables the Curvelet transform to extract meaningful
+edges from photographs on its own.
 
 \section{Parameter Choices}
 
