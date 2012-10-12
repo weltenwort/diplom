@@ -100,9 +100,8 @@ The curvelet transform in $\mathbb{R}^2$ works by localising the curvelet
 waveforms in the time domain. The "mother" curvelet waveform $\varphi_j(x)$ is
 defined using two frequency domain windows $W(r)$, the "radial window" (Figure
 \ref{fig:curvelet_frequency_windows_radial}), and $V(t)$, the "angular window"
-(Figure \ref{fig:curvelet_frequency_windows_angular}). A combined frequency
-window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be
-defined as
+(Figure \ref{fig:curvelet_frequency_windows_angular}). These windows can be
+combined in $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}):
 \begin{equation*}
     U_j(r, \theta) = 2^\frac{-3j}{4} W(2^{-j}r) V(\frac{2^{\lfloor\frac{j}{2}\rfloor}\theta}{2 \pi}).
 \end{equation*}
@@ -142,17 +141,17 @@ defined as
 The waveform $\varphi_j$ can then be expressed as being the inverse Fourier
 transform of $\hat{\varphi}_j = U_j$ and all curvelets of a scale $2^{-j}$ can
 be derived by
-\begin{description}
-    \item[rotating] $\varphi_j$ by a sequence of equispaced rotation angles
+\begin{itemize}
+    \item rotating $\varphi_j$ by a sequence of equispaced rotation angles
         $\theta_l = 2 \pi \cdot 2^{-\lfloor\frac{j}{2}\rfloor} \cdot l$ with $l
         = 0,1,\dots$ such that $0 < \theta_l < 2 \pi$ and
-    \item[translating] $\varphi_j$ by a sequence of offsets $k = (k_1, k_2) \in \mathbb{Z}^2$:
-\end{description}
+    \item translating $\varphi_j$ by a sequence of offsets $k = (k_1, k_2) \in \mathbb{Z}^2$:
+\end{itemize}
 \begin{equation} \label{eq:continuous_curvelet}
     \varphi_{j,k,l}(x) = \varphi_j(R_{\theta_l}(x - x_k^{(j,l)})),
 \end{equation}
-where $x = (x_1, x_2)$, $R_{\theta}$ the rotation matrix for angle $\theta$ and
-$x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
+where $x = (x_1, x_2)$, $R_{\theta}$ is the rotation matrix for angle $\theta$
+and $x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
 2^{-\frac{j}{2}})$.
 
 Each curvelet coefficient $c(j, l, k)$ can then be calculated as the inner
@@ -172,18 +171,18 @@ the tiling not covered by the previously described radial windows:
 Using the window defining the coarse scale curvelet $\varphi_{j_0, k}$ via its
 Fourier transform is straightforward:
 \begin{equation} \label{eq:continuous_coarse_curvelet}
-    \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi_{j_0}}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
+    \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi}_{j_0}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
 \end{equation}
 where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
 Note that, in contrast to the Gabor wavelets (Figure \ref{fig:gabor_tiling}),
-there is no gap in between the curvelets, so no information is lost.
+there is no gap in curvelet tiling, so no information is lost.
 
 \subsection{The Fast Discrete Curvelet Transform}\label{sec:background_fdct}
 
 Based on the above definition of the continuous curvelet transform, a team
 around the authors of the original curvelet publication presented two digital,
-discrete implementations of the transform: the fast discrete curvelet transform
+discrete implementations of the transform: the Fast Discrete Curvelet Transform
 (FDCT) \autocite{candes_fast_2006}. The implementations have been described in
 2D and 3D, but since this paper deals exclusively with 2D images, the
 explanation below will also be restricted to two dimensions.
@@ -199,7 +198,7 @@ consistent with the continuous version (Equation
 Since the windows used in the continuous form are based on rotations and dyadic
 coronae, they are not well suited for use with cartesian arrays. The discrete
 formulation substitutes them with appropriate concepts. Instead of concentric
-annuli, the window function $W^D_j$ generates concentric squares "rings" using
+annuli, the window function $W^D_j$ generates concentric, square "rings" using
 the square windows $\Phi_j(\omega_1, \omega_2) = \phi(2^{-j}\omega_1)
 \phi(2^{-j}\omega_2)$, with $\phi$ being a low-pass 1D window:
 \begin{equation*}
