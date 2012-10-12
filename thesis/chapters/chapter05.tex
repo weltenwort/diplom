@@ -75,15 +75,29 @@ pixel image. This constitutes a form of preprocessing that is suited to bypass
 the lack of translation invariance of the global descriptor. While that
 invariance would be expected to be an advantage of the local descriptors in
 general, it can be a confounding factor in this case, which may contribute to
-the relatively poor results.
+the relatively poor results. Whether translation invariance beyond the
+slight fuzzyness introduced by the sampling method would be desirable at all,
+clearly depends on the images involved and the expectations of the user. If the
+user sketches a scene in order to find photographs with similar composition,
+disregarding the location of drawn features would be counterproductive.
 
-As shown in Figure~\ref{fig:results_distribution} there are a few query images
-in the cross-domain benchmark, for which the proposed solutions don't lead to
-good rankings. Similarly, the results of the intra-domain evaluation
-(Figure~\ref{fig:results_precision}) show, that there are significant
-differences in descriptor performance between different sketch categories.
-Reasons for that might be that the sketches or images contain too much
-distracting patterns or that the datasets contain several representations of
-the same object, that are visually not very similar. It also indicates, that
-one set of pipeline components and parameter values might only be suitable for
-a limited range of image types.
+So while the intra-domain dataset's normalization of the images seems to favor
+global descriptors, the cross-domain dataset mixes query intents and image
+types. Some sketches and images depict single objects with varying degrees of
+context and background, while others capture whole scenes or small objects
+within a larger composition. Differences in descriptor performance within such
+a diverse image set is to be expected. And indeed, as shown in
+Figure~\ref{fig:results_distribution} there are a few query images in the
+cross-domain benchmark, for which the proposed solutions consistently don't
+lead to good rankings. 
+
+But even in the intra-domain evaluation (Figure~\ref{fig:results_precision})
+there are significant differences in descriptor performance between different
+sketch categories. Reasons for that might be that the sketches or images
+contain too much distracting patterns or that the datasets contain several
+representations of the same object, that are visually not very similar. 
+
+The overall picture is, that each set of pipeline components and parameter
+values might only be suitable for a limited range of image types. When the
+system is designed for a more specific purpose, its performance can probably
+exceed the results shown above by a large margin.
