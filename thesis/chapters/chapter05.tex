@@ -1,8 +1,8 @@
 \chapter{Discussion}\label{ch:discussion}
 
-The measurements performed above don't seem to lead to straightforward results,
-that clearly favor one approach over the other. This might be explained by the
-multitude of influencing factors, that can impact the performance.
+%The measurements performed above don't seem to lead to straightforward results,
+%that clearly favor one approach over the other. This might be explained by the
+%multitude of influencing factors, that can impact the performance.
 
 Based on the results displayed previously, one can conclude that for
 cross-domain retrieval, an approach based on Canny edge detection and local
@@ -36,16 +36,17 @@ constructed using the often-used k-means clustering algorithm, several
 established distance metrics and the TF-IDF weighting scheme, that has been
 successfully applied to information retrieval for some time.
 
-Considering the very different image types used in the cross-domain evaluation,
-it is not surprising that the most successful pipeline configurations involve
-edge detecting preprocessing steps. But even without such steps, that try to
-bridge the gap between the query and database image domains, the Curvelet
-transform on plain images produces viable results in some cases. For example,
-the global LUMA+MEAN pipeline (Figure~\ref{fig:pipeline_global_luma_mean})
-combined with the cosine similarity measure performs almost as good as the best
-global configuration (Table~\ref{tab:results_global_luma_mean}). This indicates
-that the scale-specificity enables the Curvelet transform to extract meaningful
-edges from photographs on its own.
+Considering the large differences between the image domains used in the
+cross-domain evaluation, it is not surprising that the most successful pipeline
+configurations involve edge detecting preprocessing steps. But even without
+such steps, that try to bridge the gap between the query and database image
+domains, the Curvelet transform on plain images produces viable results in some
+cases. For example, the global LUMA+MEAN pipeline
+(Figure~\ref{fig:pipeline_global_luma_mean}) combined with the cosine
+similarity measure performs almost as good as the best global configuration
+(Table~\ref{tab:results_global_luma_mean}). This indicates that the
+scale-specificity enables the Curvelet transform to extract meaningful edges
+from photographs on its own.
 
 \section{Parameter Choices}
 
