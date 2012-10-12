@@ -30,13 +30,14 @@ similarity have been developed.
 
 While the goals of those systems are very similar, they differ considerably in
 many aspects of the processing pipeline. The query input ranges from example
-images over drawings to predicate describing color and shape distribution.
+images over drawings to predicates describing color and shape distribution.
 Similarly, the structure and content of the databases and the means by which
 the systems query and rank the results vary significantly. This thesis focuses
 on evaluating a system that uses hand-drawn sketches as inputs to query
-databases of either full-color images or contour images. The fast discrete
-curvelet transform \autocite{candes_fast_2006} is used to analyse image
-segments.
+databases of either photographs or contour images. The fast discrete curvelet
+transform \autocite{candes_fast_2006} is used to analyse the images, because it
+should be especially adept at representing curve-like discontinuities of
+various sizes.
 
 \section{Outline}
 

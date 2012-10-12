@@ -10,7 +10,7 @@ computational steps is almost the same in all such systems (Figure
     \item Extract the signature using a feature extraction algorithm.
     \item Compare the signature to a database containing the signatures of the
         images to search within.
-    \item Rank the images by similarity using the comparison results.
+    \item Rank the database images by similarity using the comparison results.
 \end{enumerate}
 
 \begin{figure}[h]
@@ -44,10 +44,10 @@ on the broadness of the image domain. The concept of the domain encompasses and
 describes the variability of many possible image parameters like illumination
 or composition and is therefore closely related to the sensory gap described
 above. The narrower the image domain is, the more assumptions the system can
-make about image from that domain. By their very nature, the domain of sketch
+make about images from that domain. By their very nature, the domain of sketch
 based image retrieval systems is usually very broad. It contains the sketches
-create by the user to query the database as well as the images in the database
-itself, which can be of a completely different nature, e.g.\ photos or
+created by the user to query the database as well as the images in the database
+itself, which can be of a completely different nature, e.g.\ photographs or
 paintings.
 
 Another factor usually is the accepted input format of the feature extraction
@@ -85,7 +85,7 @@ recently, the SURF desciptor \autocite{bay_speeded-up_2008} uses Haar wavelets
 to deliver comparable performance.
 Several publications combine feature types to arrive at a more comprehensive
 descriptor. Oliva and Torralba \autocite{oliva_modeling_2001} capture various
-scene properties like "roughness" and "openness".
+properties like "roughness" and "openness" to characterize the whole scene.
 
 \begin{figure}[h]
     \centering
@@ -104,7 +104,7 @@ color descriptor published by Utenpattanant et al.\
 \autocite{utenpattanant_color_2006}. Some global algorithms subdivide the image
 into regular segments and derive the localized distribution of features for
 each division. Lazebnik at al.\ \autocite{lazebnik_beyond_2006}
-\autocite{lazebnik_spatial_2009} improves upon this concept by creating feature
+\autocite{lazebnik_spatial_2009} improve upon this concept by creating feature
 pyramids using iterative subdivision for multiscale analysis. While the
 computational complexity of those global approaches is usually quite low, they
 are especially susceptible to problems like partial occlusion or reflections
@@ -131,11 +131,11 @@ the local angular distribution of edges.
 
 \subsubsection{Dimensionality Reduction}
 
-The signatures produced by local descriptors are often large sets of vector,
+The signatures produced by local descriptors are often large sets of vectors,
 that are themselves of considerable size. For example, the SIFT descriptor
 describes each image using about $1000$ local feature vectors of $160$ values
-each. Such large numbers of vectors are expensive to store and compare, so one
-of several data reduction methods is commonly used.
+each. Such large numbers of vectors are expensive to store and compare, which
+is why one of several data reduction methods is commonly used.
 
 \paragraph{Principal Component Analysis}
 
@@ -154,11 +154,11 @@ of each observation that vary the least between all observations.
 PCA has been applied to the face recognition problem using intensity images
 (eigenfaces) \autocite{turk_face_1991}, wavelets (waveletfaces)
 \autocite{feng_human_2000} and more recently curvelets (curveletfaces)
-\autocite{mandal_face_2008}. Ke et al.\ \autocite{ke_pca-sift:_2004} used it to
-improve the robustness of the SIFT \autocite{lowe_object_1999} descriptor. To
-overcome the limited between-class discrimination of PCA, it has been combined
-with Linear Discriminant Analysis (LDA), yielding even better results
-\autocite{mandal_curvelet_2009}.
+\autocite{mandal_face_2008}. Ke et al.\ \autocite{ke_pca-sift:_2004} also used
+it to improve the robustness of the SIFT \autocite{lowe_object_1999}
+descriptor. To overcome the limited between-class discrimination of PCA, it has
+been combined with Linear Discriminant Analysis (LDA), yielding even better
+results \autocite{mandal_curvelet_2009}.
 
 \paragraph{Visual Words and Clustering}\label{sec:anatomy_clustering}
 
@@ -205,7 +205,7 @@ The centers are then recalculated as
 
 The greedy nature of the algorithm and the random initialization mean that it
 is merely a heuristic and can converge on a local minimum, that is not a global
-minimum.  Other clusting methods are hierarchical agglomorative and divisive
+minimum.  Other clusting methods are hierarchical agglomerative and divisive
 algorithms as used by Nister and Stewenius \autocite{nister_scalable_2006} and
 Philbin et al.\ \autocite {philbin_object_2007}, that recursively divide or
 merge partitions to optimize the vocabulary.
@@ -217,7 +217,8 @@ $S_i$, $i \in 1, \dots, k$ such that
 \begin{equation*}
     S_i = \left\{ x_p : \| x_p - m_{i} \| \leq \| x_p - m_{j} \| \quad \forall j \in 1, \dots, k \right\}.
 \end{equation*}
-The final image signature $\tilde{I}$ then is the vector of the cardinality of these sets:
+The final image signature $\tilde{I}$ then is the vector of the cardinalities
+of these sets:
 \begin{equation*}
     \tilde{I} = \big( |S_1|, |S_2|, \dots, |S_{k-1}|, |S_{k}| \big)
 \end{equation*}
@@ -227,16 +228,16 @@ The final image signature $\tilde{I}$ then is the vector of the cardinality of t
 \subsubsection{Weighting}\label{sec:anatomy_ranking_weighting}
 
 In the vocabulary of visual words created via clustering, a set of
-representatives for a group of features has been defined. How representative
-the presence of visual word in the signature of a specific image has not yet
-been taken into account though. To remedy this, weighting schemes are often
-used that modify the signatures to enhance distinguishing characteristics and
-make the ranking more accurate.
+representatives for a group of features has been defined. How distinctive the
+presence of visual word in the signature of a specific image actually is has
+not yet been taken into account though. To remedy this, weighting schemes are
+often used, that modify the signatures to enhance distinguishing characteristics
+and make the ranking more accurate.
 
 \paragraph{Linear Support Vector Machines}
 
-The concept of support vector machines (SVMs) is usually is usually employed
-when a feature needs to be classified into one or more classes. While such
+The concept of support vector machines (SVMs) is usually employed when a
+feature needs to be classified into one or more classes. While such
 classification problem occur frequently in computer vision in the fields of
 object detection \autocite{pontil_support_1998} \autocite{csurka_visual_2004},
 human detection \autocite{dalal_histograms_2005} or scene classification
@@ -267,7 +268,7 @@ classification problem, linear SVMs can still be of use. Guyon et al.\
 \autocite{guyon_gene_2002} showed, that the components of $w$ can be used as
 weights describing the discriminative power of feature vectors. This was
 applied to image retrieval by Shrivastava et al.\ 
-\autocite{shrivastava_data-driven_2011}. There the authors trained a SVM for
+\autocite{shrivastava_data-driven_2011}. There, the authors trained a SVM for
 each query image $I_q$ with the query image's signature constituting one class
 and the database images' signatures $x_i$ making up the other class. The
 pairwise similarity could then easily be obtained from the learned weights
@@ -306,7 +307,7 @@ assuming the document length is used for normalization.
 
 \subsubsection{Distance Metrics}\label{sec:anatomy_ranking_distance}
 
-To retrieve the similar images from the database, a ranking of database image
+To retrieve the similar images from the database, a ranking of database images
 in respect to their similarity to the query image must be obtained. Since each
 image is represented by a signature vector, this means the pairwise distance
 between the query image's signature and each database image's signature can be
@@ -318,7 +319,7 @@ end.
 
 The simplest and probably most widely used distance metric is the euclidean
 distance. Its two-dimensional variant is derived from the formula of
-Pythagoras. Generalized to $n$-dimensional points $p = (p_1, p_2, \dots, p_n$
+Pythagoras. Generalized to $n$-dimensional points $p = (p_1, p_2, \dots, p_n)$
 and $q = (q_1, q_2, \dots, q_n)$, it can be written as
 \begin{equation*}
     d_{EUCL}(p, q) = \sqrt{\sum_{i=1}^n (q_i - p_i)^2}.
@@ -344,7 +345,7 @@ the SIFT \autocite{lowe_object_1999} descriptor.
 
 A metric sometimes used in information retrieval applications is the coside
 distance or cosine similarity. The similarity is defined as the cosine of the
-angle between two vectors $p = (p_1, p_2, \dots, p_n$ and $q = (q_1, q_2,
+angle between two vectors $p = (p_1, p_2, \dots, p_n)$ and $q = (q_1, q_2,
 \dots, q_n)$ when interpreted geometrically:
 \begin{equation*}
     cos(\theta_{p, q}) = \frac{p \cdot q}{\|p\| \|q\|}

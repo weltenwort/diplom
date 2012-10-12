@@ -73,10 +73,12 @@ of edge discontinuities. They based their research on two realisations:
             \| f - \tilde{f}^T_m \|^2 \propto m^{-2} \text{, for } m \rightarrow \infty
         \end{equation*}
 \end{enumerate}
+
 They showed that a similarly precise approximation can be achieved by combining
 Candes' ridgelet analysis \autocite{candes_ridgelets:_1998} with smart
 windowing functions and bandpass filters. The steps of the transformation were
-as follows:
+described as follows:
+
 \begin{enumerate}
     \item Decomposition of the signal into subbands of scale-dependent size
     \item Partitioning of each subband into squares
@@ -84,13 +86,13 @@ as follows:
     \item Analysis of each square in an orthonormal ridgelet system
 \end{enumerate}
 
-The result was a formulation of a decomposition that matched the parabolic
+The result was the formulation of a decomposition that matched the parabolic
 scaling law $width \propto length^2$ often observed in curves.
 
 The above formulation became known as the curvelet 99 transform when Candes and
-Donoho revised it soon after in \autocite{candes_new_2004}. The new version is
-not dependent on ridgelets and aims to remove some shortcomings of the curvelet
-99 transform, namely a simpler mathematical analysis, fewer parameters and
+Donoho revised it soon after \autocite{candes_new_2004}. The new version is not
+dependent on ridgelets and aims to remove some shortcomings of the curvelet 99
+transform, namely a simpler mathematical analysis, fewer parameters and
 improved efficiency regarding digital implementations, which will be described
 later.
 
@@ -99,7 +101,8 @@ waveforms in the time domain. The "mother" curvelet waveform $\varphi_j(x)$ is
 defined using two frequency domain windows $W(r)$, the "radial window" (Figure
 \ref{fig:curvelet_frequency_windows_radial}), and $V(t)$, the "angular window"
 (Figure \ref{fig:curvelet_frequency_windows_angular}). A combined frequency
-window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be defined as
+window $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}) can then be
+defined as
 \begin{equation*}
     U_j(r, \theta) = 2^\frac{-3j}{4} W(2^{-j}r) V(\frac{2^{\lfloor\frac{j}{2}\rfloor}\theta}{2 \pi}).
 \end{equation*}
