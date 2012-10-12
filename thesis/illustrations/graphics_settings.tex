@@ -28,6 +28,7 @@
 
 
 %\pgfplotstableset{col sep=comma}
+%\pgfplotsset{compat=1.3}
 \pgfplotsset{
     /pgfplots/flexible yticklabels from table/.code n args={2}{%
         \pgfplotstablegetcolumn{#2}\of{#1}\to\pgfplots@yticklabels
@@ -37,15 +38,16 @@
         xbar,
         %xcomb,
         small,
-        y=-\baselineskip,
+        y=\baselineskip,
         enlarge y limits={true, abs value=0.45},
         xmin=0,
         xmax=0.4,
         ytick=\empty,
         xticklabel style={/pgf/number format/.cd,fixed,precision=2},
+        xtick align=outside,
         nodes near coords,
         nodes near coords align={anchor=west},
-        every node near coord/.append style={font=\tiny, overlay, text depth=0.6em, /pgf/number format/.cd,fixed,precision=3},
+        every node near coord/.append style={font=\tiny, /pgf/number format/.cd,fixed,precision=3},
         axis x line*=bottom,
         axis y line*=left,
         error bars/error bar style={
@@ -68,10 +70,17 @@
         \begin{axis}[
             hbarplot,
             width=6cm,
+            extra x ticks={0.175, 0.217, 0.277},
+            extra x tick labels={HoG, Spark, SHoG},
+            extra x tick style={
+                grid=major,
+                xtick align=center,
+                tick label style={rotate=60, anchor=east, font=\tiny, gray},
+            },
             ]
-            %\addplot+[error bars/.cd, x dir=both, x explicit] table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
-            \addplot+ table[x=MeanCorrelation, y expr=\coordindex, x error=StandardDeviation] {#1};
-            \addreferenceplot;
+            %\addplot+[error bars/.cd, x dir=both, x explicit] table[x=MeanCorrelation, y expr=-\coordindex, x error=StandardDeviation] {#1};
+            \addplot+ table[x=MeanCorrelation, y expr=-\coordindex, x error=StandardDeviation] {#1};
+            %\addreferenceplot;
         \end{axis}
     \end{tikzpicture}%
 }
