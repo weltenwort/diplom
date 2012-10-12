@@ -26,12 +26,35 @@ descriptor showing slightly better performance. In both cases the advantage of
 one type over the other was small and might be attributed to limitations of the
 benchmark dataset. Also noticeable in both cases was a broad distribution of
 the resulting values for different query images and categories, that was
-consistent in several descriptors. This could be an indication, that the
+consistent across several descriptors. This could be an indication, that the
 semantic and sensory gaps were too large for the algorithms to overcome, for
 example when the photographs or sketches contained large amounts of clutter or
 a category included ambiguous representations of an object.
 
 \section{Future Research}\label{sec:conclusion_future_research}
 
-why are some categories so difficult?
-application to specific retrieval scenarios, e.g. medical images
+As discussed above, the descriptors performed far below average for several
+queries and categories. Looking at why the algorithms behaved so differently
+with specific images or finding common properties in the outlier images could
+give precious hints for making the descriptors applicable more generally. In
+the same way, it could provide insights into which descriptors would be best
+for specific applications, such as medical image analysis or industrial quality
+    control.
+
+Another possible improvement could be to use algorithmically or heuristically
+determined values for the parameters, which were static in the above
+benchmarks, on a per-image basis. It would even be thinkable to dynamically
+exclude or include certain preprocessing steps depending on characteristics of
+the image and features in the database. If a quick analysis determines that a
+sobel operator extracts too few edges, it could be replaced by a Canny edge
+extraction, for example.
+
+To make the retrieval process more robust despite the varying nature of the
+images, a database that contains several signatures extracted using different
+descriptors for each image can enable a CBIR system to create multiple
+rankings. This would be especially useful in scenarios, in which the user can
+interactively manipulate the query preferences to express the intent behind the
+query.
+
+The results presented above show that it can be worth considering the FDCT when
+building such systems in the future.
