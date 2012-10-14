@@ -133,7 +133,9 @@ combined in $U_j$ (Figure \ref{fig:curvelet_frequency_windows_combined}):
         window $V(t)$ \subref{fig:curvelet_frequency_windows_angular} to form a
         support wedge for the curvelet
         \subref{fig:curvelet_frequency_windows_combined}. The wedge roughly
-        obeys a $width \propto length^2$ relation. \subref{fig:curvelet_frequency_windows_corona} shows the wedge within a schema of the complete tiling in frequency domain.
+        obeys a $width \propto length^2$ relation.
+        \subref{fig:curvelet_frequency_windows_corona} shows the wedge within a
+        schema of the complete tiling in frequency domain.
     }
     \label{fig:curvelet_frequency_windows}
 \end{figure}
@@ -154,6 +156,28 @@ where $x = (x_1, x_2)$, $R_{\theta}$ is the rotation matrix for angle $\theta$
 and $x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
 2^{-\frac{j}{2}})$.
 
+\begin{figure}[h]
+    \centering
+    \subfloat[Coarse Curvelet waveform in time and frequency domain]{%
+        \plotgraphics{curvelet_examples/curvelet_1_time.png}{194}{320}{194}{320}{$x_1$}{$x_2$}%
+        \plotgraphics{curvelet_examples/curvelet_1_frequency.png}{0}{512}{0}{512}{$\omega_1$}{$\omega_2$}%
+        \label{fig:curvelet_example_1}
+    }
+    \quad
+    \subfloat[Fine Curvelet waveform in time and frequency domain]{%
+        \plotgraphics{curvelet_examples/curvelet_2_time.png}{194}{320}{194}{320}{$x_1$}{$x_2$}%
+        \plotgraphics{curvelet_examples/curvelet_2_frequency.png}{0}{512}{0}{512}{$\omega_1$}{$\omega_2$}%
+        \label{fig:curvelet_example_2}
+    }
+    \caption[Curvelet waveforms in time and frequency domain]{
+        Curvelet waveforms on coarse \subref{fig:curvelet_example_1} or fine
+        \subref{fig:curvelet_example_2} scale with time domain shown on the
+        left and frequency domain shown on the right side.
+    }
+    \label{fig:curvelet_examples}
+\end{figure}
+
+
 Each curvelet coefficient $c(j, l, k)$ can then be calculated as the inner
 product of $f \in L^2(\mathbb{R}^2)$ and curvelet $\varphi_{j, l, k}$:
 \begin{equation} \label{eq:continuous_curvelet_coefficient}
@@ -168,15 +192,15 @@ the tiling not covered by the previously described radial windows:
 \begin{equation*}
     |W_0(r)^2| + \sum_{j \geq 0} |W(2^{-j}r)|^2 = 1
 \end{equation*}
-Using the window defining the coarse scale curvelet $\varphi_{j_0, k}$ via its
-Fourier transform is straightforward:
+With the help of window, defining the coarse scale curvelet $\varphi_{j_0, k}$
+via its Fourier transform is straightforward:
 \begin{equation} \label{eq:continuous_coarse_curvelet}
     \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi}_{j_0}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
 \end{equation}
 where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
 Note that, in contrast to the Gabor wavelets (Figure \ref{fig:gabor_tiling}),
-there is no gap in curvelet tiling, so no information is lost.
+there is no gap in the curvelet tiling, so no information is lost.
 
 \subsection{The Fast Discrete Curvelet Transform}\label{sec:background_fdct}
 
@@ -212,7 +236,8 @@ to create the combined window function
 The sequence $\theta_l$ is defined as a sequence of equispaced slopes
 $\tan(\theta_l) := l \cdot 2^{- \lfloor \frac{j}{2} \rfloor}$ with
 $l=-2^{\lfloor \frac{j}{2} \rfloor}, \dots, 2^{\lfloor \frac{j}{2} \rfloor} -
-1$. The construction of the corner windows are  Figure \ref{fig:curvelet_frequency_windows_discrete} shows a tiling of
+1$. The construction of the corner windows are 
+Figure \ref{fig:curvelet_frequency_windows_discrete} shows a tiling of
 all $U_{j, l}^D$.
 
 \begin{figure}[h]

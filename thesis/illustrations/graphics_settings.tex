@@ -116,3 +116,24 @@
       },
     ]{#2}
 }
+
+\newcommand{\plotgraphics}[7]{
+    \begin{tikzpicture}
+        \begin{axis}[
+            small,
+            axis on top,
+            xlabel={#6},
+            ylabel={#7},
+            xmin=#2,
+            xmax=#3,
+            ymin=#4,
+            ymax=#5,
+            y dir=reverse,
+            tick style={black},
+            every axis x label/.style={at={(1, 0)}, anchor=west},
+            every axis y label/.style={at={(0, 1)}, anchor=south},
+        ]
+            \addplot graphics[xmin=#2, xmax=#3, ymin=#4, ymax=#5] {#1};
+        \end{axis}
+    \end{tikzpicture}
+}
