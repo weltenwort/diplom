@@ -1,7 +1,7 @@
 \section{Signature Extraction}\label{sec:solution_signature_extraction}
 
-Each method of signature extraction described in this section has the fast
-discrete curvelet transform at its heart. The curvelet transform has two main
+Each method of signature extraction described in this section has the Fast
+Discrete Curvelet Transform at its heart. The curvelet transform has two main
 parameters, that influence the result: The number of angles $N_{\theta}$ used
 at the coarsest scale and the number of scales $N_j$, which corresponds to the
 number of concentric squares shown in \ref{fig:curvelet_discrete_tilings}.
@@ -62,7 +62,7 @@ For each of these grid cells, the mean $\bar{C}_{s, \theta}$ is calculated:
         \subref{fig:signature_example_curvelet}. In
         \subref{fig:signature_example_curvelet_means} the response image has
         been subdivided into $8 \times 8$ cells and the mean value of each cell
-        are shown.
+        is shown.
     }
     \label{fig:signature_examples}
 \end{figure}
@@ -159,8 +159,8 @@ for the following evaluation.
 
 The dictionary generated in the clusting step is then used to quantize the
 feature vectors extracted by the previous PMEAN and PMEAN2 procedures and
-record their number in signature vector as explained in section
-\ref{sec:anatomy_clustering}. To improve the extend in which this vector
+record their number in a signature vector as explained in section
+\ref{sec:anatomy_clustering}. To improve the degree to which this vector
 describes the image it was generated from, its components are then weighted.
 The TF-IDF statistic detailed in \ref{sec:anatomy_ranking_weighting} is used to
 calculate a factor for each value that diminishes common, non-distinguishing

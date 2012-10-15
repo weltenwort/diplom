@@ -286,7 +286,7 @@ order to create a localized "wedge" with the orientation $\theta_l$:
 The discrete curvelet coefficients $c^D(j, l, k)$ can then be calculated by
 applying the inverse 2d Fourier transform:
 \begin{equation*}
-    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})},
+    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2] e^{i 2 \pi \left(\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}}\right)},
 \end{equation*}
 in which $L_{1, j}$ and $L_{2, j}$ are the length and width of the rectangle supporting $U_j^D$.
 
@@ -303,10 +303,10 @@ in which $L_{1, j}$ and $L_{2, j}$ are the length and width of the rectangle sup
     }
     \caption[Frequency tilings for USFFT and wrapping]{
         \subref{fig:curvelet_usfft_tiling} illustrates the respective grid for
-        each parallelogram containing the sheared support windows of the "east
-        quadrant". The box highlights one of the columns, that represent one of
-        the 1D polynomial interpolation problems solved for resampling.
-        In \subref{fig:curvelet_wrapping_tiling} the parallelogram $P_{j ,l}$
+        each parallelogram containing several sheared support windows of the
+        "east quadrant". The box highlights one of the columns, that represent
+        one of the 1D polynomial interpolation problems solved for resampling.
+        In \subref{fig:curvelet_wrapping_tiling}, the parallelogram $P_{j ,l}$
         is shown on top of the tilted tiling of a curvelet in frequency domain.
         Due to the periodicity, the rectangle in the center contains the same
         curvelet, but has a much smaller axis aligned bounding box for the FFT
@@ -349,13 +349,13 @@ rectangle of size $L_{1, j}$ times $L_{2, j}$.
 Again, the discrete curvelet coefficients $c^D(j, l, k)$ can then be collected
 using the inverse 2d Fourier transform:
 \begin{equation*}
-    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} f_{j, l}^D[n_1, n_2] e^{i 2 \pi (\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}})}.
+    c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} f_{j, l}^D[n_1, n_2] e^{i 2 \pi \left(\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}}\right)}.
 \end{equation*}
 
 \subsection{gPb Contour Detection}\label{sec:background_gpb}
 
 Maire et al.\ \autocite{maire_using_2008} describe an improvement of the
-contour detector published by Martin et al.\ \autocite{martin_learning_2004}
+contour detector published by Martin et al.\ \autocite{martin_learning_2004},
 that includes global information in addition to local cues. The
 orientation-specific local parameters $G_i$ extracted from a circular
 neighborhood around the location $(x, y)$ are brightness, color and texture

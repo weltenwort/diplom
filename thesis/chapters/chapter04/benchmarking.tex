@@ -5,7 +5,7 @@ the ratio of true positive and false positive matches and visualize it in a
 receiver operating characteristic (ROC) curve. While that approach is well
 suited for benchmarking binary decision algorithms, it is not appropriate for
 retrieval problems, that don't feature a well-defined "correct" solution. An
-alternative approach is looking the recall and precision characteristics
+alternative approach is looking at the recall and precision characteristics
 defined as
 \begin{align*}
     recall & = \frac{\text{number of correct positive results}}{\text{total number of positives}} \\
@@ -13,8 +13,8 @@ defined as
 \end{align*}
 Even though this metric works better for algorithms that return a set of
 results, it is still based on the notion of a "positive match", which requires
-an a-priori classification of the benchmark data. For intra-domain evaluations
-the benchmark dataset created by Eitz et al.\ \autocite{eitz_how_2012} is used.
+an a priori classification of the benchmark data. For intra-domain evaluations
+the sketch dataset created by Eitz et al.\ \autocite{eitz_how_2012} is used.
 It consists of 20.000 hand-drawn sketches obtained via crowd-sourcing, that are
 evenly divided into 250 categories. To speed up computations, 50 of those
 categories are chosen to derive precision-recall statistics. From each

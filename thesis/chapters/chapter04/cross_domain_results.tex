@@ -3,7 +3,7 @@
 Some of the variations below include a Canny edge detector as a preprocessing
 step. The parameter $\sigma$ determines the size of the Gaussian kernel used by
 the Canny algorithm. A value of $\sigma = 1.5$ was determined to be appropriate
-for the image dataset used in the benchmark. Value larger than $\sigma = 2$
+for the image dataset used in the benchmark. Values larger than $\sigma = 2$
 tend not to detect any edges, while smaller values produced more "false" edges
 resulting from noise in the images.
 
@@ -28,12 +28,12 @@ reported similar optimal values of 500 to 1000 visual words and attributed the
 low number to the sparsity of edge-like features in sketches.
 
 Throughout the correlation coefficient graphs in the following sections, the
-red line denotes the best result obtained by Eitz et al.\ in
-\autocite{eitz_sketch-based_2010} using the SHOG descriptor.
+the results obtained by Eitz et al.\ \autocite{eitz_sketch-based_2010} using
+the HoG, Spark and SHoG descriptors are included.
 
 The first two sections present the results grouped by preprocessing steps and
-sampling method. Afterwards, the influence of parameter variations on selected
-pipelines are examined.
+sampling method. Afterwards, the influence of parameter variations and the
+distribution of results within selected pipelines are examined.
 
 \input{chapters/chapter04/results_global.tex}
 \input{chapters/chapter04/results_local.tex}

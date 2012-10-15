@@ -2,12 +2,12 @@
 
 The image processing pipeline described in this thesis aims to be suitable for
 content based image retrieval using hand-drawn sketches for querying. The main
-interest was to evaluate how well the fast discrete curvelet transform (FDCT)
+interest was to evaluate, how well the Fast Discrete Curvelet Transform (FDCT)
 \autocite{candes_fast_2006} is able to represent the lines in hand-drawn
 sketches as well as salient edges in photos or paintings. To explore the
 effects of preprocessing and signature extraction, several variations of the
 pipeline have been implemented. The used preprocessing steps include applying
-the sobel operator, extracting a canny edge map or determining segment borders
+the Sobel operator, extracting a Canny edge map or determining segment borders
 using the $gPb$ algorithm published by Arbelaez at al.\
 \autocite{arbelaez_contour_2011}.  Signatures are constructed using both,
 global curvelet features, and a bag-of-features approach similar to what was
@@ -16,7 +16,7 @@ described by Sivic and Zisserman \autocite{sivic_video_2003} and Eitz et al.\
 
 The following sections will describe the variations of the processing stages
 \emph{image acquisition}, \emph{signature extraction}, and \emph{ranking}. To
-reference the individual variations unambigiously, labels like LUMA will
+reference the individual variations unambiguously, labels like LUMA will
 be introduced for each component.
 
 \input{chapters/chapter03/acquisition.tex}

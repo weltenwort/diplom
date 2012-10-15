@@ -343,7 +343,7 @@ the SIFT \autocite{lowe_object_1999} descriptor.
 
 \paragraph{Cosine Distance}
 
-A metric sometimes used in information retrieval applications is the coside
+A metric sometimes used in information retrieval applications is the cosine
 distance or cosine similarity. The similarity is defined as the cosine of the
 angle between two vectors $p = (p_1, p_2, \dots, p_n)$ and $q = (q_1, q_2,
 \dots, q_n)$ when interpreted geometrically:
@@ -353,6 +353,11 @@ angle between two vectors $p = (p_1, p_2, \dots, p_n)$ and $q = (q_1, q_2,
 This means that the metric effectively normalizes the vectors in respect to
 their euclidean length. That effect is often used in text retrieval to achieve
 invariance regarding the document size.
+
+The distance measure derived from the cosine similarity is
+\begin{equation*}
+    d_{COS} = 1 - \frac{p \cdot q}{\|p\| \|q\|}.
+\end{equation*}
 
 \paragraph{Earth Mover's Distance}
 
