@@ -8,14 +8,14 @@ photographs using hand-drawn sketches was used as a representative example of
 cross-domain image retrieval.
 
 The theoretical discussion in literature of the Curvelet transform's advantages
-over related algorithms such as the Gabor filter indicate it might be
+over related algorithms such as the Gabor filter indicate, it might be
 especially well suited for sketch-based image retrieval. To evaluate this,
 common structural features of retrieval systems were examined and based on that
-several processing pipeline variations were implemented, that utilize the Fast
-Discrete Curvelet Transform. This included relying on global image information
-as well as using local neighborhoods to extract image features. The performance
-of these pipelines was measured using both a cross-domain benchmark and an
-intra-domain benchmark.
+several processing pipeline variations, that utilize the Fast Discrete Curvelet
+Transform, were implemented. This included descriptors relying on global image
+information as well as ones using local neighborhoods to extract image
+features. The performance of these pipelines was measured using both a
+cross-domain benchmark and an intra-domain benchmark.
 
 The results showed, that the curvelet-based descriptors can compete with other
 descriptors described in literature, although the implementations used in this
@@ -33,7 +33,7 @@ a category included ambiguous representations of an object.
 
 \section{Future Research}\label{sec:conclusion_future_research}
 
-As discussed above, the descriptors performed far below average for several
+As discussed above, the descriptors performed far below average for a few
 queries and categories. Looking at why the algorithms behaved so differently
 with specific images or finding common properties in the outlier images could
 give precious hints for making the descriptors applicable more generally. In
@@ -46,8 +46,8 @@ determined values for the parameters, which were static in the above
 benchmarks, on a per-image basis. It would even be thinkable to dynamically
 exclude or include certain preprocessing steps depending on characteristics of
 the image and features in the database. If a quick analysis determines that a
-sobel operator extracts too few edges, it could be replaced by a Canny edge
-extraction, for example.
+sobel operator extracts too few edges, for example, it could be replaced by a
+Canny edge extraction.
 
 To make the retrieval process more robust despite the varying nature of the
 images, a database that contains several signatures extracted using different

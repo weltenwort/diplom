@@ -3,10 +3,10 @@
 The local feature extraction pipelines utilize the same preprocessing steps as
 the ones based on global features. The curvelet transform remains unchanged as
 well. The the curvelet coefficients are sampled using the PMEAN and PMEAN2
-strategy to produce features for local patches. From these feature vectors, a
-codebook of size $1000$ is generated and the feature vectors from both the
+strategies to produce features from local patches. From these feature vectors,
+a codebook with 1000 entries is generated and the feature vectors from both the
 database images and the query images are quantized and weighted using the
-TF-ITF method. The metrics used for ranking are the generic cosine and $L_2$
+TF-IDF method. The metrics used for ranking are the generic cosine and $L_2$
 distance measures as well as histogram intersection and the earth mover's
 distance.
 
@@ -54,9 +54,9 @@ LUMA+MEAN version.
 
 Using the Canny edge detector and PMEAN sampling
 (Figure~\ref{fig:pipeline_local_luma_canny_pmean}), the rank correlation
-coefficient for COS and HI exceed all previous results
+coefficients for COS and HI exceed all previous results
 (Table~\ref{tab:results_local_luma_canny_pmean}) with the highest value
-achieved is $0.22$.  Treating the coefficients on different scales separately
+achieved being $0.22$. Treating the coefficients on different scales separately
 using the PMEAN2 sampling method is inferior to PMEAN in this case.
 
 \begin{figure}[h]
@@ -96,8 +96,8 @@ results for the $L_2$ and EMD metrics, but worse for COS, HI and HIB.
 \begin{figure}[h]
     \centering
     \input{illustrations/pipelines/local_luma_sobel_pmean.tex}
-    \caption[Local SOBEL+PMEAN Pipelines]{
-        Local SOBEL+PMEAN Pipelines
+    \caption[Local SOBEL+PMEAN(2) Pipelines]{
+        Local SOBEL+PMEAN(2) Pipelines
     }
     \label{fig:pipeline_local_luma_sobel_pmean}
 \end{figure}
@@ -122,15 +122,15 @@ results for the $L_2$ and EMD metrics, but worse for COS, HI and HIB.
 \FloatBarrier
 \paragraph{SEGMENT+PMEAN(2)}
 
-The SEGMENT step leads to similar, although slightly lower, results than the
+The SEGMENT step leads to similar, although slightly lower results than the
 Sobel operator. Neither PMEAN nor PMEAN2 have a consistent advantage across the
 different distance measures.
 
 \begin{figure}[h]
     \centering
     \input{illustrations/pipelines/local_luma_segment_pmean.tex}
-    \caption[Local SEGMENT+PMEAN Pipelines]{
-        Local SEGMENT+PMEAN Pipelines
+    \caption[Local SEGMENT+PMEAN(2) Pipelines]{
+        Local SEGMENT+PMEAN(2) Pipelines
     }
     \label{fig:pipeline_local_luma_segment_pmean}
 \end{figure}
