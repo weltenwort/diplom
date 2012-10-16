@@ -10,13 +10,13 @@ and the COS distance measures.
 
 The most straightforward combination of processing steps consists of a LUMA
 input image, on which the means of $G \times G$ grid cells is computed for each
-scale and angle (Figure \ref{fig:pipeline_global_luma_mean}).  Varying $G$
+scale and angle (\autoref{fig:pipeline_global_luma_mean}).  Varying $G$
 determines the feature size that can be encoded best. Setting $G=12$ seems to
 yield the best correlation, although the advantage over $G=8$ and $G=16$ is
-below $0.01$. The distance measure COS outperforms the $L_2$ measure (Table
-\ref{tab:results_global_luma_mean}). A possible explanation would be that the
-COS measure normalizes the magnitude of the feature vector as discussed in
-Section \ref{sec:anatomy_ranking_distance_euclidean}.
+below $0.01$. The distance measure COS outperforms the $L_2$ measure
+(\autoref{tab:results_global_luma_mean}). A possible explanation would be that
+the COS measure normalizes the magnitude of the feature vector as discussed in
+\autoref{sec:anatomy_ranking_distance_euclidean}.
 
 \begin{figure}[h]
     \centering
@@ -41,11 +41,12 @@ Section \ref{sec:anatomy_ranking_distance_euclidean}.
 
 In addition to reading the images like in the previous LUMA+MEAN configuration,
 this pipeline applies a CANNY processing step to the database images in an
-attempt to bring the query and database image domains closer together (Figure
-\ref{fig:pipeline_global_luma_canny_mean}). Again, the COS distance measure
-produces the best rankings (Table~\ref{tab:results_global_luma_canny_mean}).
-Surprisingly, the Canny edge detector does not lead to increased performance in
-comparison to plain the LUMA preprocessing step.
+attempt to bring the query and database image domains closer together
+(\autoref{fig:pipeline_global_luma_canny_mean}). Again, the COS distance
+measure produces the best rankings
+(\autoref{tab:results_global_luma_canny_mean}).  Surprisingly, the Canny edge
+detector does not lead to increased performance in comparison to plain the LUMA
+preprocessing step.
 
 \begin{figure}[h]
     \centering
@@ -69,9 +70,9 @@ comparison to plain the LUMA preprocessing step.
 \paragraph{SOBEL+MEAN}
 
 The SOBEL step used in this variant also attempts to bring the database images
-into the sketch domain (Figure~\ref{fig:pipeline_global_luma_sobel_mean}). The
+into the sketch domain (\autoref{fig:pipeline_global_luma_sobel_mean}). The
 results are slightly better than with the CANNY preprocessor
-(Table~\ref{tab:results_global_luma_sobel_mean}).
+(\autoref{tab:results_global_luma_sobel_mean}).
 
 \begin{figure}[h!]
     \centering
@@ -95,9 +96,9 @@ results are slightly better than with the CANNY preprocessor
 \paragraph{SEGMENT+MEAN}
 
 With the gPb contour detector in the SEGMENT step to find edges in the database
-images (Figure~\ref{fig:pipeline_global_luma_segment_mean}), the $L_2$ distance
+images (\autoref{fig:pipeline_global_luma_segment_mean}), the $L_2$ distance
 metric produces results comparable to the COS metric in the CANNY+MEAN variant
-(Table~\ref{tab:results_global_luma_segment_mean}).  Unlike in the other cases,
+(\autoref{tab:results_global_luma_segment_mean}).  Unlike in the other cases,
 the COS distance measure performs worse than the $L_2$ metric.
 
 \begin{figure}[h]

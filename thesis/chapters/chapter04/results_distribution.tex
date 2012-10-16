@@ -3,13 +3,13 @@
 Each correlation value in the above graphs is the mean of the correlation
 values for 32 benchmark query images with a ground truth ranking of 40 result
 images. Calculating the mean correlation per query image for the best
-performing configurations shown in Table~\ref{tab:results_best_performers}
-shows, that the retrieval pipelines deal quite well with most image categories
-(Figure~\ref{fig:results_distribution}). At the same time the correlation is
+performing configurations shown in \autoref{tab:results_best_performers} shows,
+that the retrieval pipelines deal quite well with most image categories
+(\autoref{fig:results_distribution}). At the same time the correlation is
 almost zero for two of the categories and even significantly below zero for two
 more across all pipeline configurations. This suggests that those query images
 or image sets have characteristics, that confound the algorithms.
-Figure~\ref{fig:results_distribution_outliers} shows the query images with
+\autoref{fig:results_distribution_outliers} shows the query images with
 correlations below zero and examples from the corresponding image set.
 
 \begin{figure}[h]
@@ -17,7 +17,7 @@ correlations below zero and examples from the corresponding image set.
     \input{illustrations/graphs/cross_distribution.tex}
     \caption[Distribution of results]{
         The distribution of mean correlations for the configurations of
-        Table~\ref{tab:results_best_performers} shows drastically worse
+        \autoref{tab:results_best_performers} shows drastically worse
         performance for some queries.
     }
     \label{fig:results_distribution}

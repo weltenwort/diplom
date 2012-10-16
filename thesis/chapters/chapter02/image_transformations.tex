@@ -26,8 +26,8 @@ orientations:
 \end{equation*}
 To avoid redundancy due to overlap, the scaling parameters $\sigma_u$ and
 $\sigma_v$ are chosen in a way that the frequency spectra can be tiled as in
-figure \ref{fig:gabor_tiling}. A normalization to zero mean can be added to
-remove the influence of the input's intensity value scale.
+\autoref{fig:gabor_tiling}. A normalization to zero mean can be added to remove
+the influence of the input's intensity value scale.
 
 The individual coefficients can be obtained by convolving each filter of the
 filter bank with the signal.
@@ -98,11 +98,11 @@ later.
 
 The curvelet transform in $\mathbb{R}^2$ works by localising the curvelet
 waveforms in the time domain. The "mother" curvelet waveform $\varphi_j(x)$ is
-defined using two frequency domain windows $W(r)$, the "radial window" (Figure
-\ref{fig:curvelet_frequency_windows_radial}), and $V(t)$, the "angular window"
-(Figure \ref{fig:curvelet_frequency_windows_angular}). These windows must obey
-the admissibility condition for wavelets. They can be combined in $U_j$ (Figure
-\ref{fig:curvelet_frequency_windows_combined}):
+defined using two frequency domain windows $W(r)$, the "radial window" (
+\autoref{fig:curvelet_frequency_windows_radial}), and $V(t)$, the "angular
+window" (\autoref{fig:curvelet_frequency_windows_angular}). These windows must
+obey the admissibility condition for wavelets. They can be combined in $U_j$
+(\autoref{fig:curvelet_frequency_windows_combined}):
 \begin{equation*}
     U_j(r, \theta) = 2^\frac{-3j}{4} W(2^{-j}r) V(\frac{2^{\lfloor\frac{j}{2}\rfloor}\theta}{2 \pi}).
 \end{equation*}
@@ -155,8 +155,8 @@ be derived by
 \end{equation}
 where $x = (x_1, x_2)$, $R_{\theta}$ is the rotation matrix for angle $\theta$
 and $x_k^{(j,l)} = R_{\theta_l}^{-1}(k_1 \cdot 2^{-j}, k_2 \cdot
-2^{-\frac{j}{2}})$. The figures \ref{fig:curvelet_example_1} and
-\ref{fig:curvelet_example_2} show example waveforms and their supports in
+2^{-\frac{j}{2}})$. \autoref{fig:curvelet_example_1} and
+\autoref{fig:curvelet_example_2} show example waveforms and their supports in
 frequency domain.
 
 \begin{figure}[h]
@@ -188,7 +188,7 @@ product of $f \in L^2(\mathbb{R}^2)$ and curvelet $\varphi_{j, l, k}$:
     c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
 \end{equation}
 
-As visible in figure \ref{fig:curvelet_frequency_windows_corona} curvelets also
+As visible in \autoref{fig:curvelet_frequency_windows_corona} curvelets also
 have non-directional components at the coarsest scale, similar to those found
 in the wavelet transform. Those curvelets will be defined using a special
 low-pass filter window $W_0$, which is characterized as being the remainder of
@@ -203,7 +203,7 @@ via its Fourier transform is straightforward:
 \end{equation}
 where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
-Note that, in contrast to the Gabor wavelets (Figure \ref{fig:gabor_tiling}),
+Note that, in contrast to the Gabor wavelets (\autoref{fig:gabor_tiling}),
 there is no gap in the curvelet tiling, so no information is lost.
 
 \subsection{The Fast Discrete Curvelet Transform}\label{sec:background_fdct}
@@ -217,8 +217,8 @@ explanation below will also be restricted to two dimensions.
 
 The digital versions of the transforms operate on arrays $f[t_1, t_2]$ with $0
 \leq t_1, t_2 < n$ to produce coefficients $c^D(j, l, k)$ in a way
-consistent with the continuous version (Equation
-\ref{eq:continuous_curvelet_coefficient}):
+consistent with the continuous version
+(\autoref{eq:continuous_curvelet_coefficient}):
 \begin{equation}
     c^D(j, l, k) := \sum_{0 \leq t_1, t_2 < n} f[t_1, t_2] \overline{\varphi_{j, l, k}^D[t_1, t_2]}.
 \end{equation}
@@ -248,7 +248,7 @@ diagonals, to ensure
     \sum_{j} \sum_{l} | U_{j, l}^D (\omega)|^2 = 1
 \end{equation*}
 holds, so the tiling obeys the admissibility condition just like in the
-continuous case. Figure \ref{fig:curvelet_frequency_windows_discrete} shows a
+continuous case. \autoref{fig:curvelet_frequency_windows_discrete} shows a
 tiling of all $U_{j, l}^D$.
 
 \begin{figure}[h]
@@ -275,9 +275,9 @@ and angle $l$ to match the grid of the sheared support window $U_j^D[n_1, n_2]$
 . The authors achieve this by resampling $\hat{f}$ on the grid
 implied by the sheared window for each angle via a series of 1D fast Fourier
 transforms.  These transforms represent a polynomial interpolation of each
-"column" of the parallelogram $P_j$ containing the sheared window (Figure
-\ref{fig:curvelet_usfft_tiling}), that can be computed with a $O(n^2 \log n)$
-complexity in a sufficiently exact approximation.
+"column" of the parallelogram $P_j$ containing the sheared window
+(\autoref{fig:curvelet_usfft_tiling}), that can be computed with a $O(n^2 \log
+n)$ complexity in a sufficiently exact approximation.
 
 This yields an object $\hat{f}[n_1, n_2 - n_1 \tan \theta_l]$ for $(n_1, n_2)
 \in P_j$, that can be multiplied with the window $U_j^D$ described above in
@@ -341,7 +341,7 @@ Fourier transform and propose generating a periodically wrapped version of the
 fourier samples. For $P_{j, l}$ as the bounding parallelogram of $U_{j, l}^D$,
 $L_{1, j}$ and $L_{2, j}$ are the period lengths by which to translate $P_{j,
 l}$ in the horizontal and vertical direction to produce a suitable tiling for
-each orientation $\theta_l$ (Figure \ref{fig:curvelet_discrete_tilings}). Thus,
+each orientation $\theta_l$ (\autoref{fig:curvelet_discrete_tilings}). Thus,
 the wrapped, localized data are
 \begin{equation*}
     f_{j, l}^D[n_1, n_2] = W d_{j, l}[n_1, n_2] = \sum_{m_1 \in \mathbb{Z}} \sum_{m_2 \in \mathbb{Z}} d_{j, l}[n_1 + m_1 L_{1, j}, n_2 + m_2 L_{2, j}]

@@ -2,9 +2,8 @@
 
 In an attempt to improve the results, the best performing configurations
 presented in the previous sections will be re-used with varying parameter
-values (Table~\ref{tab:results_best_performers}). The following sections
-compare the results of changing the parameters $N_{\theta}$, $P$, $G$ and
-$\sigma$.
+values (\autoref{tab:results_best_performers}). The following sections compare
+the results of changing the parameters $N_{\theta}$, $P$, $G$ and $\sigma$.
 
 \begin{table}[h]
     \centering
@@ -21,9 +20,9 @@ $\sigma$.
 \subsubsection{Curvelet Angles}
 
 The parameter $N_{\theta}$ controls the number of angles, the curvelet
-coronization is divided into (see Section~\ref{sec:background_fdct}).
-Therefore, it determines how finely the angles of the lines are resolved and
-how sensitive to angular differences the descriptor is.
+coronization is divided into (see \autoref{sec:background_fdct}).  Therefore,
+it determines how finely the angles of the lines are resolved and how sensitive
+to angular differences the descriptor is.
 
 As indicated by literature and exploratory experiments, an angular subdivision
 of $N_{\theta} = 12$ appears to be optimal. Larger values lead to worse, but
@@ -50,16 +49,16 @@ features might vanish within a large grid cell, unable to influence the mean
 value. A finer subdivision allows for smaller features to be represented at the
 risk of cutting apart larger features that lie on the grid lines. In addition
 to $G$, the local sampling methods PMEAN and PMEAN2 are influenced by the
-number of grid cells that make up a patch. As explained in section
-\ref{sec:solution_signature_extraction_local}, a patch captures the geometric
-relationships within a $P \times P$ neighborhood of cells. It thus defines an
-upper limit on the size of a feature that can be represented atomically. The
-results (Table~\ref{tab:results_parameter_grid}) indicate, that a ratio of
-$\frac{P}{G} \approx \frac{1}{3}$ lead to a locally optimal solution. This
-means, that features and their local composition in a neighborhood of about
-$\frac{1}{3}$ of the image's width and height are best suited to discriminate
-the images. This is similar to the $25\%$ optimum determined by Eitz et al.\
-\autocite{eitz_sketch-based_2010}.
+number of grid cells that make up a patch. As explained in
+\autoref{sec:solution_signature_extraction_local}, a patch captures the
+geometric relationships within a $P \times P$ neighborhood of cells. It thus
+defines an upper limit on the size of a feature that can be represented
+atomically. The results (\autoref{tab:results_parameter_grid}) indicate, that a
+ratio of $\frac{P}{G} \approx \frac{1}{3}$ lead to a locally optimal solution.
+This means, that features and their local composition in a neighborhood of
+about $\frac{1}{3}$ of the image's width and height are best suited to
+discriminate the images. This is similar to the $25\%$ optimum determined by
+Eitz et al.\ \autocite{eitz_sketch-based_2010}.
 
 \begin{table}[h]
     \centering

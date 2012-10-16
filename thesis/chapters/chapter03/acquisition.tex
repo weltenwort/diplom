@@ -7,8 +7,8 @@ seems obvious. The first domain, the domain of query sketches, is quite narrow,
 because we can characterize its members as binary images with large, smooth
 areas separated by discontinuities along curves. The database images, that make
 up the second domain, are not subject to such limitations. They may be color
-photographs (Figure \ref{fig:input_example_color}), paintings, computer
-renderings or black-and-white sketches.
+photographs (\autoref{fig:input_example_color}), paintings, computer renderings
+or black-and-white sketches.
 
 \paragraph{LUMA}
 
@@ -17,8 +17,8 @@ signature extraction step takes a single 2D matrix as input, images with more
 than one color channel need to be reduced to one channel. The RGB values from
 the benchmark dataset have therefore been converted to greyscale images using
 the definition of luma according to ITU standards \autocite{_parameter_2002}
-(Figure \ref{fig:input_example_luma}).  Each pixel with red, green and blue
-values $(R, G, B)$ is mapped to a luminance value $Y$ using
+(\autoref{fig:input_example_luma}).  Each pixel with red, green and blue values
+$(R, G, B)$ is mapped to a luminance value $Y$ using
 \begin{equation*}
     Y = \frac{299}{1000}R + \frac{587}{1000}G + \frac{114}{1000}B.
 \end{equation*}
@@ -45,8 +45,8 @@ the image with the $3 \times 3$ kernels
     \end{bmatrix}
 \end{equation*}
 to obtain the directional gradients $G_x$ and $G_y$. The overall response is
-the gradient magnitude $G$ at each pixel location (Figure
-\ref{fig:input_example_sobel}):
+the gradient magnitude $G$ at each pixel location
+(\autoref{fig:input_example_sobel}):
 \begin{equation*}
     G = \sqrt{G_x^2 + G_y^2}
 \end{equation*}
@@ -70,8 +70,8 @@ direction, e.g. a pixel is marked as being on a $90 \degree$ edge if its
 magnitude is larger than the magnitudes north and south of its location. To
 avoid lines being broken up by noisy fluctuations, the edges are traced along
 their direction and gaps are filled in if the signal within the gap is above a
-certain threshold. The result is a binary edge map of the whole image (Figure
-\ref{fig:input_example_canny}).
+certain threshold. The result is a binary edge map of the whole image
+(\autoref{fig:input_example_canny}).
 
 \paragraph{SEGMENT}
 
@@ -82,7 +82,7 @@ hierarchical segmentation algorithm gPb-owt-ucm published by Arbeláez et al.\
 \autocite{arbelaez_contours_2009} \autocite{arbelaez_contour_2011} was chosen
 because it represents the most recent advances in contour detection and it
 incorporates both local and global image information. On the gPb contour
-detector described in \ref{sec:background_gpb} they apply the Oriented
+detector described in \autoref{sec:background_gpb} they apply the Oriented
 Watershed Transform, that merges adjacent regions of an over-segmented image.
 The criterion for merging is the strength of the boundary shared by the two
 regions.

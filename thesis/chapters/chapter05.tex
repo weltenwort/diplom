@@ -42,9 +42,9 @@ configurations involve edge detecting preprocessing steps. But even without
 such steps, that try to bridge the gap between the query and database image
 domains, the Curvelet transform on plain images produces viable results in some
 configurations. For example, the global LUMA+MEAN pipeline
-(Figure~\ref{fig:pipeline_global_luma_mean}) combined with the cosine
+(\autoref{fig:pipeline_global_luma_mean}) combined with the cosine
 similarity measure performs almost as good as the best global configuration
-(Table~\ref{tab:results_global_luma_mean}). This indicates that the
+(\autoref{tab:results_global_luma_mean}). This indicates that the
 scale-specificity enables the Curvelet transform to extract meaningful edges
 from photographs on its own.
 
@@ -52,7 +52,7 @@ from photographs on its own.
 
 Since many of the processing steps are based on commonly-used algorithms,
 literature already presented reasonable starting values for the evaluation. As
-the experiments in Section \ref{sec:results_parameters} show, the initial
+the experiments in \autoref{sec:results_parameters} show, the initial
 values already produce competitive results. The best parameter values seem to
 strike a balance between losing information due to small resolution and
 becoming overly sensitive to noise or unrelated image background. For local
@@ -87,11 +87,11 @@ types. Some sketches and images depict single objects with varying degrees of
 context and background, while others capture whole scenes or objects within a
 larger composition. Differences in descriptor performance within such a diverse
 image set are to be expected. And indeed, as shown in
-Figure~\ref{fig:results_distribution}, there are a few query images in the
+\autoref{fig:results_distribution}, there are a few query images in the
 cross-domain benchmark, for which the proposed solutions consistently don't
 lead to good rankings. 
 
-But even in the intra-domain evaluation (Figure~\ref{fig:results_precision})
+But even in the intra-domain evaluation (\autoref{fig:results_precision})
 there are significant differences in descriptor performance between different
 sketch categories. Reasons for that might be that the sketches or images
 contain too much distracting patterns or that the datasets contain several
