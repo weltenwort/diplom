@@ -181,6 +181,40 @@ class PlotPrResults(CustomLister):
                 )
 
 
+class PlotApResults(CustomLister):
+    def get_parser(self, prog_name):
+        parser = super(PlotApResults, self).get_parser(prog_name)
+        parser.add_argument("result")
+        return parser
+
+    def take_action(self, args):
+        with pathlib.Path(args.result).open() as fp:
+            result_info = json.load(fp)
+        precisions = result_info["precisions"]
+        image_sets = sorted([(x["key"], x["query_image"]) for x in result_info["config"]["images"]], key=lambda x: x[0])
+
+        results = []
+        for query_index, (query_key, query_image) in enumerate(image_sets):
+            recall_precision = precisions[query_image]
+            recall_diffs = numpy.ediff1d([0, ] + [r for r, p in recall_precision])
+            avg_precision = numpy.average([p for r, p in recall_precision], weights=recall_diffs)
+            results.append((query_key, avg_precision))
+
+        #recall_precisions = numpy.zeros((max([len(x) for x in precisions.values()]), 2, len(precisions)))
+        #for query_index, (query_key, query_image) in enumerate(image_sets):
+            #recall_precision = precisions[query_image]
+            #recall_precisions[:, :, query_index] = recall_precision
+        #for query_index, recall_precision in enumerate(precisions.values()):
+            #print(numpy.asarray(recall_precision))
+        #means = numpy.mean(recall_precisions, axis=2)
+        #stds = numpy.std(recall_precisions, axis=2)
+
+        return (
+                ["query", "average"],
+                results,
+                )
+
+
 class CustomPgfFormatter(ListFormatter):
     def add_argument_group(self, parser):
         pass
