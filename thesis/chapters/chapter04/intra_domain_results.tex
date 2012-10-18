@@ -5,13 +5,18 @@ consisting purely of sketches is meant to remove the edge detection
 preprocessing steps as possible biases. The pipeline configurations used are
 the global LUMA+MEAN variant (\autoref{fig:pipeline_global_luma_mean}) and the
 local LUMA+PMEAN pipeline (\autoref{fig:pipeline_local_luma_pmean}). As the two
-graphs in \autoref{fig:results_precision} show, there is a large spread of
-precision values across the different categories. This is in line with the
-observations made by the creators of the benchmark dataset
-\autocite{eitz_how_2012}, that state that the images appear to be of varying
-difficulty for computational classification. Here, for example, the descriptors
-seem to deal well with the "pear" or "donut" category, and fail to categorize
-images from the "cabinet" category to any significant degree.
+graphs in \autoref{fig:results_precision} show, both descriptors exhibit a
+large variation of precision values across the different categories. The mean
+average precision shows a small advantage of the global descriptor with
+$MAP=0.150$ over the local variant with $MAP=0.129$.
+
+\autoref{fig:results_average_precision} breaks the results down and displays
+the average precision for each category. Here, it is apparent, that both
+descriptors deal well with some categories like "calculator", "pear" or "donut",
+while the average precision values for the "parrot" or "saxophone" categories
+stay well below $0.05$. This is in line with the observations made by the
+creators of the benchmark dataset \autocite{eitz_how_2012}, that state that the
+images appear to be of varying difficulty for computational classification.
 
 \begin{figure}[h]
     \centering
@@ -39,8 +44,10 @@ images from the "cabinet" category to any significant degree.
     \centering
     \input{illustrations/graphs/pr_average_precision.tex}
     \caption[Average Precision by Category]{
-        foo
+        The average precision of the LUMA+MEAN and LUMA+PMEAN pipelines broken
+        down by query category.
     }
     \label{fig:results_average_precision}
 \end{figure}
 
+\FloatBarrier

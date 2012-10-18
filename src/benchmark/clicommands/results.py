@@ -2,6 +2,7 @@ import json
 
 from cliff.lister import Lister
 from cliff.formatters.base import ListFormatter
+from cliff.show import ShowOne
 import numpy
 import pathlib
 
@@ -178,6 +179,33 @@ class PlotPrResults(CustomLister):
         return (
                 ["recall", "precision", "stddev", "min", "max"] + [x for x, _ in image_sets],
                 [[mr, mp, sp, numpy.min(p), numpy.max(p)] + p.tolist() for (mr, mp), (_, sp), p in zip(means.tolist(), stds.tolist(), [recall_precisions[i, 1, :] for i in range(recall_precisions.shape[0])])]
+                )
+
+
+class ShowPrResults(ShowOne):
+    def get_parser(self, prog_name):
+        parser = super(ShowPrResults, self).get_parser(prog_name)
+        parser.add_argument("result")
+        return parser
+
+    def take_action(self, args):
+        with pathlib.Path(args.result).open() as fp:
+            result_info = json.load(fp)
+        precisions = result_info["precisions"]
+        image_sets = sorted([(x["key"], x["query_image"]) for x in result_info["config"]["images"]], key=lambda x: x[0])
+
+        avg_precisions = []
+        for query_index, (query_key, query_image) in enumerate(image_sets):
+            recall_precision = precisions[query_image]
+            recall_diffs = numpy.ediff1d([0, ] + [r for r, p in recall_precision])
+            avg_precision = numpy.average([p for r, p in recall_precision], weights=recall_diffs)
+            avg_precisions.append(avg_precision)
+
+        mean_avg_precision = numpy.mean(avg_precisions)
+
+        return (
+                ("Mean Average Precision", ),
+                (mean_avg_precision, ),
                 )
 
 
