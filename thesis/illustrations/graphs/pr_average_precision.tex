@@ -1,0 +1,33 @@
+\pgfplotstableread[]{results/ap_g_luma_mean.csv}\resultsapglumamean
+\pgfplotstableread[]{results/ap_l_luma_pmean.csv}\resultsapllumapmean
+\begin{tikzpicture} %[trim axis left, trim axis right]
+    \begin{axis}[
+        xbar=0.5pt,
+        small,
+        width=\textwidth,
+        y=1.5ex,
+        xmin=0,
+        enlarge y limits={abs=1},
+        xlabel={Average Precision},
+        ylabel=Category,
+        ylabel near ticks,
+        xlabel near ticks,
+        xtick={0,0.1,...,1},
+        ytick=data,
+        yticklabels from table={\resultsapglumamean}{query},
+        yticklabel style={
+            font=\tiny,
+        },
+        xmajorgrids,
+        legend entries={
+            LUMA+MEAN,
+            LUMA+PMEAN,
+        },
+        legend style={font=\tiny},
+        %legend pos=outer north east,
+        bar width=2pt,
+        ]
+        \addplot table[y expr=-\coordindex, x=average] {\resultsapglumamean};
+        \addplot table[y expr=-\coordindex, x=average] {\resultsapllumapmean};
+    \end{axis}
+\end{tikzpicture}
