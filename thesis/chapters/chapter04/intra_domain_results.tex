@@ -4,11 +4,18 @@ As described in \autoref{sec:results_benchmarking}, the benchmark on a dataset
 consisting purely of sketches is meant to remove the edge detection
 preprocessing steps as possible biases. The pipeline configurations used are
 the global LUMA+MEAN variant (\autoref{fig:pipeline_global_luma_mean}) and the
-local LUMA+PMEAN pipeline (\autoref{fig:pipeline_local_luma_pmean}). As the two
-graphs in \autoref{fig:results_precision} show, both descriptors exhibit a
-large variation of precision values across the different categories. The mean
-average precision shows a small advantage of the global descriptor with
-$MAP=0.150$ over the local variant with $MAP=0.129$.
+local LUMA+PMEAN pipeline (\autoref{fig:pipeline_local_luma_pmean}). Based on
+the results in \autoref{sec:cross_results}, a grid cell number of $G=12$ and
+the cosine distance measure are used for the global pipeline. The local
+LUMA+PMEAN variant is tested with $G=8$ and a patch size of $P=3$ in
+combination with the histogram intersection distance metric $HI$. The size of
+the codebook used remains at 1000 visual words. In both cases the Fast Discrete
+Curvelet Transform uses the parameters $N_s=4$ and $N_{\theta}=12$.
+
+As the two graphs in \autoref{fig:results_precision} show, both descriptors
+exhibit a large variation of precision values across the different categories.
+The mean average precision shows a small advantage of the global descriptor
+with $MAP=0.150$ over the local variant with $MAP=0.129$.
 
 \autoref{fig:results_average_precision} breaks the results down and displays
 the average precision for each category. Here, it is apparent, that both
