@@ -95,7 +95,11 @@ But even in the intra-domain evaluation (\autoref{fig:results_precision})
 there are significant differences in descriptor performance between different
 sketch categories. Reasons for that might be that the sketches or images
 contain too much distracting patterns or that the datasets contain several
-representations of the same object, that are visually not very similar. 
+distinct representations of the same object, that are visually not very
+similar. When examining the results for each category
+(\autoref{fig:results_average_precision}), it is noticeable that the
+descriptors perform best for categories containing images with a high degree of
+symmetry and barely any variation in the orientation or perspective.
 
 The overall picture is, that each set of pipeline components and parameter
 values might only be suitable for a limited range of image types. When the

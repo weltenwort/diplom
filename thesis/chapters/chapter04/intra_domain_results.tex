@@ -13,10 +13,12 @@ $MAP=0.150$ over the local variant with $MAP=0.129$.
 \autoref{fig:results_average_precision} breaks the results down and displays
 the average precision for each category. Here, it is apparent, that both
 descriptors deal well with some categories like "calculator", "pear" or "donut",
-while the average precision values for the "parrot" or "saxophone" categories
-stay well below $0.05$. This is in line with the observations made by the
-creators of the benchmark dataset \autocite{eitz_how_2012}, that state that the
-images appear to be of varying difficulty for computational classification.
+while the average precision values for the "parrot" or "door handle" categories
+stay well below $0.05$. \autoref{fig:results_sketch_examples} displays a few
+examples from two successful categories and two "difficult" categories. This is
+in line with the observations made by the creators of the benchmark dataset
+\autocite{eitz_how_2012}, that state that the images appear to be of varying
+difficulty for computational classification. 
 
 \begin{figure}[h]
     \centering
@@ -50,4 +52,37 @@ images appear to be of varying difficulty for computational classification.
     \label{fig:results_average_precision}
 \end{figure}
 
+\begin{figure}[h!]
+    \centering
+    \subfloat[]{%
+        \begin{tabular}{ccc}
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_3.png} \\
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_3.png}
+        \end{tabular}
+        \label{fig:results_sketch_examples_good}
+    }
+    \subfloat[]{%
+        \begin{tabular}{ccc}
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_3.png} \\
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_3.png}
+        \end{tabular}
+        \label{fig:results_sketch_examples_bad}
+    }
+    \caption[Category Example Images]{
+        The descriptors perform well on the categories "calculator" and "donut"
+        \subref{fig:results_sketch_examples_good}, which exhibit a high degree of
+        symmetry. The sketches from the categories "parrot" and "door handle"
+        \subref{fig:results_sketch_examples_bad} don't have a uniform
+        orientation or perspective.
+    }
+    \label{fig:results_sketch_examples}
+\end{figure}
 \FloatBarrier
