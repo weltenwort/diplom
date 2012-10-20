@@ -40,7 +40,7 @@ To compare a ground truth ranking $x = (x_1, x_2, \dots, x_n)$ to a ranking
 $y = (y_1, y_2, \dots, y_n)$ produced by a retrieval system, the Kendall
 rank correlation coefficient $\tau_B$ is used. It measures the similarity of
 the orderings by grouping all pairs $p_{i, j} = \{(x_i, y_i), (x_j, y_j)\}$,
-$i, j \in 1, \dots, n$ into 5 sets:
+$i, j \in \{1, \dots, n\}$ into 5 sets:
 \begin{align*}
     p_{i, j} & \in C & \quad\text{if } x_i < x_j \text{ and } y_i < y_j \\
     p_{i, j} & \in D & \quad\text{if } x_i < x_j \text{ and } y_i > y_j \\

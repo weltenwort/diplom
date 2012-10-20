@@ -5,7 +5,7 @@
 In content based image retrieval, the inability of the Fourier transform to
 localize the frequency components in time disqualifies it as a suitable
 analysis method. Instead, wavelets are often used to obtain a time-frequency
-representation of the signal. A particulaly successful application to CBIR was
+representation of the signal. A particularly successful application to CBIR was
 the use of gabor wavelets as proposed by Manjunath and Ma
 \autocite{manjunath_texture_1996}. The mother Gabor wavelet $g(x, y)$ with the
 sinus frequency $W$ and gaussian scaling parameters $\sigma_x$, $\sigma_y$ is
@@ -13,10 +13,10 @@ given as
 \begin{equation*}
     g(x, y) = \left( \frac{1}{2 \pi \sigma_x \sigma_y} \right) \exp{\left( - \frac{1}{2} \left( \frac{x^2}{\sigma_x^2} + \frac{y^2}{\sigma_y^2} \right) + i \cdot 2 \pi W x \right)}
 \end{equation*}
-and thus its Fourier transform as
+and thus its Fourier transform can be written as
 \begin{equation*}
     \hat{g}(u, v) = \exp{\left( - \frac{1}{2} \left( \frac{(u - W)^2}{\sigma_u^2} + \frac{v^2}{\sigma_v^2} \right) \right)}\text{, }
-    \sigma_u = \frac{1}{2} \pi \sigma_x \text{ and } \sigma_v = \frac{1}{2} \pi \sigma_y
+    \sigma_u = \frac{1}{2} \pi \sigma_x \text{ and } \sigma_v = \frac{1}{2} \pi \sigma_y.
 \end{equation*}
 The individual wavelets $g_{m, n}(x, y)$ are generated from $g(x, y)$ by
 scaling and rotation by $\theta = \frac{n \pi}{K}$ for all $0 < n < K$
@@ -194,13 +194,14 @@ in the wavelet transform. Those curvelets will be defined using a special
 low-pass filter window $W_0$, which is characterized as being the remainder of
 the tiling not covered by the previously described radial windows:
 \begin{equation*}
-    |W_0(r)^2| + \sum_{j \geq 0} |W(2^{-j}r)|^2 = 1
+    W_0(r)^2 = 1 - \sum_{j \geq 0} W(2^{-j}r)^2
 \end{equation*}
-With the help of window, defining the coarse scale curvelet $\varphi_{j_0, k}$
-via its Fourier transform is straightforward:
-\begin{equation} \label{eq:continuous_coarse_curvelet}
-    \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k), \hat{\varphi}_{j_0}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|),
-\end{equation}
+With the help of this window, defining the coarse scale curvelet $\varphi_{j_0,
+k}$ via its Fourier transform $\hat{\varphi}_{j_0}$ is possible:
+\begin{gather*} \label{eq:continuous_coarse_curvelet}
+    \hat{\varphi}_{j_0}(\omega) = 2^{-j_0}W_0(2^{-j_0}|\omega|)\\
+    \varphi_{j_0, k}(x) = \varphi_{j_0}(x-2^{-j_0}k),
+\end{gather*}
 where $k = (k_1, k_2) \in \mathbb{Z}^2$.
 
 Note that, in contrast to the Gabor wavelets (\autoref{fig:gabor_tiling}),
@@ -287,7 +288,7 @@ order to create a localized "wedge" with the orientation $\theta_l$:
 \end{equation*}
 
 The discrete curvelet coefficients $c^D(j, l, k)$ can then be calculated by
-applying the inverse 2d Fourier transform:
+applying the inverse 2D Fourier transform:
 \begin{equation*}
     c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} \hat{f}[n_1, n_2 - n_1 \tan \theta_l] U_j^D[n_1, n_2] e^{i 2 \pi \left(\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}}\right)},
 \end{equation*}
@@ -350,7 +351,7 @@ with $0 \leq n_1 < L_{1, j}$ and $0 \leq n_2 < L_{2, j}$, which gives a
 rectangle of size $L_{1, j}$ times $L_{2, j}$.
 
 Again, the discrete curvelet coefficients $c^D(j, l, k)$ can then be collected
-using the inverse 2d Fourier transform:
+using the inverse 2D Fourier transform:
 \begin{equation*}
     c^D(j, k, l) = \sum_{n_1, n_2 \in P_j} f_{j, l}^D[n_1, n_2] e^{i 2 \pi \left(\frac{k_1 n_1}{L_{1, j}} + \frac{k_2 n_2}{L_{2,j}}\right)}.
 \end{equation*}
@@ -368,11 +369,11 @@ gradients on three scales. They are summarized as a coefficient $mPb(x, y,
     mPb(x, y, \theta) = \sum_{i=1}^9 \alpha_i G_i(x, y, \theta)
 \end{equation*}
 
-The global combonent $sPb(x, y, \theta)$ is the result of applying a
+The global component $sPb(x, y, \theta)$ is the result of applying a
 filterbank of directional gaussian derivatives to a set of $k$ generalized
-eigenvectors $v_j$, $j \in 1, \dots, k$. The linear system these eigenvectors are
-obtained from has an affinity matrix derived from the intervening contour cue
-\autocite{fowlkes_learning_2003}. The linear combination of the individual
+eigenvectors $v_j$, $j \in \{1, \dots, k\}$. The linear system these eigenvectors
+are obtained from has an affinity matrix derived from the intervening contour
+cue \autocite{fowlkes_learning_2003}. The linear combination of the individual
 directional derivatives then represents the large-scale contours in the image:
 \begin{equation*}
     sPb(x, y, \theta) = \sum_{j=1}^k \frac{1}{\sqrt{\lambda_j}} sPb_{v_j}(x, y, \theta)

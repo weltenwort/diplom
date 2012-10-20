@@ -143,7 +143,7 @@ The Principle Component Analysis (PCA) is a transformation, that computes the
 orthogonal basis best suited to describe the variance of the data. An
 $n$-dimensional data set is linearly mapped to a coordinate system, in which
 the direction of the first axis $a_1$ is the direction with the largest
-variance in the data. The following axes' $a_i$, $i \in 2, \dots, n$ directions
+variance in the data. The following axes' $a_i$, $i \in \{2, \dots, n\}$ directions
 correspond to the orthogonal directions with the next-largest variances in
 descending order. By choosing the $p$ largest component vectors and performing
 an inverse transformation of the PCA-transformed data, a projection of the
@@ -183,7 +183,7 @@ The most common clusting method used in numerous publications
 \autocite{csurka_visual_2004} \autocite{fergus_learning_2005}
 \autocite{winn_object_2005} is k-means clustering. This algorithm uses the
 euclidean distance as a metric to assign each observation $x_p$ to the nearest
-cluster $S_i$ with mean $m_i$, $i \in 1, \dots, k$. The goal is to minimize
+cluster $S_i$ with mean $m_i$, $i \in \{1, \dots, k\}$. The goal is to minimize
 the variance within each cluster:
 \begin{equation*}
     \sum_{i=1}^k \sum_{x_p \in S_i} \| x_p - m_i \|^2
@@ -196,7 +196,7 @@ iteratively adjusted until no reassignment takes place in two consecutive
 iterations $t$ and $t+1$. In each iteration, each oberservation $x_i$ is
 assigned to exactly one cluster $S_i$ using
 \begin{equation*}
-    S_{i, t} = \left\{ x_p : \| x_p - m_{i, t} \| \leq \| x_p - m_{j, t} \| \quad \forall j \in 1, \dots, k \right\}.
+    S_{i, t} = \left\{ x_p : \| x_p - m_{i, t} \| \leq \| x_p - m_{j, t} \| \quad \forall j \in \{1, \dots, k\} \right\}.
 \end{equation*}
 The centers are then recalculated as
 \begin{equation*}
@@ -205,17 +205,18 @@ The centers are then recalculated as
 
 The greedy nature of the algorithm and the random initialization mean that it
 is merely a heuristic and can converge on a local minimum, that is not a global
-minimum.  Other clusting methods are hierarchical agglomerative and divisive
-algorithms as used by Nister and Stewenius \autocite{nister_scalable_2006} and
-Philbin et al.\ \autocite {philbin_object_2007}, that recursively divide or
-merge partitions to optimize the vocabulary.
+minimum.  Other clustering methods work hierarchically by agglomerating and
+dividing the data. Applications of that have been published by Nister and
+Stewenius \autocite{nister_scalable_2006} and Philbin et al.\ \autocite
+{philbin_object_2007}, who recursively divide or merge partitions to optimize
+the vocabulary.
 
 Once the clustering algorithm has converged, the cluster centers $m_i$ will be
 used as the visual words of the codebook. To create the signature vector of an
 image, its feature vectors $x_p$ will be quantized by grouping them into sets
-$S_i$, $i \in 1, \dots, k$ such that
+$S_i$, $i \in \{1, \dots, k\}$ such that
 \begin{equation*}
-    S_i = \left\{ x_p : \| x_p - m_{i} \| \leq \| x_p - m_{j} \| \quad \forall j \in 1, \dots, k \right\}.
+    S_i = \left\{ x_p : \| x_p - m_{i} \| \leq \| x_p - m_{j} \| \quad \forall j \in \{1, \dots, k\} \right\}.
 \end{equation*}
 The final image signature $\tilde{I}$ then is the vector of the cardinalities
 of these sets:
@@ -238,7 +239,7 @@ and make the ranking more accurate.
 
 The concept of support vector machines (SVMs) is usually employed when a
 feature needs to be classified into one or more classes. While such
-classification problem occur frequently in computer vision in the fields of
+classification problems occur frequently in computer vision in the fields of
 object detection \autocite{pontil_support_1998} \autocite{csurka_visual_2004},
 human detection \autocite{dalal_histograms_2005} or scene classification
 \autocite{yang_evaluating_2007}, the class concept is too limited for general
@@ -294,8 +295,8 @@ j} : \forall t_i \in d_j \}$ of any term in the document $j$:
     tf_{i, j} = \frac{tc_{i, j}}{n_j} \text{ or } tf_{i, j} = \frac{tc_{i, j}}{\max \{ tc_{i, j} : \forall t_i \in d_j \}}
 \end{equation*}
 The occurence of a term in the database $D$ is measured as the logarithm of the
-quotient of the overall number of documents $|D|$ and the number of documents
-$m_i$ containing the term $t_i$:
+quotient of the overall number of documents $|D|$ and the number $m_i$ of
+documents containing the term $t_i$:
 \begin{equation*}
     idf_{i} = \log \frac{|D|}{m_i}
 \end{equation*}
@@ -381,8 +382,8 @@ minimizes the overall costs by finding flow values $f_{i, j}$ between each pair
 $p_i$ and $q_i$, that satisfy the constraints
 \begin{align*}
     f_{i, j} & \geq 0 \\
-    \sum_{j=1}^m f_{i, j} & \leq w_{p_i} \\
-    \sum_{i=1}^n f_{i, j} & \leq w_{q_j} \\
+    \sum_{j=1}^n f_{i, j} & \leq w_{p_i} \\
+    \sum_{i=1}^m f_{i, j} & \leq w_{q_j} \\
     \sum_{i=1}^n \sum_{j=1}^m f_{i, j} & = min \left( \sum_{i=1}^n w_{p_i}, \sum_{j=1}^m w_{q_j} \right)
 \end{align*}
 for all $1 \leq i \leq n$ and $1 \leq j \leq m$.

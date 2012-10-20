@@ -2,7 +2,7 @@
 
 The local feature extraction pipelines utilize the same preprocessing steps as
 the ones based on global features. The curvelet transform remains unchanged as
-well. The the curvelet coefficients are sampled using the PMEAN and PMEAN2
+well. The curvelet coefficients are sampled using the PMEAN and PMEAN2
 strategies to produce features from local patches. From these feature vectors,
 a codebook with 1000 entries is generated and the feature vectors from both the
 database images and the query images are quantized and weighted using the
@@ -89,9 +89,12 @@ using the PMEAN2 sampling method is inferior to PMEAN in this case.
 \paragraph{SOBEL+PMEAN(2)}
 %\subsubsection{SOBEL+PMEAN(2)}
 
-Preprocessing the database images with the Sobel operator results in slightly
-lower correlation coefficients. The PMEAN2 sampling algorithm yields better
-results for the $L_2$ and EMD metrics, but worse for COS, HI and HIB.
+Preprocessing the database images with the Sobel operator
+(\autoref{fig:pipeline_local_luma_sobel_pmean}) results in slightly lower
+correlation coefficients (\autoref{tab:results_local_luma_sobel_pmean_all}).
+The PMEAN2 sampling algorithm yields better results for the $L_2$ and EMD
+metrics, but worse for COS, HI and HIB
+(\autoref{tab:results_local_luma_sobel_pmean2}).
 
 \begin{figure}[h]
     \centering
@@ -122,9 +125,10 @@ results for the $L_2$ and EMD metrics, but worse for COS, HI and HIB.
 \FloatBarrier
 \paragraph{SEGMENT+PMEAN(2)}
 
-The SEGMENT step leads to similar, although slightly lower results than the
-Sobel operator. Neither PMEAN nor PMEAN2 have a consistent advantage across the
-different distance measures.
+The SEGMENT step (\autoref{fig:pipeline_local_luma_segment_pmean}) leads to
+similar, although slightly lower results than the Sobel operator
+(\autoref{tab:results_local_luma_segment_pmean_all}). Neither PMEAN nor PMEAN2
+have a consistent advantage across the different distance measures.
 
 \begin{figure}[h]
     \centering
