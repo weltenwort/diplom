@@ -3,61 +3,31 @@
 As described in \autoref{sec:results_benchmarking}, the benchmark on a dataset
 consisting purely of sketches is meant to remove the edge detection
 preprocessing steps as possible biases. The pipeline configurations used are
-the global LUMA+MEAN variant (\autoref{fig:pipeline_global_luma_mean}) and the
-local LUMA+PMEAN pipeline (\autoref{fig:pipeline_local_luma_pmean}). Based on
-the results in \autoref{sec:cross_results}, a grid cell number of $G=12$ and
-the cosine distance measure are used for the global pipeline. The local
-LUMA+PMEAN variant is tested with $G=8$ and a patch size of $P=3$ in
+the global LUMA+MEAN variant (\autoref{fig:pipeline_global_luma_mean}) with the
+L2 and COS distance measures and the local LUMA+PMEAN and LUMA+PMEAN2
+pipelines (\autoref{fig:pipeline_local_luma_pmean}). Based on the results in
+\autoref{sec:cross_results}, a grid cell number of $G=12$ and the cosine
+distance measure are used for the global pipelines. The local LUMA+PMEAN and
+LUMA+PMEAN2 variants are tested with $G=8$ and a patch size of $P=3$ in
 combination with the histogram intersection distance metric $HI$. The size of
-the codebook used remains at 1000 visual words. In both cases the Fast Discrete
+the codebooks remains at 1000 visual words. In all cases the Fast Discrete
 Curvelet Transform uses the parameters $N_s=4$ and $N_{\theta}=12$.
 
-As the two graphs in \autoref{fig:results_precision} show, both descriptors
+As the graphs in \autoref{fig:results_precision} show, all four descriptors
 exhibit a large variation of precision values across the different categories.
-The mean average precision shows a small advantage of the global descriptor
-with $MAP=0.150$ over the local variant with $MAP=0.129$.
+The mean average precision shows a small advantage of the global descriptors
+with $MAP_{L2}=0.139$ and $MAP_{COS}=0.150$ over the local variants with
+$MAP_{PMEAN}=0.129$ and $MAP_{PMEAN2}=0.120$ respectively.
 
 \autoref{fig:results_average_precision} breaks the results down and displays
-the average precision for each category. Here, it is apparent, that both
-descriptors deal well with some categories like "calculator", "pear" or "donut",
-while the average precision values for the "parrot" or "door handle" categories
-stay well below $0.05$. \autoref{fig:results_sketch_examples} displays a few
-examples from two successful categories and two "difficult" categories. This is
-in line with the observations made by the creators of the benchmark dataset
-\autocite{eitz_how_2012}, that state that the images appear to be of varying
-difficulty for computational classification. 
-
-\begin{figure}[h]
-    \centering
-    \subfloat[Precisions for global LUMA+MEAN]{%
-        \input{illustrations/graphs/pr_g_luma_mean.tex}
-        \label{fig:results_precision_global_luma_mean}
-    }
-    \quad
-    \subfloat[Precisions for local LUMA+PMEAN]{%
-        \input{illustrations/graphs/pr_l_luma_pmean.tex}
-        \label{fig:results_precision_local_luma_pmean}
-    }
-    \caption[Precision and Recall Results]{
-        The graphs show results of applying the global LUMA+MEAN
-        \subref{fig:results_precision_global_luma_mean} and local LUMA+PMEAN
-        \subref{fig:results_precision_local_luma_pmean} pipelines to
-        intra-domain retrieval of sketches. The areas indicate the overall
-        spread of values across all categories while the line plots show
-        results for selected categories.
-    }
-    \label{fig:results_precision}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \input{illustrations/graphs/pr_average_precision.tex}
-    \caption[Average Precision by Category]{
-        The average precision of the LUMA+MEAN and LUMA+PMEAN pipelines broken
-        down by query category.
-    }
-    \label{fig:results_average_precision}
-\end{figure}
+the average precision for each category. Here, it is apparent, that both global
+and local descriptors deal well with some categories like "calculator", "pear"
+or "donut", while the average precision values for the "parrot" and "door
+handle" categories stay well below $0.1$. \autoref{fig:results_sketch_examples}
+displays a few examples from two successful categories and two "difficult"
+categories. This is in line with the observations made by the creators of the
+benchmark dataset \autocite{eitz_how_2012}, that state that the images appear
+to be of varying difficulty for computational classification. 
 
 \begin{figure}[h!]
     \centering
@@ -91,5 +61,37 @@ difficulty for computational classification.
         orientation or perspective.
     }
     \label{fig:results_sketch_examples}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    %\subfloat[Precisions for global LUMA+MEAN]{%
+        %\input{illustrations/graphs/pr_g_luma_mean.tex}
+        %\label{fig:results_precision_global_luma_mean}
+    %}
+    %\quad
+    %\subfloat[Precisions for local LUMA+PMEAN]{%
+        %\input{illustrations/graphs/pr_l_luma_pmean.tex}
+        %\label{fig:results_precision_local_luma_pmean}
+    %}
+    \input{illustrations/graphs/pr_precisions.tex}
+    \caption[Precision and Recall Results]{
+        The graphs show the results of applying the global LUMA+MEAN with the
+        L2 and COS distance measures and the local LUMA+PMEAN and LUMA+PMEAN2
+        pipelines to intra-domain retrieval of sketches. The areas indicate the
+        overall spread of values across all categories while the line plots
+        show results for selected categories.
+    }
+    \label{fig:results_precision}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \input{illustrations/graphs/pr_average_precision.tex}
+    \caption[Average Precision by Category]{
+        The average precision of the LUMA+MEAN, LUMA+PMEAN and LUMA+PMEAN2
+        pipelines broken down by query category.
+    }
+    \label{fig:results_average_precision}
 \end{figure}
 \FloatBarrier

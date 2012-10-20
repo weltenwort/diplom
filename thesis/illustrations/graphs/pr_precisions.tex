@@ -1,0 +1,55 @@
+\newcommand{\plotpr}[1]{
+    \addplot+[draw=none, stack plots=y, no markers, forget plot] table[x=recall, y=min]{#1};
+    \addplot+[draw=none, stack plots=y, fill=gray!20, no markers, forget plot] table[x=recall, y expr=\thisrow{max}-\thisrow{min}]{#1} \closedcycle;
+    \addplot+[stack plots=false, thick] table[x=recall, y=precision]{#1};
+    \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,pumpkin,donut}{
+        \addplot+ table[x=recall, y=##1]{#1};
+    }
+}
+
+\pgfplotstableread[]{results/pr_g_luma_mean_l2.csv}\resultsprglumameaneucl
+\pgfplotstableread[]{results/pr_g_luma_mean_cos.csv}\resultsprglumameancos
+\pgfplotstableread[]{results/pr_l_luma_pmean.csv}\resultsprllumapmean
+\pgfplotstableread[]{results/pr_l_luma_pmean2.csv}\resultsprllumapmeantwo
+\begin{tikzpicture} %[trim axis left, trim axis right]
+    \begin{groupplot}[
+        group style={
+            group size=2 by 2,
+            group name=plots,
+            xlabels at=edge bottom,
+            ylabels at=edge left,
+            vertical sep=1.5cm,
+        },
+        title style={
+            font=\small,
+        },
+        name=mainplot,
+        small,
+        width=0.45\textwidth,
+        no markers,
+        xmin=0.1,
+        xmax=1,
+        ymin=0,
+        xlabel=Recall,
+        ylabel=Precision,
+        ymajorgrids,
+        legend columns=3,
+        legend style={font=\tiny},
+        legend cell align=left,
+        cycle list name=exotic,
+        ]
+        \nextgroupplot[title=LUMA+MEAN+L2, legend to name=grouplegend]
+            \plotpr{\resultsprglumameaneucl}
+            \addlegendentryexpanded[black]{Mean}
+            \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,pumpkin,donut}{
+                \addlegendentryexpanded[black]{Category "#1"}
+            }
+        \nextgroupplot[title=LUMA+MEAN+COS]
+            \plotpr{\resultsprglumameancos}
+        \nextgroupplot[title=LUMA+PMEAN]
+            \plotpr{\resultsprllumapmean}
+        \nextgroupplot[title=LUMA+PMEAN2]
+            \plotpr{\resultsprllumapmeantwo}
+    \end{groupplot}
+    \node[anchor=north] at ($(plots c1r2.outer south)!.5!(plots c2r2.outer south)$) {\ref{grouplegend}};
+\end{tikzpicture}

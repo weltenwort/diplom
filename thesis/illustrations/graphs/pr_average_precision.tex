@@ -1,11 +1,13 @@
-\pgfplotstableread[]{results/ap_g_luma_mean.csv}\resultsapglumamean
+\pgfplotstableread[]{results/ap_g_luma_mean_l2.csv}\resultsapglumameaneucl
+\pgfplotstableread[]{results/ap_g_luma_mean_cos.csv}\resultsapglumameancos
 \pgfplotstableread[]{results/ap_l_luma_pmean.csv}\resultsapllumapmean
+\pgfplotstableread[]{results/ap_l_luma_pmean2.csv}\resultsapllumapmeantwo
 \begin{tikzpicture} %[trim axis left, trim axis right]
     \begin{axis}[
-        xbar=0.3pt,
+        xbar=0.2pt,
         small,
         width=\textwidth,
-        y=1.3ex,
+        y=2.4ex,
         xmin=0,
         enlarge y limits={abs=1},
         xlabel={Average Precision},
@@ -14,20 +16,24 @@
         xlabel near ticks,
         xtick={0,0.1,...,1},
         ytick=data,
-        yticklabels from table={\resultsapglumamean}{query},
+        yticklabels from table={\resultsapglumameaneucl}{query},
         yticklabel style={
             font=\tiny,
         },
         xmajorgrids,
         legend entries={
-            {global LUMA+MEAN},
+            {global LUMA+MEAN+L2},
+            {global LUMA+MEAN+COS},
             {local LUMA+PMEAN},
+            {local LUMA+PMEAN2},
         },
         legend style={font=\tiny},
         %legend pos=outer north east,
         bar width=2pt,
         ]
-        \addplot table[y expr=-\coordindex, x=average] {\resultsapglumamean};
+        \addplot table[y expr=-\coordindex, x=average] {\resultsapglumameaneucl};
+        \addplot table[y expr=-\coordindex, x=average] {\resultsapglumameancos};
         \addplot table[y expr=-\coordindex, x=average] {\resultsapllumapmean};
+        \addplot table[y expr=-\coordindex, x=average] {\resultsapllumapmeantwo};
     \end{axis}
 \end{tikzpicture}
