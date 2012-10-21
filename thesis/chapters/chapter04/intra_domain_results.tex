@@ -1,11 +1,12 @@
 \section{Intra-Domain Results}\label{sec:intra_results}
 
-As described in \autoref{sec:results_benchmarking}, the benchmark on a dataset
-consisting purely of sketches is meant to remove the edge detection
-preprocessing steps as possible biases. The pipeline configurations used are
-the global LUMA+MEAN variant (\autoref{fig:pipeline_global_luma_mean}) with the
-L2 and COS distance measures and the local LUMA+PMEAN and LUMA+PMEAN2
-pipelines (\autoref{fig:pipeline_local_luma_pmean}). Based on the results in
+As described in \autoref{sec:results_benchmarking}, the precision-recall
+benchmark on a dataset consisting purely of sketches is meant to remove the
+edge detection preprocessing steps as possible biases. The pipeline
+configurations used are the global LUMA+MEAN variant
+(\autoref{fig:pipeline_global_luma_mean}) with the L2 and COS distance measures
+and the local LUMA+PMEAN and LUMA+PMEAN2 pipelines
+(\autoref{fig:pipeline_local_luma_pmean}). Based on the results in
 \autoref{sec:cross_results}, a grid cell number of $G=12$ and the cosine
 distance measure are used for the global pipelines. The local LUMA+PMEAN and
 LUMA+PMEAN2 variants are tested with $G=8$ and a patch size of $P=3$ in
