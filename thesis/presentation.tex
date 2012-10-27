@@ -14,6 +14,11 @@
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{caption}
+%}}}
+
+% config {{{
+\captionsetup{font=scriptsize,labelfont=scriptsize}
 %}}}
 
 % title {{{
@@ -55,12 +60,41 @@
 
 \subsection{Challenges of CBIR}
 \begin{frame}{Challenges of CBIR}
-    foo
+    \begin{block}{The Semantic Gap}
+        \begin{quote}
+            ``The semantic gap is the \textbf{lack of coincidence} between the
+            information that one can extract from the \textbf{visual data} and
+            the \textbf{interpretation} that the same data have for a user in a
+            given situation.'' -- Smeulders et al.
+        \end{quote}
+    \end{block}
+    \begin{block}{The Sensory Gap}
+        \begin{quote}
+            ``The sensory gap is the gap between the \textbf{object in the
+            world} and the information in a (computational) description derived
+            from a \textbf{recording of that scene}.'' -- Smeulders et al.
+        \end{quote}
+    \end{block}
 \end{frame}
 
 \subsection{Anatomy of a CBIR System}
 \begin{frame}{Anatomy of a CBIR System}
-    foo
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_cropped}
+                \caption{Global Descriptors}
+                \label{fig:anatomy_global}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_local_cropped}
+                \caption{Local Descriptors}
+                \label{fig:anatomy_local}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 % }}}
 
@@ -68,7 +102,33 @@
 \section{Proposed Solution}
 \subsection{Acquisition}
 \begin{frame}{Acquisition}
-    foo
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/input_example_color}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/input_example_luma}
+                \caption{Luma Conversion}
+            \end{figure}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/input_example_canny}
+                \caption{Canny Operator}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/input_example_sobel}
+                \caption{Sobel Operator}
+            \end{figure}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/input_example_segment}
+                \caption{gPb-owt-ucm Transform}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \subsection{The Curvelet Transform}
