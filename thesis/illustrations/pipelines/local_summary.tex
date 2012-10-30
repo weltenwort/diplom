@@ -1,0 +1,76 @@
+\begin{tikzpicture}[font=\tiny]
+    \matrix[node grid] {
+        \node [document node] (dbimg) {$I_{db}$}; &
+        \node [operation node, split node=4] (dbpreprocess) {LUMA \nodepart{two} LUMA+SOBEL \nodepart{three} LUMA+CANNY \nodepart{four} SEGMENT};  &
+        \node [operation node] (dbcurvelet) {FDCT}; &
+        %\node [operation node] (dbpmean) {PMEAN}; &&
+        \node [operation node, split node=2] (dbpmean) {PMEAN \nodepart{two} PMEAN2}; &
+        \node [operation node] (dbquant) {VQ}; \\
+        &&&
+        \node [operation node] (cluster) {CLUSTER}; \\
+        \node [document node] (qimg) {$I_q$}; &
+        \node [operation node] (qluma) {LUMA}; &
+        \node [operation node] (qcurvelet) {FDCT}; &
+        %\node [operation node] (qpmean) {PMEAN}; &&
+        \node [operation node, split node=2] (qpmean) {PMEAN \nodepart{two} PMEAN2}; &
+        \node [operation node] (qquant) {VQ}; \\
+    };
+    \node [operation node, split node=4, right=3ex of $(dbquant.east)!0.5!(qquant.east)$] (dist) {$L_2$ \nodepart{two} COS \nodepart{three} HI(B) \nodepart{four} EMD};
+    \node [document node, right=of dist] (result) {distances};
+
+    \node [parameter node, below=1ex of dbimg] (dbcannyparam) {$\sigma$};
+    \node [parameter node, above=of dbcurvelet] (dbcurveletparam) {$(N_s, N_{\theta})$};
+    \node [parameter node, above=of dbpmean] (dbpmeanparam) {$(G, P)$};
+    \node [parameter node, below=of qcurvelet] (qcurveletparam) {$(N_s, N_{\theta})$};
+    \node [parameter node, below=of qpmean] (qpmeanparam) {$(G, P)$};
+
+    \path [parameter connector] (dbcannyparam) -- (dbpreprocess.three west);
+    \path [parameter connector] (dbcurveletparam) -- (dbcurvelet);
+    \path [parameter connector] (dbpmeanparam) -- (dbpmean);
+    \path [parameter connector] (qcurveletparam) -- (qcurvelet);
+    \path [parameter connector] (qpmeanparam) -- (qpmean);
+
+    { [start chain=going right, every join/.style={connector}]
+        \chainin (dbimg);
+        \chainin (dbpreprocess) [join];
+        \chainin (dbcurvelet) [join];
+        \chainin (dbpmean) [join];
+        { [start branch]
+            \chainin (cluster) [join];
+            { [start branch]
+                \chainin (qquant) [join=with cluster.-5 by hv connector];
+            }
+            \chainin (dbquant) [join=with cluster.5 by hv connector];
+        }
+        \chainin (dbquant) [join];
+        \chainin (dist) [join=with dbquant.east by hvh connector top];
+    }
+    { [start chain=going right, every join/.style={connector}]
+        \chainin (qimg);
+        \chainin (qluma) [join];
+        \chainin (qcurvelet) [join];
+        \chainin (qpmean) [join];
+        \chainin (qquant) [join];
+        \chainin (dist) [join=with qquant.east by hvh connector bottom];
+        \chainin (result) [join];
+    }
+
+    \begin{pgfonlayer}{background}
+        \node[minimum node, above=of dbimg] (labelanchor) {};
+        \node[minimum node, below=of qimg] (labelanchorbottom) {};
+        \node (acquisitionend) at ($(dbpreprocess.east)!0.5!(dbcurvelet.west)$) {};
+        \node (extractionmiddle) at ($(dbcurvelet.east)!0.5!(dbquant.west)$) {};
+        \node (extractionend) at ($(dbquant.east)!0.5!(dist.west)$) {};
+        \node (rankingmiddle) at ($(dist.east)!0.5!(result.west)$) {};
+
+        \only<2>{\path[section highlight] (labelanchor.north west) rectangle (labelanchorbottom.south -| acquisitionend);}
+        \only<3>{\path[section highlight] (labelanchor.north west -| acquisitionend) rectangle (labelanchorbottom -| extractionend);}
+        \only<4>{\path[section highlight] (labelanchor.north west -| extractionend) rectangle (labelanchorbottom -| result.east);}
+
+        \node[section label] (acquisitionlabel) at (labelanchor -| dbpreprocess) {Acquisition};
+        \node[section label] (extractionlabel) at (labelanchor -| extractionmiddle) {Feature Extraction};
+        \node[section label] (rankinglabel) at (labelanchor -| rankingmiddle) {Ranking};
+        \path[section divider] (labelanchor.north -| acquisitionend) -- (labelanchorbottom.south -| acquisitionend);
+        \path[section divider] (labelanchor.north -| extractionend) -- (labelanchorbottom.south -| extractionend);
+    \end{pgfonlayer}
+\end{tikzpicture}

@@ -15,9 +15,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{caption}
+\usepackage{tikz}
 %}}}
 
 % config {{{
+\input{illustrations/graphics_settings.tex}
 %\captionsetup{font=scriptsize,labelfont=scriptsize}
 %\renewcommand{\captionfont}{\tiny}
 %\renewcommand{\captionlabelfont}{\tiny}
@@ -211,6 +213,19 @@
 
 % solution {{{
 \section{Proposed Solution}
+\subsection{Proposed Retrieval Pipelines}
+\begin{frame}{Proposed Retrieval Pipelines (Global)}
+    \begin{figure}
+        \input{illustrations/pipelines/global_summary.tex}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Proposed Retrieval Pipelines (Local)}
+    \begin{figure}
+        \input{illustrations/pipelines/local_summary.tex}
+    \end{figure}
+\end{frame}
+
 \subsection{Acquisition}
 \begin{frame}{Acquisition}
     \begin{columns}[T]
