@@ -43,7 +43,10 @@
     }
 
     \uncover<4->{
-        \draw[highlight line] ([yshift=-0.405cm]wtr) rectangle ([yshift=-0.405cm]wbr -| lvt);
+        \draw[default line] ([yshift=-0.405cm]wtr) rectangle ([yshift=-0.405cm]wbr -| lvt);
+
+        \path[default line, decorate, decoration={brace, mirror, raise=.6}] ([yshift=-0.405cm]wtr) to node[above, midway]{$2^j$} ([yshift=-0.405cm]wtr -| lvt);
+        \path[default line, decorate, decoration={brace, raise=.6}] ([yshift=-0.405cm]wtr) to node[right, midway]{$2^{\frac{j}{2}}$} ([yshift=-0.405cm]wbr);
     }
 
 \end{tikzpicture}
