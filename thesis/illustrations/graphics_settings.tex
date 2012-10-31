@@ -3,7 +3,7 @@
 \colorlet{graybg}{black!10}
 \colorlet{grayborder}{black!50}
 
-\usetikzlibrary{fit,positioning,chains,scopes,shapes,shapes.multipart,calc,backgrounds,shadings}
+\usetikzlibrary{fit,positioning,chains,scopes,shapes,shapes.multipart,calc,backgrounds,shadings,intersections}
 
 \tikzset{
 	node grid/.style={row sep=1ex, column sep=1.5ex},
@@ -28,9 +28,11 @@
 
 \tikzset{
     default line/.style={draw=black},
+    default area/.style={draw=black, fill=white},
     highlight area/.style={fill=black!20},
     highlight brace/.style={draw=black, decorate, decoration=brace},
-    highlight line/.style={draw=red}
+    highlight line/.style={draw=red},
+    muted line/.style={draw=black!50}
 }
 
 \usepackage{pgfplots}

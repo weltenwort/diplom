@@ -1,0 +1,109 @@
+\begin{tikzpicture}[font=\tiny,x=0.75cm,y=0.75cm]
+    \def\ra{.05}
+    \def\rb{.1}
+    \def\rc{.2}
+    \def\rd{.4}
+    \def\re{.8}
+    \def\rf{1.6}
+    \def\rg{3.2}
+    \coordinate (center) at (0,0);
+    \def\rectc{(-\rc, -\rc) rectangle (\rc, \rc)}
+    \def\rectd{(-\rd, -\rd) rectangle (\rd, \rd)}
+    \def\recte{(-\re, -\re) rectangle (\re, \re)}
+    \def\rectf{(-\rf, -\rf) rectangle (\rf, \rf)}
+    \def\rectg{(-\rg, -\rg) rectangle (\rg, \rg)}
+
+    \coordinate (lvt) at (\re, 4);
+    \coordinate (lvb) at (\re, -4);
+    \coordinate (rvt) at (\rf, 4);
+    \coordinate (rvb) at (\rf, -4);
+    \coordinate (thr) at (33.75:10);
+    \coordinate (bhr) at (22.5:10);
+
+    \coordinate (wtl) at (intersection of lvt--lvb and center--thr);
+    \coordinate (wtr) at (intersection of rvt--rvb and center--thr);
+    \coordinate (wbr) at (intersection of rvt--rvb and center--bhr);
+    \coordinate (wbl) at (intersection of lvt--lvb and center--bhr);
+
+    \draw[default area] \rectg;
+    \begin{scope}
+        \clip \rectg;
+        \foreach \a in {0,5.625,...,359} {
+            \draw[default line] (center) -- (\a:10);
+        }
+    \end{scope}
+
+    \draw[default area] \rectf;
+    \begin{scope}
+        \clip \rectf;
+        \foreach \a in {0,11.25,...,359} {
+            \draw[default line] (center) -- (\a:10);
+        }
+    \end{scope}
+
+    \draw[default area] \rectf;
+    \draw[default area] \recte;
+    \begin{scope}
+        \clip \rectf;
+        \uncover<2->{
+            \path[highlight area] (wtl) -- (wtr) -- (wbr) -- (wbl) -- cycle;
+        }
+        \foreach \a in {0,11.25,...,359} {
+            \draw[default line] (center) -- (\a:10);
+        }
+    \end{scope}
+    \draw[default line] \rectf;
+    \draw[default line] \recte;
+
+    \draw[default area] \rectd;
+    \begin{scope}
+        \clip \rectd;
+        \foreach \a in {0,22.5,...,359} {
+            \draw[default line] (center) -- (\a:10);
+        }
+    \end{scope}
+
+    \draw[default area] \rectc;
+
+
+    % draw shells
+    %\foreach \r in {\rc,\rd,\re,\rf,\rg} {
+        %\draw[default line] (-\r, -\r) rectangle (\r, \r);
+    %}
+
+    %\begin{scope}
+        %\clip (-\rg, -\rg) rectangle (\rg, \rg);
+        %% draw angular lines
+        %\foreach \a in {0,90,180,270} {
+            %\draw[default line] (\a:\ra) -- (\a:\rg);
+        %}
+
+        %%\foreach \a in {45,135,...,360} {
+            %%\draw[default line] (\a:\rb) -- (\a:\rg);
+        %%}
+
+        %%\foreach \a in {22.5,67.5,...,360} {
+            %%\draw[default line] (\a:\rd) -- (\a:\rg);
+        %%}
+
+        %%\foreach \a in {11.25,33.75,...,360} {
+            %%\draw[default line] (\a:\rf) -- (\a:\rg);
+        %%}
+    %\end{scope}
+
+    %\uncover<7->{
+        %\draw[highlight line] (center) circle(2.4);
+        %\node[text=red, anchor=north west] at (0:2.4) {Scale};
+        %\draw[highlight line] (center) -- (50.75:4);
+        %\node[text=red, anchor=west] at (50.75:\rg) {Orientation};
+    %}
+
+    %\begin{pgfonlayer}{background}
+        %\uncover<6->{
+            %\path[highlight area] (56.25:\rf) -- (56.25:\rg) arc[start angle=56.25, end angle=45, radius=\rg] -- (45:\rf) arc[start angle=45, end angle=56.25, radius=\rf];
+
+            %\path[default line, decorate, decoration={brace, mirror}] (45:\rf) to node[below right=-0.15, midway]{$2^j$} (45:\rg);
+            %\path[default line, decorate, decoration={brace, mirror}] (45:\rg) to node[above right=-0.05, midway]{$2^{\frac{j}{2}}$} (56.25:\rg);
+        %}
+    %\end{pgfonlayer}
+\end{tikzpicture}

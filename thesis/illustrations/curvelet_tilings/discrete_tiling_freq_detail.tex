@@ -1,0 +1,49 @@
+\begin{tikzpicture}[font=\tiny,x=2cm,y=2cm]
+    \def\ra{.05}
+    \def\rb{.1}
+    \def\rc{.2}
+    \def\rd{.4}
+    \def\re{.8}
+    \def\rf{1.6}
+    \def\rg{3.2}
+    \coordinate (center) at (0,0);
+    \def\rectc{(-\rc, -\rc) rectangle (\rc, \rc)}
+    \def\rectd{(-\rd, -\rd) rectangle (\rd, \rd)}
+    \def\recte{(-\re, -\re) rectangle (\re, \re)}
+    \def\rectf{(-\rf, -\rf) rectangle (\rf, \rf)}
+    \def\rectg{(-\rg, -\rg) rectangle (\rg, \rg)}
+
+    \coordinate (lvt) at (\re, 4);
+    \coordinate (lvb) at (\re, -4);
+    \coordinate (rvt) at (\rf, 4);
+    \coordinate (rvb) at (\rf, -4);
+    \coordinate (thr) at (33.75:10);
+    \coordinate (bhr) at (22.5:10);
+
+    \coordinate (wtl) at (intersection of lvt--lvb and center--thr);
+    \coordinate (wtr) at (intersection of rvt--rvb and center--thr);
+    \coordinate (wbr) at (intersection of rvt--rvb and center--bhr);
+    \coordinate (wbl) at (intersection of lvt--lvb and center--bhr);
+
+    \uncover<2>{
+        \path[highlight area] (wtl) -- (wtr) -- (wbr) -- (wbl) -- cycle;
+    }
+
+    \uncover<3->{
+        \foreach \x [evaluate=\x using \x*2cm] in {-0.8,0,0.8} {
+            \foreach \y [evaluate=\y using \y*2cm] in {-0.405,0,0.405} {
+                \draw[muted line, yslant=0.5] ([xshift=\x, yshift=\y]wtr) rectangle ([xshift=\x, yshift=\y]wbr -| lvt);
+            }
+        }
+        \foreach \x/\ys [evaluate=\x using \x*2cm, count=\xi from 0] in {-0.8/-1,0/0,0.8/1} {
+            \foreach \y [evaluate=\y using \y*2cm+\ys*0.81cm] in {-0.405,0,0.405} {
+                \path[highlight area] ([xshift=\x, yshift=\y]wtl) -- ([xshift=\x, yshift=\y]wtr) -- ([xshift=\x, yshift=\y]wbr) -- ([xshift=\x, yshift=\y]wbl) -- cycle;
+            }
+        }
+    }
+
+    \uncover<4->{
+        \draw[highlight line] ([yshift=-0.405cm]wtr) rectangle ([yshift=-0.405cm]wbr -| lvt);
+    }
+
+\end{tikzpicture}
