@@ -50,8 +50,8 @@
         \node (rankingmiddle) at ($(dist.east)!0.5!(result.west)$) {};
 
         \only<2>{\path[section highlight] (labelanchor.north west) rectangle (labelanchorbottom.south -| acquisitionend);}
-        \only<3>{\path[section highlight] (labelanchor.north west -| acquisitionend) rectangle (labelanchorbottom -| extractionend);}
-        \only<4>{\path[section highlight] (labelanchor.north west -| extractionend) rectangle (labelanchorbottom -| result.east);}
+        \only<3>{\path[section highlight] (labelanchor.north west -| acquisitionend) rectangle (labelanchorbottom.south -| extractionend);}
+        \only<4>{\path[section highlight] (labelanchor.north west -| extractionend) rectangle (labelanchorbottom.south -| result.east);}
 
         \node[section label] (acquisitionlabel) at (labelanchor -| dbpreprocess) {Acquisition};
         \node[section label] (extractionlabel) at (labelanchor -| extractionmiddle) {Feature Extraction};

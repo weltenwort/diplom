@@ -1,0 +1,49 @@
+\begin{tikzpicture}[font=\tiny,x=0.75cm,y=0.75cm]
+    \def\ra{.05}
+    \def\rb{.1}
+    \def\rc{.2}
+    \def\rd{.4}
+    \def\re{.8}
+    \def\rf{1.6}
+    \def\rg{3.2}
+    \coordinate (center) at (0,0);
+
+    % draw shells
+    \foreach \r in {\ra,\rb,\rc,\rd,\re,\rf,\rg} {
+        \draw[default line] (center) circle(\r);
+    }
+
+    % draw angular lines
+    \only<2->{
+        \foreach \a in {0,90,180,270} {
+            \draw[default line] (\a:\ra) -- (\a:\rg);
+        }
+    }
+
+    \only<3->{
+        \foreach \a in {45,135,...,360} {
+            \draw[default line] (\a:\rb) -- (\a:\rg);
+        }
+    }
+
+    \only<4->{
+        \foreach \a in {22.5,67.5,...,360} {
+            \draw[default line] (\a:\rd) -- (\a:\rg);
+        }
+    }
+
+    \only<5->{
+        \foreach \a in {11.25,33.75,...,360} {
+            \draw[default line] (\a:\rf) -- (\a:\rg);
+        }
+    }
+
+    \begin{pgfonlayer}{background}
+        \only<6->{
+            \path[highlight area] (56.25:\rf) -- (56.25:\rg) arc[start angle=56.25, end angle=45, radius=\rg] -- (45:\rf) arc[start angle=45, end angle=56.25, radius=\rf];
+
+            \path[default line, decorate, decoration={brace, mirror}] (45:\rf) to node[below right=-0.15, midway]{$2^j$} (45:\rg);
+            \path[default line, decorate, decoration={brace, mirror}] (45:\rg) to node[above right=-0.05, midway]{$2^{\frac{j}{2}}$} (56.25:\rg);
+        }
+    \end{pgfonlayer}
+\end{tikzpicture}
