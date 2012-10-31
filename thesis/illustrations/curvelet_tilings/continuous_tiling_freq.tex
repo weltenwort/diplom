@@ -38,6 +38,13 @@
         }
     }
 
+    \uncover<7->{
+        \draw[highlight line] (center) circle(2.4);
+        \node[text=red, anchor=north west] at (0:2.4) {Scale};
+        \draw[highlight line] (center) -- (50.75:4);
+        \node[text=red, anchor=west] at (50.75:\rg) {Orientation};
+    }
+
     \begin{pgfonlayer}{background}
         \uncover<6->{
             \path[highlight area] (56.25:\rf) -- (56.25:\rg) arc[start angle=56.25, end angle=45, radius=\rg] -- (45:\rf) arc[start angle=45, end angle=56.25, radius=\rf];
