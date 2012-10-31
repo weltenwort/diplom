@@ -14,32 +14,32 @@
     }
 
     % draw angular lines
-    \only<2->{
+    \uncover<2->{
         \foreach \a in {0,90,180,270} {
             \draw[default line] (\a:\ra) -- (\a:\rg);
         }
     }
 
-    \only<3->{
+    \uncover<3->{
         \foreach \a in {45,135,...,360} {
             \draw[default line] (\a:\rb) -- (\a:\rg);
         }
     }
 
-    \only<4->{
+    \uncover<4->{
         \foreach \a in {22.5,67.5,...,360} {
             \draw[default line] (\a:\rd) -- (\a:\rg);
         }
     }
 
-    \only<5->{
+    \uncover<5->{
         \foreach \a in {11.25,33.75,...,360} {
             \draw[default line] (\a:\rf) -- (\a:\rg);
         }
     }
 
     \begin{pgfonlayer}{background}
-        \only<6->{
+        \uncover<6->{
             \path[highlight area] (56.25:\rf) -- (56.25:\rg) arc[start angle=56.25, end angle=45, radius=\rg] -- (45:\rf) arc[start angle=45, end angle=56.25, radius=\rf];
 
             \path[default line, decorate, decoration={brace, mirror}] (45:\rf) to node[below right=-0.15, midway]{$2^j$} (45:\rg);
