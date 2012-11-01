@@ -67,7 +67,7 @@
 
 % introduction and background {{{
 \section{Introduction and Background}
-\subsection{Motivation and Challenges of CBIR}
+\subsection{Motivation}
 \begin{frame}{Motivation}
     \begin{columns}
         \begin{column}{.5\textwidth}
@@ -91,26 +91,26 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Challenges of CBIR}
-    \begin{block}{The Semantic Gap}
-        \begin{quote}
-            ``The semantic gap is the \textbf{lack of coincidence} between the
-            information that one can extract from the \textbf{visual data} and
-            the \textbf{interpretation} that the same data have for a user in a
-            given situation.'' -- Smeulders et al.
-        \end{quote}
-    \end{block}
-    \begin{block}{The Sensory Gap}
-        \begin{quote}
-            ``The sensory gap is the gap between the \textbf{object in the
-            world} and the information in a (computational) description derived
-            from a \textbf{recording of that scene}.'' -- Smeulders et al.
-        \end{quote}
-    \end{block}
-\end{frame}
+%\begin{frame}{Challenges of CBIR}
+    %\begin{block}{The Semantic Gap}
+        %\begin{quote}
+            %``The semantic gap is the \textbf{lack of coincidence} between the
+            %information that one can extract from the \textbf{visual data} and
+            %the \textbf{interpretation} that the same data have for a user in a
+            %given situation.'' -- Smeulders et al.
+        %\end{quote}
+    %\end{block}
+    %\begin{block}{The Sensory Gap}
+        %\begin{quote}
+            %``The sensory gap is the gap between the \textbf{object in the
+            %world} and the information in a (computational) description derived
+            %from a \textbf{recording of that scene}.'' -- Smeulders et al.
+        %\end{quote}
+    %\end{block}
+%\end{frame}
 
 \subsection{Prior Work}
-\begin{frame}{Prior Work on Human Recognition}
+\begin{frame}{Prior Work on Face Recognition}
     \begin{figure}
         \includegraphics[width=.9\textwidth]{illustrations/related_work/curvelet_faces_mandal09}
         \caption{``Face recognition using curvelet based PCA.'', T. Mandal and Q. M.J Wu, ICPR 2008}
@@ -219,22 +219,21 @@
 
 \subsection{Anatomy of a CBIR System}
 \begin{frame}{Anatomy of a CBIR System}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
+    %\begin{columns}
+        %\begin{column}{0.5\textwidth}
             \begin{figure}
-                \includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_cropped}
-                \caption{Global Descriptors}
-                \label{fig:anatomy_global}
+                \includegraphics[height=.8\textheight]{illustrations/cbir_anatomy_query_cropped}
+                %\caption{Global Descriptors}
             \end{figure}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{figure}
-                \includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_local_cropped}
-                \caption{Local Descriptors}
-                \label{fig:anatomy_local}
-            \end{figure}
-        \end{column}
-    \end{columns}
+        %\end{column}
+        %\begin{column}{0.5\textwidth}
+            %\begin{figure}
+                %\includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_local_cropped}
+                %\caption{Local Descriptors}
+                %\label{fig:anatomy_local}
+            %\end{figure}
+        %\end{column}
+    %\end{columns}
 \end{frame}
 % }}}
 
@@ -256,37 +255,41 @@
 \subsection{Acquisition}
 \begin{frame}{Acquisition}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.4\textwidth}
             \begin{figure}
                 \includegraphics[width=\textwidth]{illustrations/input_example_color}
                 \caption{Original Image}
             \end{figure}
         \end{column}
-        \begin{column}{0.5\textwidth}
-            \only<1>{
+        \begin{column}{0.6\textwidth}
+            %\only<1>{
                 \begin{figure}
-                    \includegraphics[width=\textwidth]{illustrations/input_example_luma}
-                    \caption{Luma Conversion}
+                    \includegraphics[width=.5\textwidth]{illustrations/input_example_luma}
+                    \includegraphics[width=.5\textwidth]{illustrations/input_example_canny}\\
+                    \includegraphics[width=.5\textwidth]{illustrations/input_example_sobel}
+                    \includegraphics[width=.5\textwidth]{illustrations/input_example_segment}
+                    \caption{Luma, Canny, Sobel and gPb contour transformations}
+                    %\caption{Luma Conversion}
                 \end{figure}
-            }
-            \only<2>{
-                \begin{figure}
-                    \includegraphics[width=\textwidth]{illustrations/input_example_canny}
-                    \caption{Canny Operator}
-                \end{figure}
-            }
-            \only<3>{
-                \begin{figure}
-                    \includegraphics[width=\textwidth]{illustrations/input_example_sobel}
-                    \caption{Sobel Operator}
-                \end{figure}
-            }
-            \only<4>{
-                \begin{figure}
-                    \includegraphics[width=\textwidth]{illustrations/input_example_segment}
-                    \caption{gPb-owt-ucm Transform}
-                \end{figure}
-            }
+            %}
+            %\only<2>{
+                %\begin{figure}
+                    %\includegraphics[width=\textwidth]{illustrations/input_example_canny}
+                    %\caption{Canny Operator}
+                %\end{figure}
+            %}
+            %\only<3>{
+                %\begin{figure}
+                    %\includegraphics[width=\textwidth]{illustrations/input_example_sobel}
+                    %\caption{Sobel Operator}
+                %\end{figure}
+            %}
+            %\only<4>{
+                %\begin{figure}
+                    %\includegraphics[width=\textwidth]{illustrations/input_example_segment}
+                    %\caption{gPb-owt-ucm Contours}
+                %\end{figure}
+            %}
         \end{column}
     \end{columns}
 \end{frame}
@@ -295,10 +298,12 @@
 \begin{frame}{Properties of the Curvelet Transform}
     \begin{itemize}
         \item An extension of the wavelet transform
-        \item Localized in \emph{position}, \emph{scale} and \emph{orientation}
+        \item Especially suited for representing curve-like discontinuities, because
         \item Curvelets obey parabolic scaling: $width \approx length^2$
-        \item Approximation error along edges using $m$ largest coefficients decays with $\frac{log(m)^3}{m^2}$ (compare $\frac{1}{m}$ for wavelets)
-        \item Defined and applied in frequency domain as $\hat{\varphi}_{j, l, k}$ using the inverse Fourier Transforms:
+        \item Parameterized by \emph{location}, \emph{scale} and \emph{orientation}
+        \item Approximation error along edges using $m$ largest coefficients decays with $\frac{1}{m^2}$ (compare $\frac{1}{m}$ for wavelets)
+        %\item Defined and applied in frequency domain using the Fourier Transform
+        \item Defined and applied in frequency domain as $\hat{\varphi}_{j, l, k}$ using the inverse Fourier Transform:
             \begin{equation*}
                 c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
             \end{equation*}
@@ -317,6 +322,23 @@
             \begin{figure}
                 \input{illustrations/curvelet_tilings/continuous_tiling_spatial.tex}
                 \caption{Spatial Domain}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The Fast Discrete Curvelet Transform}
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \input{illustrations/curvelet_tilings/discrete_tiling_freq.tex}
+                \caption{Frequency Domain}
+            \end{figure}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \input{illustrations/curvelet_tilings/discrete_tiling_freq_detail.tex}
+                \caption{Parallelogram Support}
             \end{figure}
         \end{column}
     \end{columns}
@@ -341,25 +363,11 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{The Fast Discrete Curvelet Transform}
-    \begin{columns}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-                \input{illustrations/curvelet_tilings/discrete_tiling_freq.tex}
-                \caption{Frequency Domain}
-            \end{figure}
-        \end{column}
-        \begin{column}{.5\textwidth}
-            \begin{figure}
-                \input{illustrations/curvelet_tilings/discrete_tiling_freq_detail.tex}
-                \caption{Parallelogram Support}
-            \end{figure}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \subsection{Feature Extraction}
-\begin{frame}{Global Feature Extraction}
+\begin{frame}{Global Feature Extraction (Sampling)}
+    \begin{description}
+        \item[MEAN] Calculate the mean coefficients on $n \times n$ grid, concatenate across scales and angles
+    \end{description}
     \begin{columns}
         \begin{column}{.5\textwidth}
             \begin{figure}
@@ -401,8 +409,8 @@
 
 \begin{frame}{Local Feature Extraction (Clustering)}
     \begin{itemize}
-        \item k-means clustering
-        \item Codebook size $k = 1000$
+        \item k-means clustering of features in database images
+        \item $k = 1000$ clusters sufficient
         \item Each sample vector is assigned to the cluster $S_i$, $i = 1, \dots, k$ the center of which it is closest to
         \item Image signature is the number of occurences of each ``visual word'' in the image:
             \begin{equation*}
@@ -414,8 +422,8 @@
 \subsection{Ranking}
 \begin{frame}{Distance Metrics}
     \begin{description}[Histogram Intersection (HI)] \itemsep16pt
-        \item[$L_2$] $d_{EUCL}(p, q) = \sqrt{\sum_{i=1}^n (q_i - p_i)^2}$
-        \item[Cosine] $d_{COS}(p, q) = 1 - \frac{p \cdot q}{\|p\| \|q\|}$
+        \item[$L_2$ Distance] $d_{EUCL}(p, q) = \sqrt{\sum_{i=1}^n (q_i - p_i)^2}$
+        \item[Cosine Distance] $d_{COS}(p, q) = 1 - \frac{p \cdot q}{\|p\| \|q\|}$
         \item[Histogram Intersection (HI)] $d_{HI}(P, Q) = 1 - \frac{\sum_{i=1}^n \min (p_i, q_i)}{\sum_{i=1}^n q_i}$
         \item[Earth Mover's Distance (EMD)] $d_{EMD}(P, Q) = \frac{\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}$
     \end{description}
@@ -555,9 +563,39 @@
         \item For cross-domain retrieval, local LUMA+CANNY+HI performs best
         \item For intra-domain retrieval, global descriptors work better
         \item Large performance differences between queries
+        \item Very dependent on the nature of the images
         \item[$\Rightarrow$] Possibly much better results for narrower problem statements and specialized applications
     \end{itemize}
 \end{frame}
+%}}}
+
+% additional material {{{
+\appendix
+\section{\appendixname}
+\begin{frame}{Cross-Domain Parameter Variation: Angles}
+    \begin{table}
+        \centering
+        \pgfplotstableread[]{results/parameter_angles.csv}\resultsparameterangles
+        \plottablexbars{imagereader,features,scales,angles,metric}{\resultsparameterangles}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Cross-Domain Parameter Variation: Grid and Patch Sizes}
+    \begin{table}
+        \centering
+        \pgfplotstableread[]{results/parameter_grid.csv}\resultsparametergrid
+        \plottablexbars{imagereader,features,gridsize,patchsize,metric}{\resultsparametergrid}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Cross-Domain Parameter Variation: Canny Sigma}
+    \begin{table}
+        \centering
+        \pgfplotstableread[]{results/parameter_canny.csv}\resultsparametercanny
+        \plottablexbars{imagereader,features,cannysigma,metric}{\resultsparametercanny}
+    \end{table}
+\end{frame}
+
 %}}}
 
 %}}}

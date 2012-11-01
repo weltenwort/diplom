@@ -2,7 +2,7 @@
     \addplot+[draw=none, stack plots=y, no markers, forget plot] table[x=recall, y=min]{#1};
     \addplot+[draw=none, stack plots=y, fill=gray!20, no markers, forget plot] table[x=recall, y expr=\thisrow{max}-\thisrow{min}]{#1} \closedcycle;
     \addplot+[stack plots=false, thick] table[x=recall, y=precision]{#1};
-    \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,pumpkin,donut}{
+    \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,calculator,donut}{
         \addplot+ table[x=recall, y=##1]{#1};
     }
 }
@@ -42,7 +42,7 @@
         \nextgroupplot[title=LUMA+MEAN+L2, legend to name=grouplegend]
             \plotpr{\resultsprglumameaneucl}
             \addlegendentryexpanded[black]{Mean}
-            \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,pumpkin,donut}{
+            \pgfplotsinvokeforeach{skull,pear,squirrel,cabinet,calculator,donut}{
                 \addlegendentryexpanded[black]{Category "#1"}
             }
         \nextgroupplot[title=LUMA+MEAN+COS]
