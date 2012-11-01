@@ -485,6 +485,39 @@
 \end{frame}
 
 \subsection{Intra-Domain Benchmark}
+\begin{frame}{Intra-Domain Dataset}
+    \begin{figure}
+        \begin{tabular}{cccccc}
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/calculator_3.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/parrot_3.png} \\
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/donut_3.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_1.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_2.png} &
+            \includegraphics[width=0.15\textwidth]{illustrations/sketch_examples/doorhandle_3.png}
+        \end{tabular}
+        \caption{Example sketches from four categories from ``How do humans
+            sketch objects?'', Eitz et al., 2012}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Intra-Domain Benchmark}
+    \begin{itemize}
+        \item 50 categories with 80 hand-drawn sketches each (Eitz et al., 2012)
+        \item Precision-recall statistics
+            \begin{align*}
+                recall & = \frac{\text{number of correct positive results}}{\text{total number of positives}} \\
+                precision & = \frac{\text{number of correct positive results}}{\text{total number of results}}
+            \end{align*}
+        \item no edge-detecting preprocessing
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Intra-Domain Results}
     \begin{figure}
         \input{illustrations/graphs/pr_precisions_presentation.tex}
@@ -494,8 +527,14 @@
 
 % conclusion {{{
 \section{Conclusions}
-\begin{frame}{Conclusions}
-    foo
+\begin{frame}{Discussion and Conclusions}
+    \begin{itemize}
+        \item Retrieval performance comparable to other descriptors
+        \item For cross-domain retrieval, local LUMA+CANNY+HI performs best
+        \item For intra-domain retrieval, global descriptors work better
+        \item Large performance differences between queries
+        \item[$\Rightarrow$] Possibly much better results for narrower problem statements and specialized applications
+    \end{itemize}
 \end{frame}
 %}}}
 
