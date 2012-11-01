@@ -345,8 +345,39 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Local Feature Extraction}
-    foo
+\begin{frame}{Local Feature Extraction (Sampling)}
+    \begin{description}
+        \item[PMEAN] Collect $(n - m + 1)^2$ sample vectors of length $N_s \cdot N_{\theta_s} \cdot m^2$ by concatenating across scales and angles
+        \item[PMEAN2] Collect $N_s \cdot (n - m + 1)^2$ sample vectors of length $N_{\theta_s} \cdot m^2$ by concatenating across angles
+    \end{description}
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{illustrations/signature_example_curvelet_patches}
+                \caption{$8 \times 8$ mean coefficient grid sampled using $3 \times 3$ window}
+            \end{figure}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \begin{description}[abc]
+                \item[$n$] image width and height
+                \item[$m$] window width and height
+                \item[$N_s$] Number of scales
+                \item[$N_{\theta_s}$] Number of angles at scale $s$
+            \end{description}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Local Feature Extraction (Clustering)}
+    \begin{itemize}
+        \item k-means clustering
+        \item Codebook size $k = 1000$
+        \item Each sample vector is assigned to the closest cluster $S_i$, $i = 1, \dots, k$
+        \item Image signature is the number of occurences of each ``visual word'' in the image:
+            \begin{equation*}
+                \tilde{I} = [|S_1|, |S_2|, \dots, |S_k|]
+            \end{equation*}
+    \end{itemize}
 \end{frame}
 
 \subsection{Ranking}
