@@ -69,7 +69,26 @@
 \section{Introduction and Background}
 \subsection{Motivation and Challenges of CBIR}
 \begin{frame}{Motivation}
-    foo
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            \begin{itemize}
+                \item Increasing amount of visual information in
+                    \begin{itemize}
+                        \item the internet
+                        \item medicine
+                        \item astronomy
+                    \end{itemize}
+                \item Manual search largely infeasible
+                \item Textual queries require cognitive effort by human and machine
+                \item Sketches allow for easy \emph{expression of query intent}
+            \end{itemize}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.9\textwidth]{illustrations/medical_image}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Challenges of CBIR}
@@ -279,7 +298,7 @@
         \item Localized in \emph{position}, \emph{scale} and \emph{orientation}
         \item Curvelets obey parabolic scaling: $width \approx length^2$
         \item Approximation error along edges using $m$ largest coefficients decays with $\frac{log(m)^3}{m^2}$ (compare $\frac{1}{m}$ for wavelets)
-        \item Defined and applied in frequency domain as $\hat{\varphi}_{j, l, k}$ using the forward and inverse Fourier Transforms:
+        \item Defined and applied in frequency domain as $\hat{\varphi}_{j, l, k}$ using the inverse Fourier Transforms:
             \begin{equation*}
                 c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
             \end{equation*}
