@@ -224,13 +224,13 @@
 \subsection{Proposed Retrieval Pipelines}
 \begin{frame}{Proposed Retrieval Pipelines (Global)}
     \begin{figure}
-        %\input{illustrations/pipelines/global_summary.tex}
+        \input{illustrations/pipelines/global_summary.tex}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Proposed Retrieval Pipelines (Local)}
     \begin{figure}
-        %\input{illustrations/pipelines/local_summary.tex}
+        \input{illustrations/pipelines/local_summary.tex}
     \end{figure}
 \end{frame}
 
@@ -279,7 +279,10 @@
         \item Localized in \emph{position}, \emph{scale} and \emph{orientation}
         \item Curvelets obey parabolic scaling: $width \approx length^2$
         \item Approximation error along edges using $m$ largest coefficients decays with $\frac{log(m)^3}{m^2}$ (compare $\frac{1}{m}$ for wavelets)
-        \item Defined in frequency domain using 
+        \item Defined and applied in frequency domain as $\hat{\varphi}_{j, l, k}$ using the forward and inverse Fourier Transforms:
+            \begin{equation*}
+                c(j, l, k) := \langle f, \varphi_{j, l, k} \rangle = \int_{\mathbb{R}^2} f(x) \overline{\varphi_{j, l, k}(x)} dx
+            \end{equation*}
     \end{itemize}
 \end{frame}
 
