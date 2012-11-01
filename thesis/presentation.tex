@@ -20,6 +20,15 @@
 
 % config {{{
 \input{illustrations/graphics_settings.tex}
+\pgfplotstableset{
+    every table/.style={font=\scriptsize},
+}
+\pgfplotsset{
+    hbarplot/.append style={
+        bar width=8pt,
+    },
+}
+\setlength{\tabcolsep}{3pt}
 %\captionsetup{font=scriptsize,labelfont=scriptsize}
 %\renewcommand{\captionfont}{\tiny}
 %\renewcommand{\captionlabelfont}{\tiny}
@@ -372,7 +381,7 @@
     \begin{itemize}
         \item k-means clustering
         \item Codebook size $k = 1000$
-        \item Each sample vector is assigned to the closest cluster $S_i$, $i = 1, \dots, k$
+        \item Each sample vector is assigned to the cluster $S_i$, $i = 1, \dots, k$ the center of which it is closest to
         \item Image signature is the number of occurences of each ``visual word'' in the image:
             \begin{equation*}
                 \tilde{I} = [|S_1|, |S_2|, \dots, |S_k|]
@@ -381,21 +390,61 @@
 \end{frame}
 
 \subsection{Ranking}
-\begin{frame}{Ranking}
-    foo
+\begin{frame}{Distance Metrics}
+    \begin{description}[Histogram Intersection (HI)] \itemsep16pt
+        \item[$L_2$] $d_{EUCL}(p, q) = \sqrt{\sum_{i=1}^n (q_i - p_i)^2}$
+        \item[Cosine] $d_{COS}(p, q) = 1 - \frac{p \cdot q}{\|p\| \|q\|}$
+        \item[Histogram Intersection (HI)] $d_{HI}(P, Q) = 1 - \frac{\sum_{i=1}^n \min (p_i, q_i)}{\sum_{i=1}^n q_i}$
+        \item[Earth Mover's Distance (EMD)] $d_{EMD}(P, Q) = \frac{\sum_{i=1}^n \sum_{j=1}^m d_{i, j} f_{i, j}}{\sum_{i=1}^n \sum_{j=1}^m f_{i, j}}$
+    \end{description}
 \end{frame}
+
+\begin{frame}{TF-IDF Weighting}
+    Term $t_i$ occurs $tc_{i, j}$ times in document $d_j \in D$ with length
+    $n_j$ and is present in $m_i$ documents overall.
+    \begin{description} \itemsep16pt
+        \item[Term Frequency] $tf_{i, j} = \frac{tc_{i, j}}{n_j}$
+        \item[Inverse Document Frequency] $idf_{i} = \log \frac{|D|}{m_i}$
+        \item[Total Term Weight] $w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}$
+    \end{description}
+\end{frame}
+
 %}}}
 
 % results {{{
 \section{Results}
-\subsection{Benchmarking}
-\begin{frame}{Benchmarking Method}
-    foo
+\subsection{Cross-Domain Benchmark}
+\begin{frame}{Cross-Domain Dataset}
+    \begin{figure}
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/sketch_8}
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/result_8_1}
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/result_8_2}\\
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/sketch_13}
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/result_13_1}
+        \includegraphics[width=.3\textwidth]{illustrations/image_examples/result_13_2}
+        \caption{Example images from ``Sketch-based image retrieval: benchmark and bag-of-features descriptors'', Eitz et al., 2011}
+    \end{figure}
 \end{frame}
 
-\subsection{Cross-Domain Results}
+\begin{frame}{Cross-Domain Benchmark}
+    \begin{itemize}
+        \item 31 user study-based ground-truth rankings of 40 images with
+            corresponding query sketches (Eitz et al., 2011)
+        \item Kendall rank correlation coefficient $-1 \leq \tau_B \leq 1$
+        \item $\tau_B$ is based on the number of similarly ordered pairs of
+            measurements between two distributions
+        \item $\tau_B = 1$ means same ordering, $\tau_B = -1$ means inverted ordering
+        \item independent of the scaling differences between the two distributions
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Cross-Domain Results}
-    foo
+    \begin{table}
+        \centering
+        \pgfplotstableread[]{results/best_performers.csv}\resultsbestperformers
+        \plottablexbars{imagereader,features,gridsize,patchsize,cannysigma,metric}{\resultsbestperformers}
+        \caption{Best performing pipeline configurations}
+    \end{table}
 \end{frame}
 
 \subsection{Intra-Domain Results}
