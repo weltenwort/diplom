@@ -1,18 +1,18 @@
 \begin{tikzpicture}[font=\tiny,x=0.55cm,y=0.55cm,rotate=-45]
     % draw dots
-    \uncover<5->{
+    \uncover<2->{
         \foreach \x in {3.2,6.4,9.6}
             \foreach \y in {1,...,7} {
                 \draw[fill=black] (\x, \y) circle(0.04);
         }
     }
 
-    \uncover<7->{
+    \uncover<4->{
         \path[highlight line, ->] (6.4, 4) to node[left, midway, text=red]{Translation} (9.6, 2);
     }
 
     \begin{pgfonlayer}{background}
-        \uncover<6->{
+        \uncover<3->{
             \path[default line, highlight area] (9.6, 2) circle[x radius=1.6, y radius=.5];
 
             \path[default line, decorate, decoration={brace}] (6.4, 4) to node[above right=-0.05, midway]{$2^{-\frac{j}{2}}$} (9.6, 4);

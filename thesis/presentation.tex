@@ -264,7 +264,17 @@
 \end{frame}
 
 \subsection{The Curvelet Transform}
-\begin{frame}{The Curvelet Transform}
+\begin{frame}{Properties of the Curvelet Transform}
+    \begin{itemize}
+        \item An extension of the wavelet transform
+        \item Localized in \emph{position}, \emph{scale} and \emph{orientation}
+        \item Curvelets obey parabolic scaling: $width \approx length^2$
+        \item Approximation error along edges using $m$ largest coefficients decays with $\frac{log(m)^3}{m^2}$ (compare $\frac{1}{m}$ for wavelets)
+        \item Defined in frequency domain using 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Constructing the Curvelets}
     \begin{columns}
         \begin{column}{.5\textwidth}
             \begin{figure}
@@ -275,6 +285,25 @@
         \begin{column}{.5\textwidth}
             \begin{figure}
                 \input{illustrations/curvelet_tilings/continuous_tiling_spatial.tex}
+                \caption{Spatial Domain}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Example Curvelets}
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.5\textwidth]{illustrations/curvelet_examples/curvelet_1_frequency}\\
+                \includegraphics[width=.5\textwidth]{illustrations/curvelet_examples/curvelet_2_frequency}
+                \caption{Frequency Domain}
+            \end{figure}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.5\textwidth]{illustrations/curvelet_examples/curvelet_1_time}\\
+                \includegraphics[width=.5\textwidth]{illustrations/curvelet_examples/curvelet_2_time}
                 \caption{Spatial Domain}
             \end{figure}
         \end{column}
@@ -300,7 +329,20 @@
 
 \subsection{Feature Extraction}
 \begin{frame}{Global Feature Extraction}
-    foo
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.9\textwidth]{illustrations/signature_example_curvelet}
+                \caption{Curvelet coefficients at a specific scale and angle}
+            \end{figure}
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=.9\textwidth]{illustrations/signature_example_curvelet_means}
+                \caption{Mean values on an $8 \times 8$ grid}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Local Feature Extraction}
