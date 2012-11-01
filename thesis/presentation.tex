@@ -447,9 +447,48 @@
     \end{table}
 \end{frame}
 
-\subsection{Intra-Domain Results}
+\begin{frame}{Cross-Domain Distribution}
+    \begin{figure}[h]
+        \centering
+        \pgfplotstableread{results/best_performer_means.csv}\resultsbestperformermeans
+        \begin{tikzpicture}
+            \begin{axis}[
+                ybar,
+                small,
+                width=\textwidth,
+                height=.8\textheight,
+                xlabel=Query Images,
+                xlabel near ticks,
+                ylabel=Mean $\tau_B$ and standard deviation,
+                xtick=data,
+                xticklabels from table={\resultsbestperformermeans}{key},
+                xticklabel style={
+                    rotate=90,
+                },
+                xtick align=inside,
+                extra y ticks= 0,
+                extra y tick labels=,
+                extra y tick style={grid=major},
+                axis x line*=box,
+                axis y line*=box,
+                ymajorgrids,
+                error bars/error bar style={
+                    gray,
+                },
+                bar width=5pt,
+                ]
+                \addplot+[error bars/y dir=both, error bars/y explicit] table[x expr=\coordindex, y=mean, y error=stddev]{\resultsbestperformermeans};
+            \end{axis}
+        \end{tikzpicture}
+        %\caption{Distribution of best performing descriptors across different queries}
+    \end{figure}
+\end{frame}
+
+\subsection{Intra-Domain Benchmark}
 \begin{frame}{Intra-Domain Results}
-    foo
+    \begin{figure}
+        \input{illustrations/graphs/pr_precisions_presentation.tex}
+    \end{figure}
 \end{frame}
 %}}}
 
