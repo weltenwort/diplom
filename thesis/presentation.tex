@@ -210,30 +210,35 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Prior Work on Scene Classification}
-    \begin{figure}
-        \includegraphics[width=.9\textwidth]{illustrations/related_work/pyramid_lazebnik09}
-        \caption{``Spatial pyramid matching'', Lazebnik et al., 2009}
-    \end{figure}
-\end{frame}
+%\begin{frame}{Prior Work on Scene Classification}
+    %\begin{figure}
+        %\includegraphics[width=.9\textwidth]{illustrations/related_work/pyramid_lazebnik09}
+        %\caption{``Spatial pyramid matching'', Lazebnik et al., 2009}
+    %\end{figure}
+%\end{frame}
 
 \subsection{Anatomy of a CBIR System}
 \begin{frame}{Anatomy of a CBIR System}
-    %\begin{columns}
-        %\begin{column}{0.5\textwidth}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{enumerate}
+                \item Image Acquisition
+                \item Signature Extraction
+                \item Ranking
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.5\textwidth}
             \begin{figure}
-                \includegraphics[height=.8\textheight]{illustrations/cbir_anatomy_query_cropped}
+                \includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_cropped}
                 %\caption{Global Descriptors}
             \end{figure}
-        %\end{column}
-        %\begin{column}{0.5\textwidth}
             %\begin{figure}
                 %\includegraphics[width=.9\textwidth]{illustrations/cbir_anatomy_query_local_cropped}
                 %\caption{Local Descriptors}
                 %\label{fig:anatomy_local}
             %\end{figure}
-        %\end{column}
-    %\end{columns}
+        \end{column}
+    \end{columns}
 \end{frame}
 % }}}
 
@@ -297,6 +302,7 @@
 \subsection{The Curvelet Transform}
 \begin{frame}{Properties of the Curvelet Transform}
     \begin{itemize}
+        \item Published by Candes and Donoho, 2004
         \item An extension of the wavelet transform
         \item Especially suited for representing curve-like discontinuities, because
         \item Curvelets obey parabolic scaling: $width \approx length^2$
@@ -327,7 +333,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{The Fast Discrete Curvelet Transform}
+\begin{frame}{The Fast Discrete Curvelet Transform (via Wrapping)}
     \begin{columns}
         \begin{column}{.5\textwidth}
             \begin{figure}
@@ -342,6 +348,15 @@
             \end{figure}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{The Fast Discrete Curvelet Transform (via Wrapping)}
+    \begin{enumerate}
+        \item Transform image $f$ to $\hat{f}$ using 2D FFT
+        \item For each scale and angle, multiply $\hat{f}$ with the curvelet window
+        \item Wrap the product around the origin
+        \item Apply inverse 2D FFT to wrapped product to collect curvelet coefficients for each scale and angle
+    \end{enumerate}
 \end{frame}
 
 \begin{frame}{Example Curvelets}
@@ -366,7 +381,7 @@
 \subsection{Feature Extraction}
 \begin{frame}{Global Feature Extraction (Sampling)}
     \begin{description}
-        \item[MEAN] Calculate the mean coefficients on $n \times n$ grid, concatenate across scales and angles
+        \item[MEAN] Calculate the mean of coefficients on $n \times n$ grid, concatenate across scales and angles
     \end{description}
     \begin{columns}
         \begin{column}{.5\textwidth}
@@ -432,10 +447,15 @@
 \begin{frame}{TF-IDF Weighting}
     Term $t_i$ occurs $tc_{i, j}$ times in document $d_j \in D$ with length
     $n_j$ and is present in $m_i$ documents overall.
-    \begin{description} \itemsep16pt
+
+    \begin{description}[Inverse Document Frequency] \itemsep10pt
         \item[Term Frequency] $tf_{i, j} = \frac{tc_{i, j}}{n_j}$
         \item[Inverse Document Frequency] $idf_{i} = \log \frac{|D|}{m_i}$
         \item[Total Term Weight] $w_{i, j} = tf_{i, j} \cdot idf_{i} = \frac{tc_{i, j}}{n_j} \cdot \log \frac{|D|}{m_i}$
+    \end{description}
+
+    \begin{description}
+        \item[$\Rightarrow$] Amplify rare features, suppress common features
     \end{description}
 \end{frame}
 
